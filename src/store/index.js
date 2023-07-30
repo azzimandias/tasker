@@ -1,4 +1,6 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
+
+import navPanel from './modules/navPanel';
 
 export default createStore({
   state: {
@@ -10,5 +12,6 @@ export default createStore({
   actions: {
   },
   modules: {
+    nav: navPanel
   }
-})
+});
