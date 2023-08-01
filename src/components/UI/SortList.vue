@@ -30,8 +30,10 @@ let currentColor = props.color;
         flex-direction: column;
         justify-content: space-between;
         cursor: pointer;
+        transition: .3;
         &:active {
-            background-color: #5C5D5F;
+            //background-color: #5C5D5F;
+            opacity: 0.8;
             .sort-list__count, .sort-list__label {
                 color: #ADAEAF;
             }

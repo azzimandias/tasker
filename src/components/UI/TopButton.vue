@@ -16,6 +16,7 @@ export default {
         background-position: center;
         background-size: 30px 30px;
         background-repeat: no-repeat;
+        &:active { opacity: 0.8; }
     }
     .person { background-image: url('../../assets/svgs/person.svg'); }
     .plus { background-image: url('../../assets/svgs/plus.svg'); }

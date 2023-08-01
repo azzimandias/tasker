@@ -36,6 +36,7 @@ import ThePersonalTags from '@/components/layout/ThePersonalTags.vue';
         color: white;
         cursor: pointer;
         position: relative;
+        &:active { opacity: 0.8; }
         &::before {
             content: '';
             display: block;

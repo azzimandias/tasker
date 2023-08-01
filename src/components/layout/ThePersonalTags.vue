@@ -2,8 +2,13 @@
     <div class="personal-tags" v-if="personalTags">
         <SectionHeader>Теги</SectionHeader>
         <div class="personal-tags__container">
-            <PersonalTag :key="0">{{ 'Все теги' }}</PersonalTag>
-            <PersonalTag v-for="tag in personalTags" :key="tag.id">{{ tag.name }}</PersonalTag>
+            <PersonalTag :currentKey="-1">{{ 'Все теги' }}</PersonalTag>
+            <PersonalTag 
+                v-for="(tag,key) in personalTags" 
+                :key="tag.id"
+                :currentKey="key">
+                {{ tag.name }}
+            </PersonalTag>
         </div>
     </div>
 </template>

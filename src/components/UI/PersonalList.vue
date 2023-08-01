@@ -23,6 +23,7 @@ let currentColor = props.color;
         padding: 6px 15px 6px 6px;
         border-radius: 5px;
         cursor: pointer;
+        transition: .3;
         &:active {
             background-color: #5C5D5F;
             .personal-list__count { color: white; }
