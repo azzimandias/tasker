@@ -1,6 +1,6 @@
 <template>
     <div class="sort-lists">
-        <div class="sort-lists__label"> Списки</div>
+        <SectionHeader>Списки</SectionHeader>
         <div class="sort-lists__container">
             <SortList v-for="item in 4"/>
         </div>
@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+import SectionHeader from '../UI/SectionHeader.vue';
 import SortList from '@/components/UI/SortList.vue';
 </script>
 

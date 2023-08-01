@@ -11,7 +11,7 @@ import api from '@/api';
 import TheBigMenu from '@/components/layout/TheBigMenu.vue';
 import TheTasker from '@/components/layout/TheTasker.vue';
 
-onMounted(() => {
+onMounted( async () => {
   api.getTags();
 });
 </script>

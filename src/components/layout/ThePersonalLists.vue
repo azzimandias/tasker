@@ -1,6 +1,6 @@
 <template>
     <div class="personal-lists">
-        <div class="personal-lists__label"> Мои списки</div>
+        <SectionHeader>Мои списки</SectionHeader>
         <div class="personal-lists__container">
             <PersonalList v-for="item in 5"/>
         </div>
@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalList from '@/components/UI/PersonalList.vue';
 </script>
 

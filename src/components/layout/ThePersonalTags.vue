@@ -1,6 +1,6 @@
 <template>
     <div class="personal-tags">
-        <div class="personal-tags__label">Теги</div>
+        <SectionHeader>Теги</SectionHeader>
         <div class="personal-tags__container">
             <div class="all-tags">Все теги</div>
             <PersonalTag v-for="item in 6">Название</PersonalTag>
@@ -9,16 +9,11 @@
 </template>
 
 <script setup>
+import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalTag from '@/components/UI/PersonalTag.vue';
 </script>
 
 <style lang="scss">
-    .personal-tags__label {
-        font-size: 12px;
-        font-weight: 500;
-        color: #5F6164;
-        margin: 20px 0 3px 12px;
-    }
     .personal-tags__container {
         display: flex;
         flex-wrap: wrap;
