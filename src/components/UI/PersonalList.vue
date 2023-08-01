@@ -1,13 +1,18 @@
 <template>
     <div class="personal-list">
-        <div class="personal-list__circle"></div>
-        <div class="personal-list__label">Название</div>
-        <div class="personal-list__count">0</div>
+        <div class="personal-list__circle" :style="{ backgroundColor: currentColor }"></div>
+        <div class="personal-list__label"><slot name="name"></slot></div>
+        <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { defineProps } from 'vue';
 
+const props = defineProps({
+    color: String
+});
+let currentColor = props.color;
 </script>
 
 <style lang="scss">

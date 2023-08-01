@@ -1,14 +1,21 @@
 <template>
     <div class="sort-list">
         <div class="sort-list__container">
-            <div class="circle"></div>
-            <div class="sort-list__count">0</div>
+            <div class="circle" :style="{ backgroundColor: currentColor }"></div>
+            <div class="sort-list__count"><slot name="count"></slot></div>
         </div>
-        <div class="sort-list__label">Название</div>
+        <div class="sort-list__label"><slot name="name"></slot></div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    color: String
+});
+
+let currentColor = props.color;
 
 </script>
 

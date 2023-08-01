@@ -1,16 +1,24 @@
 <template>
-    <div class="personal-tags">
+    <div class="personal-tags" v-if="personalTags">
         <SectionHeader>Теги</SectionHeader>
         <div class="personal-tags__container">
-            <div class="all-tags">Все теги</div>
-            <PersonalTag v-for="item in 6">Название</PersonalTag>
+            <PersonalTag :key="0">{{ 'Все теги' }}</PersonalTag>
+            <PersonalTag v-for="tag in personalTags" :key="tag.id">{{ tag.name }}</PersonalTag>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalTag from '@/components/UI/PersonalTag.vue';
+
+const personalTags = ref([
+    {id: 1, name: 'first'},
+    {id: 2, name: 'second'},
+    {id: 3, name: 'third'},
+    {id: 4, name: 'fourth'},
+]);
 </script>
 
 <style lang="scss">
@@ -18,15 +26,5 @@ import PersonalTag from '@/components/UI/PersonalTag.vue';
         display: flex;
         flex-wrap: wrap;
         padding: 6px 15px 6px 6px;
-    }
-    .all-tags {
-        background-color: #45474A;
-        color: #aaadae;
-        font-size: 13px;
-        padding: 5px 8px;
-        border-radius: 5px;
-        margin-right: 5px;
-        margin-bottom: 5px;
-        cursor: pointer;
     }
 </style>

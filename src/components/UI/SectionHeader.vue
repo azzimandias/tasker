@@ -8,7 +8,7 @@
 <script setup>
 import { ref } from 'vue';
 import Loader from './Loader.vue';
-const isLoad = ref(false);
+const isLoad = ref(true);
 </script>
 
 <style lang="scss">

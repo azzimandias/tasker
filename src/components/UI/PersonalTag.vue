@@ -1,9 +1,15 @@
 <template>
-    <div class="personal-tag">#<slot></slot></div>
+    <div class="personal-tag" v-if="currentKey !== 0">{{currentKey}}#<slot></slot></div>
+    <div class="personal-tag" v-else><slot></slot></div>
 </template>
 
-<script>
-
+<script setup>
+import { defineProps } from 'vue';
+const props = defineProps({
+    key: Number
+});
+console.log(props.key)
+let currentKey = props.key;
 </script>
 
 <style lang="scss">
@@ -16,5 +22,6 @@
         margin-right: 5px;
         margin-bottom: 5px;
         cursor: pointer;
+        &:active { opacity: 0.8; }
     }
 </style>
