@@ -4,6 +4,10 @@
     </div>
 </template>
 
+<script>
+
+</script>
+
 <style lang="scss">
     .application-name__container {
         width: 100%;

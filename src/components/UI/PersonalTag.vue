@@ -1,5 +1,5 @@
 <template>
-    <div class="personal-tag">#Название</div>
+    <div class="personal-tag">#<slot></slot></div>
 </template>
 
 <script>

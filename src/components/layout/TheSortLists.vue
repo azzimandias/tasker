@@ -7,13 +7,8 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import SortList from '@/components/UI/SortList.vue';
-export default {
-    components: {
-        SortList
-    }
-}
 </script>
 
 <style lang="scss">

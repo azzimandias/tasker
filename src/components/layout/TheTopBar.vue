@@ -8,22 +8,11 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import TopButton from '@/components/UI/TopButton.vue';
-export default {
-    data() {
-        return {
-            cl: [
-                'person',
-                'plus',
-                'loup'
-            ]
-        }
-    },
-    components: {
-        TopButton
-    }
-}
+
+const cl = ref(['person','plus','loup']);
 </script>
 
 <style lang="scss">

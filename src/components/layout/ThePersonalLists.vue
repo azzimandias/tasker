@@ -7,13 +7,8 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import PersonalList from '@/components/UI/PersonalList.vue';
-export default {
-    components: {
-        PersonalList
-    }
-}
 </script>
 
 <style lang="scss">

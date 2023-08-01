@@ -4,13 +4,8 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import TheTopBar from '@/components/layout/TheTopBar.vue';
-export default {
-    components: {
-        TheTopBar
-    }
-}
 </script>
 
 <style>

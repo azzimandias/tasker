@@ -3,18 +3,13 @@
         <div class="personal-tags__label">Теги</div>
         <div class="personal-tags__container">
             <div class="all-tags">Все теги</div>
-            <PersonalTag v-for="item in 6"/>
+            <PersonalTag v-for="item in 6">Название</PersonalTag>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
 import PersonalTag from '@/components/UI/PersonalTag.vue';
-export default {
-    components: {
-        PersonalTag
-    }
-}
 </script>
 
 <style lang="scss">

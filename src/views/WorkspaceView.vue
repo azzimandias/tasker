@@ -5,15 +5,15 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted } from 'vue';
+import api from '@/api';
 import TheBigMenu from '@/components/layout/TheBigMenu.vue';
 import TheTasker from '@/components/layout/TheTasker.vue';
-export default {
-  components: {
-    TheBigMenu,
-    TheTasker
-  }
-}
+
+onMounted(() => {
+  api.getTags();
+});
 </script>
 
 <style scoped lang="scss">
