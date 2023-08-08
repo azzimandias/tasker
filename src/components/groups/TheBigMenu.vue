@@ -12,9 +12,9 @@
 
 <script setup>
 import ApplivationName from '@/components/UI/ApplicationName.vue';
-import TheSortLists from '@/components/layout/TheSortLists.vue';
-import ThePersonalLists from '@/components/layout/ThePersonalLists.vue';
-import ThePersonalTags from '@/components/layout/ThePersonalTags.vue';
+import TheSortLists from '@/components/groups/TheSortLists.vue';
+import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
+import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
 </script>
 
 <style scoped lang="scss">

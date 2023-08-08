@@ -8,8 +8,8 @@
 <script setup>
 import { onMounted } from 'vue';
 import api from '@/api';
-import TheBigMenu from '@/components/layout/TheBigMenu.vue';
-import TheTasker from '@/components/layout/TheTasker.vue';
+import TheBigMenu from '@/components/groups/TheBigMenu.vue';
+import TheTasker from '@/components/groups/TheTasker.vue';
 
 onMounted( async () => {
   api.getTags();
