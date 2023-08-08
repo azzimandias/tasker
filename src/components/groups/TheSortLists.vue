@@ -55,7 +55,7 @@ const getSortLists = async () => {
     const arr = await response.json();
     if ((typeof arr) === "object") {
       arr.forEach(item => {
-        sortLists[item.id].count = item.count;
+        sortLists[item.id-1].count = item.count;
       });
       is_load = false;
     }
