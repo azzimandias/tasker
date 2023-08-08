@@ -1,5 +1,5 @@
 <template>
-    <div class="personal-tag" v-if="currentKey >= 0">#<slot></slot></div>
+    <div class="personal-tag" v-if="props.currentKey >= 0">#<slot></slot></div>
     <div class="personal-tag" v-else><slot></slot></div>
 </template>
 
@@ -8,7 +8,6 @@ import { defineProps } from 'vue';
 const props = defineProps({
     currentKey: Number
 });
-let currentKey = props.currentKey;
 </script>
 
 <style lang="scss">

@@ -25,12 +25,12 @@ let currentColor = props.color;
         height: 70px;
         background-color: #494B4E;
         border-radius: 13px;
-        padding: 8px 9px;
+        padding: 8px 9px 5px 9px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         cursor: pointer;
-        transition: .3;
+        transition: .3s;
         &:active {
             //background-color: #5C5D5F;
             opacity: 0.8;

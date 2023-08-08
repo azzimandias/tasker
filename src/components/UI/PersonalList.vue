@@ -1,6 +1,6 @@
 <template>
     <div class="personal-list">
-        <div class="personal-list__circle" :style="{ backgroundColor: currentColor }"></div>
+        <div class="personal-list__circle" :style="{ backgroundColor: props.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
@@ -10,9 +10,8 @@
 import { defineProps } from 'vue';
 
 const props = defineProps({
-    color: String
+    color: String,
 });
-let currentColor = props.color;
 </script>
 
 <style lang="scss">
@@ -23,7 +22,7 @@ let currentColor = props.color;
         padding: 6px 15px 6px 6px;
         border-radius: 5px;
         cursor: pointer;
-        transition: .3;
+        transition: .3s;
         &:active {
             background-color: #5C5D5F;
             .personal-list__count { color: white; }

@@ -1,6 +1,6 @@
 <template>
     <div class="sort-lists">
-        <SectionHeader>Списки</SectionHeader>
+        <SectionHeader :is_load="is_load">Списки</SectionHeader>
         <div class="sort-lists__container">
             <SortList 
                 v-for="sortList in sortLists" 
@@ -14,39 +14,59 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,reactive,onMounted } from 'vue';
 import SectionHeader from '../UI/SectionHeader.vue';
 import SortList from '@/components/UI/SortList.vue';
 
-const sortLists = ref([
+let is_load = ref(true);
+const sortLists = reactive([
     {
         id: 1, 
-        name: 'First', 
-        count: 2,
+        name: 'Сегодня',
+        count: '—',
         color: 'gray'
     },
     {
 
         id: 2, 
-        name: 'Second', 
-        count: 1,
+        name: 'С флажком',
+        count: '—',
         color: '#be5252'
     },
     {
 
         id: 3, 
-        name: 'Third', 
-        count: 5,
+        name: 'Завершено',
+        count: '—',
         color: '#daadad'
     },
     {
 
         id: 4, 
-        name: 'Fourth', 
-        count: 10,
+        name: 'Все',
+        count: '—',
         color: '#a66f0a'
     },
 ]);
+
+const getSortLists = async () => {
+  try {
+    const response = await fetch('http://localhost/sortLists');
+    const arr = await response.json();
+    if ((typeof arr) === "object") {
+      arr.forEach(item => {
+        sortLists[item.id].count = item.count;
+      });
+      is_load = false;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+onMounted(async () => {
+  await getSortLists();
+});
 </script>
 
 <style lang="scss">

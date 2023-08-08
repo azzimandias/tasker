@@ -1,6 +1,6 @@
 <template>
-    <div class="personal-tags" v-if="personalTags">
-        <SectionHeader>Теги</SectionHeader>
+    <div class="personal-tags" v-if="personalTags.length">
+        <SectionHeader :is_load="is_load">Теги</SectionHeader>
         <div class="personal-tags__container">
             <PersonalTag :currentKey="-1">{{ 'Все теги' }}</PersonalTag>
             <PersonalTag 
@@ -14,16 +14,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,reactive,onMounted } from 'vue';
 import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalTag from '@/components/UI/PersonalTag.vue';
 
-const personalTags = ref([
-    {id: 1, name: 'first'},
-    {id: 2, name: 'second'},
-    {id: 3, name: 'third'},
-    {id: 4, name: 'fourth'},
-]);
+let is_load = ref(true);
+const personalTags = reactive([]);
+const getPersonalTags = async () => {
+  try {
+    const response = await fetch('http://localhost/tags');
+    const arr = await response.json();
+    if ((typeof arr) === "object") {
+      personalTags.length = 0;
+      arr.forEach(item => {
+        personalTags.push(item);
+      });
+      is_load = false;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+onMounted(async () => {
+  await getPersonalTags();
+});
 </script>
 
 <style lang="scss">

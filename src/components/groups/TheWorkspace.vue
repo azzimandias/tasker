@@ -1,8 +1,7 @@
 <template>
   <div class="workspace">
-    <keep-alive>
-      <code v-for="task in testTasks" :key="task.id">{{ task }}</code>
-    </keep-alive>
+<!--      <code v-for="task in testTasks" :key="task.id">{{ task }}</code>-->
+
   </div>
 </template>
 
