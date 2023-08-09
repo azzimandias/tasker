@@ -1,12 +1,18 @@
 <template>
   <div class="workspace">
-<!--      <code v-for="task in testTasks" :key="task.id">{{ task }}</code>-->
-
+    <ListHeader>Все</ListHeader>
+    <Task
+        v-for="task in testTasks"
+        :key="task.id"
+        :task="task"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref,onMounted,reactive  } from "vue";
+import ListHeader from "@/components/UI/ListHeader.vue";
+import Task from "@/components/UI/Task.vue";
 
 const testTasks = reactive([]);
 const getTestTasks = async () => {
@@ -17,6 +23,7 @@ const getTestTasks = async () => {
       arr.forEach(item => {
         testTasks.push(item);
       });
+      console.log(testTasks)
     }
   } catch (e) {
     console.log(e);
@@ -30,6 +37,12 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
   .workspace {
-    color: #C5C7CA;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    grid-gap: 20px;
+    padding: 15px 20px;
+    overflow-y: auto;
   }
 </style>

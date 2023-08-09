@@ -5,7 +5,8 @@
             <SortList 
                 v-for="sortList in sortLists" 
                 :key="sortList.id"
-                :color="sortList.color">
+                :color="sortList.color"
+            >
                 <template #name>{{ sortList.name }}</template>
                 <template #count>{{ sortList.count }}</template>
             </SortList>
@@ -57,7 +58,8 @@ const getSortLists = async () => {
       arr.forEach(item => {
         sortLists[item.id-1].count = item.count;
       });
-      is_load = false;
+      console.log(arr)
+      is_load.value = false;
     }
   } catch (e) {
     console.log(e);

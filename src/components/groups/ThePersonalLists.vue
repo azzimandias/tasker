@@ -53,7 +53,7 @@ const getPersonalLists = async () => {
       setTimeout(() => {
 
       },5000);
-      is_load = false;
+      is_load.value = false;
     }
   } catch (e) {
     console.log(e);

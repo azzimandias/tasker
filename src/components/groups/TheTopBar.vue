@@ -33,7 +33,7 @@ let isSearchMode = ref(false);
         height: 40px;
         display: flex;
         align-items: center;
-        padding: 11px;
+        padding: 11px 17.5px;
         background-color: #3F4041;
     }
     .top-bar__container {

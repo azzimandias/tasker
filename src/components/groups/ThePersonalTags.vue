@@ -29,7 +29,7 @@ const getPersonalTags = async () => {
       arr.forEach(item => {
         personalTags.push(item);
       });
-      is_load = false;
+      is_load.value = false;
     }
   } catch (e) {
     console.log(e);
