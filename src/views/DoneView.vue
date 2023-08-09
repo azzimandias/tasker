@@ -1,6 +1,6 @@
 <template>
   <div class="workspace">
-    <ListHeader>Все</ListHeader>
+    <ListHeader>{{ header }}</ListHeader>
     <Task
         v-for="task in testTasks"
         :key="task.id"
@@ -15,14 +15,16 @@ import ListHeader from "@/components/UI/ListHeader.vue";
 import Task from "@/components/UI/Task.vue";
 
 const testTasks = reactive([]);
+let header = ref('');
 const getTestTasks = async () => {
   try {
-    const response = await fetch('http://localhost/tasks');
+    const response = await fetch('http://localhost/done');
     const arr = await response.json();
     if ((typeof arr) === "object") {
       arr.forEach(item => {
         testTasks.push(item);
       });
+      header.value = 'Завершено';
       console.log(testTasks)
     }
   } catch (e) {
@@ -36,13 +38,13 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-  .workspace {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    grid-gap: 20px;
-    padding: 15px 20px;
-    overflow-y: auto;
-  }
+.workspace {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  grid-gap: 20px;
+  padding: 15px 20px;
+  overflow-y: auto;
+}
 </style>

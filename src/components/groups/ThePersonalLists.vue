@@ -5,7 +5,7 @@
             <PersonalList 
                 v-for="list in personalLists" 
                 :key="list.id"
-                :color="list.color">
+                :list="list">
                 <template #name>{{ list.name }}</template>
                 <template #count>{{ list.count_of_active_tasks }}</template>
             </PersonalList>

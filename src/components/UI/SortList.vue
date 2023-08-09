@@ -1,5 +1,5 @@
 <template>
-    <div class="sort-list">
+    <div class="sort-list" @click="redir">
         <div class="sort-list__container">
             <div class="circle" :style="{ backgroundColor: currentColor }"></div>
             <div class="sort-list__count"><slot name="count"></slot></div>
@@ -10,10 +10,17 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
-    color: String
+    color: String,
+    url: String
 });
+
+const router = useRouter();
+const redir = () => {
+  router.push(props.url);
+};
 
 let currentColor = props.color;
 

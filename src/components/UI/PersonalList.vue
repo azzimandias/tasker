@@ -1,6 +1,6 @@
 <template>
-    <div class="personal-list">
-        <div class="personal-list__circle" :style="{ backgroundColor: props.color }"></div>
+    <div class="personal-list" @click="redir">
+        <div class="personal-list__circle" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
@@ -8,10 +8,15 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
-    color: String,
+    list: Object,
 });
+const router = useRouter();
+const redir = () => {
+  router.push(`/workspace/${props.list.id}`);
+};
 </script>
 
 <style lang="scss">

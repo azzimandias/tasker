@@ -1,13 +1,14 @@
 <template>
-    <div class="tasker">
-        <TheTopBar/>
-        <TheWorkspace/>
-    </div>
+  <div class="tasker">
+      <TheTopBar/>
+      <router-view :key="route.path"/>
+  </div>
 </template>
 
 <script setup>
+import { useRoute } from "vue-router";
 import TheTopBar from '@/components/groups/TheTopBar.vue';
-import TheWorkspace from "@/components/groups/TheWorkspace.vue";
+const route = useRoute();
 </script>
 
 <style>

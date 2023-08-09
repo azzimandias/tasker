@@ -6,6 +6,7 @@
                 v-for="sortList in sortLists" 
                 :key="sortList.id"
                 :color="sortList.color"
+                :url="sortList.url"
             >
                 <template #name>{{ sortList.name }}</template>
                 <template #count>{{ sortList.count }}</template>
@@ -25,28 +26,32 @@ const sortLists = reactive([
         id: 1, 
         name: 'Сегодня',
         count: '—',
-        color: 'gray'
+        color: 'gray',
+        url: '/workspace/today'
     },
     {
 
         id: 2, 
         name: 'С флажком',
         count: '—',
-        color: '#be5252'
+        color: '#be5252',
+        url: '/workspace/with_flag'
     },
     {
 
         id: 3, 
         name: 'Завершено',
         count: '—',
-        color: '#daadad'
+        color: '#daadad',
+        url: '/workspace/done'
     },
     {
 
         id: 4, 
         name: 'Все',
         count: '—',
-        color: '#a66f0a'
+        color: '#a66f0a',
+        url: '/workspace/all'
     },
 ]);
 
