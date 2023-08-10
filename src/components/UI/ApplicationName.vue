@@ -12,6 +12,9 @@
     .application-name__container {
         width: 100%;
         height: 40px;
+        position: sticky;
+        top: 0;
+        background-color: #26282B;
         //padding-bottom: 30px;
     }
     .application-name__label {

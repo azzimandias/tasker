@@ -21,6 +21,7 @@ onMounted( async () => {
     height: 100%;
     display: grid;
     grid-template-columns: 300px 2fr;
+    grid-template-rows: 100vh;
     grid-column-gap: 2px;
     background-color: black;
   }

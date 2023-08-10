@@ -27,7 +27,7 @@ const sortLists = reactive([
         name: 'Сегодня',
         count: '—',
         color: 'gray',
-        url: '/workspace/today'
+        url: '/workspace/sortList_today'
     },
     {
 
@@ -35,7 +35,7 @@ const sortLists = reactive([
         name: 'С флажком',
         count: '—',
         color: '#be5252',
-        url: '/workspace/with_flag'
+        url: '/workspace/sortList_with_flag'
     },
     {
 
@@ -43,7 +43,7 @@ const sortLists = reactive([
         name: 'Завершено',
         count: '—',
         color: '#daadad',
-        url: '/workspace/done'
+        url: '/workspace/sortList_done'
     },
     {
 
@@ -51,7 +51,7 @@ const sortLists = reactive([
         name: 'Все',
         count: '—',
         color: '#a66f0a',
-        url: '/workspace/all'
+        url: '/workspace/sortList_all'
     },
 ]);
 
@@ -63,7 +63,6 @@ const getSortLists = async () => {
       arr.forEach(item => {
         sortLists[item.id-1].count = item.count;
       });
-      console.log(arr)
       is_load.value = false;
     }
   } catch (e) {

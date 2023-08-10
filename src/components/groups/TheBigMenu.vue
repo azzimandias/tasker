@@ -1,7 +1,7 @@
 <template>
     <div class="big-menu">
         <div class="big-menu__wrapper">
-            <ApplivationName/>
+            <ApplicationName/>
             <TheSortLists/>
             <ThePersonalLists/>
             <ThePersonalTags/>
@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import ApplivationName from '@/components/UI/ApplicationName.vue';
+import ApplicationName from '@/components/UI/ApplicationName.vue';
 import TheSortLists from '@/components/groups/TheSortLists.vue';
 import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
 import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
@@ -25,6 +25,21 @@ import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
         padding-bottom: 10px;
         background-color: #26282B;
         user-select: none;
+        overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 5px;
+        background-color: #0a0a0a;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: #c4c4c4;
+      }
+
+      &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+        background-color: #4b4b4b;
+      }
     }
     .big-menu__wrapper {
         > div {

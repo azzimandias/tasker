@@ -15,7 +15,7 @@ const props = defineProps({
 });
 const router = useRouter();
 const redir = () => {
-  router.push(`/workspace/${props.list.id}`);
+  router.push(`/workspace/list_${props.list.id}`);
 };
 </script>
 
