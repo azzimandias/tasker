@@ -1,7 +1,9 @@
 <template>
-  <Transition mode="out-in" name="slide-up">
+  <Transition mode="out-in" name="fade">
 
     <LoaderBig v-if="loading"/>
+
+    <SomethingWrong v-else-if="is_somethingWrong"/>
 
     <div class="workspace" v-else>
       <ListHeader>{{ header }}</ListHeader>
@@ -21,16 +23,19 @@
 import { ref,onMounted,reactive  } from "vue";
 import { useRoute } from "vue-router";
 import ListHeader from "@/components/UI/ListHeader.vue";
+import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import Task from "@/components/UI/Task.vue";
 import LoaderBig from "@/components/UI/LoaderBig.vue";
 
 const testTasks = reactive([]);
 let header = ref('');
 let loading = ref(true);
+let is_somethingWrong = ref(false);
 let request = ref('');
 const route = useRoute();
 const getTestTasks = async () => {
   try {
+    is_somethingWrong.value = false;
     loading.value = true;
     if ( route.params.id ) {
       request.value = `http://localhost/list?id=${route.params.id}`;
@@ -39,15 +44,19 @@ const getTestTasks = async () => {
     }
     const response = await fetch(request.value);
     const arr = await response.json();
-    if ((typeof arr[1]) === "object") {
+    if ((typeof arr[1]) === "object" && arr.length) {
       arr[1].forEach(item => {
         testTasks.push(item);
       });
       header.value = arr[0];
       loading.value = false;
+    } else {
+      is_somethingWrong.value = true;
     }
   } catch (e) {
     console.log(e);
+    loading.value = false;
+    is_somethingWrong.value = true;
   }
 }
 
@@ -88,16 +97,16 @@ onMounted(async () => {
   display: flex;
   align-items: center;
 }
-.slide-up-enter-active,
-.slide-up-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: all 0.25s ease-out;
 }
 
-.slide-up-enter-from {
+.fade-enter-from {
   opacity: 0;
 }
 
-.slide-up-leave-to {
+.fade-leave-to {
   opacity: 0;
 }
 </style>

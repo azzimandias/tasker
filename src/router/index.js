@@ -26,6 +26,7 @@ const router = createRouter({
         },
       ],
     },
+    { path: '/:NotFoundPage(.*)', component: () => import('../views/NotFoundPageView.vue'), },
   ]
 })
 
