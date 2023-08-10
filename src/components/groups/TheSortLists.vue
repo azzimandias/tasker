@@ -27,7 +27,7 @@ const sortLists = reactive([
         name: 'Сегодня',
         count: '—',
         color: 'gray',
-        url: '/workspace/sortList_today'
+        url: '/workspace/sortList=today'
     },
     {
 
@@ -35,7 +35,7 @@ const sortLists = reactive([
         name: 'С флажком',
         count: '—',
         color: '#be5252',
-        url: '/workspace/sortList_with_flag'
+        url: '/workspace/sortList=with_flag'
     },
     {
 
@@ -43,7 +43,7 @@ const sortLists = reactive([
         name: 'Завершено',
         count: '—',
         color: '#daadad',
-        url: '/workspace/sortList_done'
+        url: '/workspace/sortList=done'
     },
     {
 
@@ -51,7 +51,7 @@ const sortLists = reactive([
         name: 'Все',
         count: '—',
         color: '#a66f0a',
-        url: '/workspace/sortList_all'
+        url: '/workspace/sortList=all'
     },
 ]);
 

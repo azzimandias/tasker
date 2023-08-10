@@ -1,22 +1,21 @@
 <template>
-    <div class="personal-list" @click="redir">
+  <router-link :to="`/workspace/list=${props.list.id}`">
+    <div class="personal-list" :class="{ active: props.list.id === +route.params.id_list }">
         <div class="personal-list__circle" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
+  </router-link>
 </template>
 
 <script setup>
 import { defineProps } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
     list: Object,
 });
-const router = useRouter();
-const redir = () => {
-  router.push(`/workspace/list_${props.list.id}`);
-};
+const route = useRoute();
 </script>
 
 <style lang="scss">
@@ -28,9 +27,10 @@ const redir = () => {
         border-radius: 5px;
         cursor: pointer;
         transition: .3s;
-        &:active {
-            background-color: #5C5D5F;
-            .personal-list__count { color: white; }
+        &.active {
+          background-color: #5C5D5F;
+          .personal-list__circle { box-shadow: 0 0 6px #26282B; }
+          .personal-list__count { color: white; }
         }
     }
     .personal-list__circle {
@@ -38,6 +38,7 @@ const redir = () => {
         border-radius: 90px;
         width: 28px;
         height: 28px;
+        transition: .3s;
     }
     .personal-list__label {
         margin-left: 8px;
@@ -49,5 +50,6 @@ const redir = () => {
         font-size: 14px;
         font-weight: 600;
         color: #5F6164;
+        transition: .3s;
     }
 </style>

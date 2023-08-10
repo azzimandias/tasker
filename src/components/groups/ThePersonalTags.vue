@@ -6,7 +6,9 @@
             <PersonalTag 
                 v-for="(tag,key) in personalTags" 
                 :key="tag.id"
-                :currentKey="key">
+                :currentKey="key"
+                :tag="tag"
+            >
                 {{ tag.name }}
             </PersonalTag>
         </div>

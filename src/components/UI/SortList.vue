@@ -1,26 +1,25 @@
 <template>
-    <div class="sort-list" @click="redir">
+  <router-link :to="props.url">
+    <div class="sort-list" :class="{ active: props.url === route.path }">
         <div class="sort-list__container">
             <div class="circle" :style="{ backgroundColor: currentColor }"></div>
             <div class="sort-list__count"><slot name="count"></slot></div>
         </div>
         <div class="sort-list__label"><slot name="name"></slot></div>
     </div>
+  </router-link>
 </template>
 
 <script setup>
 import { defineProps } from 'vue';
-import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const props = defineProps({
     color: String,
     url: String
 });
 
-const router = useRouter();
-const redir = () => {
-  router.push(props.url);
-};
+const route = useRoute();
 
 let currentColor = props.color;
 
@@ -44,6 +43,9 @@ let currentColor = props.color;
             .sort-list__count, .sort-list__label {
                 color: #ADAEAF;
             }
+        }
+        &.active {
+          filter: brightness(1.5);
         }
     }
     .sort-list__container {

@@ -1,7 +1,9 @@
 <template>
   <div class="something-wrong">
-    <p class="something-wrong__label">Something went wrong</p>
-    <p class="something-wrong__label-small">try reloading or go <router-link to="/workspace">here</router-link></p>
+    <div class="something-wrong__container">
+      <p class="something-wrong__label">Something went wrong</p>
+      <p class="something-wrong__label-small">try reloading or go <router-link to="/workspace">here</router-link></p>
+    </div>
   </div>
 </template>
 
@@ -14,8 +16,14 @@
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
+    align-items: center;
+  }
+  .something-wrong__container {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
   }
   .something-wrong__label {
@@ -30,5 +38,6 @@
   }
   a {
     color: #d7bc76;
+    text-decoration: underline;
   }
 </style>

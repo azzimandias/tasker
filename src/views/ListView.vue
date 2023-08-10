@@ -8,10 +8,10 @@
     <div class="workspace" v-else>
       <ListHeader>{{ header }}</ListHeader>
       <Task
-          v-for="task in testTasks"
+          v-for="task in tasks"
           :key="task.id"
           :task="task"
-          v-if="testTasks.length"
+          v-if="tasks.length"
       />
       <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
     </div>
@@ -27,18 +27,18 @@ import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import Task from "@/components/UI/Task.vue";
 import LoaderBig from "@/components/UI/LoaderBig.vue";
 
-const testTasks = reactive([]);
+const tasks = reactive([]);
 let header = ref('');
 let loading = ref(true);
 let is_somethingWrong = ref(false);
 let request = ref('');
 const route = useRoute();
-const getTestTasks = async () => {
+const getTasks = async () => {
   try {
     is_somethingWrong.value = false;
     loading.value = true;
-    if ( route.params.id ) {
-      request.value = `http://localhost/list?id=${route.params.id}`;
+    if ( route.params.id_list ) {
+      request.value = `http://localhost/list?id=${route.params.id_list}`;
     } else {
       request.value = `http://localhost/list?name=${route.params.name}`;
     }
@@ -46,7 +46,7 @@ const getTestTasks = async () => {
     const arr = await response.json();
     if ((typeof arr[1]) === "object" && arr.length) {
       arr[1].forEach(item => {
-        testTasks.push(item);
+        tasks.push(item);
       });
       header.value = arr[0];
       loading.value = false;
@@ -61,7 +61,7 @@ const getTestTasks = async () => {
 }
 
 onMounted(async () => {
-  await getTestTasks();
+  await getTasks();
 });
 </script>
 
