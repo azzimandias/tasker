@@ -1,7 +1,6 @@
 <template>
-  <router-link :to="`tag=${isTag()}`">
-    <div class="personal-tag" :class="{ active: +id.value === +route.params.id_tag }" v-if="props.currentKey >= 0">#<slot></slot></div>
-    <div class="personal-tag" :class="{ active: +id.value === +route.params.id_tag }" v-else><slot></slot></div>
+  <router-link :to="`/workspace/tag=${props.tag.id}`">
+    <div class="personal-tag" :class="{ active: +props.tag.id === +route.params.id_tag }">{{ name }}</div>
   </router-link>
 </template>
 
@@ -10,22 +9,18 @@ import {defineProps, onMounted, ref} from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
-    currentKey: Number,
     tag: Object,
 });
 const route = useRoute();
 let id = ref(0);
+let name = ref(props.tag.name);
 const isTag = () => {
-  let idx = 0;
-  if(props.tag) {
-    idx = props.tag.id;
+  if(props.tag.id !== 0) {
+    name.value = `#${props.tag.name}`;
   }
-  id.value = idx;
-  return idx;
 };
 onMounted(() => {
   isTag();
-  console.log(+id.value === +route.params.id_tag)
 });
 </script>
 

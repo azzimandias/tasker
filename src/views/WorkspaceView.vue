@@ -7,11 +7,14 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import {useDefaultStore} from "@/stores/DefaultStore";
 import TheBigMenu from '@/components/groups/TheBigMenu.vue';
 import TheTasker from '@/components/groups/TheTasker.vue';
 
-onMounted( async () => {
+const defaultStore = useDefaultStore();
 
+onMounted(  () => {
+  //defaultStore.startIntervalUpdate();
 });
 </script>
 

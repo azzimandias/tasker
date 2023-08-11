@@ -51,6 +51,7 @@ const getTasks = async () => {
       header.value = arr[0];
       loading.value = false;
     } else {
+      loading.value = false;
       is_somethingWrong.value = true;
     }
   } catch (e) {

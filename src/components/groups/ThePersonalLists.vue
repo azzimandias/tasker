@@ -1,9 +1,9 @@
 <template>
     <div class="personal-lists">
-        <SectionHeader :is_load="is_load">Мои списки</SectionHeader>
+        <SectionHeader :is_load="defaultStore.is_load_personalLists">Мои списки</SectionHeader>
         <div class="personal-lists__container">
             <PersonalList 
-                v-for="list in personalLists" 
+                v-for="list in defaultStore.personalLists"
                 :key="list.id"
                 :list="list">
                 <template #name>{{ list.name }}</template>
@@ -14,55 +14,13 @@
 </template>
 
 <script setup>
-import { ref,reactive,onMounted } from 'vue';
+/*import { ref,reactive,onMounted } from 'vue';*/
+import {useDefaultStore} from "@/stores/DefaultStore";
 import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalList from '@/components/UI/PersonalList.vue';
 
-let is_load = ref(true);
-const personalLists = reactive([
-    {
-        id: 1, 
-        name: '',
-        count_of_active_tasks: '—',
-        color: 'grey'
-    },
-    {
-        id: 2, 
-        name: '',
-        count_of_active_tasks: '—',
-        color: 'grey'
-    },
-    {
+const defaultStore = useDefaultStore();
 
-        id: 3, 
-        name: '',
-        count_of_active_tasks: '—',
-        color: 'grey'
-    }
-]);
-
-const getPersonalLists = async () => {
-  try {
-    const response = await fetch('http://localhost/lists');
-    const arr = await response.json();
-    if ((typeof arr) === "object") {
-      personalLists.length = 0;
-      arr.forEach(item => {
-        personalLists.push(item);
-      });
-      setTimeout(() => {
-
-      },5000);
-      is_load.value = false;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-onMounted(async () => {
-  await getPersonalLists();
-});
 </script>
 
 <style lang="scss">

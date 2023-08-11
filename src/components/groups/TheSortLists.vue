@@ -1,9 +1,9 @@
 <template>
     <div class="sort-lists">
-        <SectionHeader :is_load="is_load">Списки</SectionHeader>
+        <SectionHeader :is_load="defaultStore.is_load_sortLists">Списки</SectionHeader>
         <div class="sort-lists__container">
             <SortList 
-                v-for="sortList in sortLists" 
+                v-for="sortList in defaultStore.sortLists"
                 :key="sortList.id"
                 :color="sortList.color"
                 :url="sortList.url"
@@ -16,62 +16,15 @@
 </template>
 
 <script setup>
-import { ref,reactive,onMounted } from 'vue';
+import { onMounted } from 'vue';
+import {useDefaultStore} from "@/stores/DefaultStore";
 import SectionHeader from '../UI/SectionHeader.vue';
 import SortList from '@/components/UI/SortList.vue';
 
-let is_load = ref(true);
-const sortLists = reactive([
-    {
-        id: 1, 
-        name: 'Сегодня',
-        count: '—',
-        color: 'gray',
-        url: '/workspace/sortList=today'
-    },
-    {
+const defaultStore = useDefaultStore();
 
-        id: 2, 
-        name: 'С флажком',
-        count: '—',
-        color: '#be5252',
-        url: '/workspace/sortList=with_flag'
-    },
-    {
-
-        id: 3, 
-        name: 'Завершено',
-        count: '—',
-        color: '#daadad',
-        url: '/workspace/sortList=done'
-    },
-    {
-
-        id: 4, 
-        name: 'Все',
-        count: '—',
-        color: '#a66f0a',
-        url: '/workspace/sortList=all'
-    },
-]);
-
-const getSortLists = async () => {
-  try {
-    const response = await fetch('http://localhost/sortLists');
-    const arr = await response.json();
-    if ((typeof arr) === "object") {
-      arr.forEach(item => {
-        sortLists[item.id-1].count = item.count;
-      });
-      is_load.value = false;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-onMounted(async () => {
-  await getSortLists();
+onMounted( () => {
+  //defaultStore.getSortListsCount();
 });
 </script>
 

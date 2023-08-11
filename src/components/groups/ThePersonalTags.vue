@@ -1,46 +1,24 @@
 <template>
-    <div class="personal-tags" v-if="personalTags.length">
-        <SectionHeader :is_load="is_load">Теги</SectionHeader>
+    <div class="personal-tags" v-if="defaultStore.personalTags.length > 1">
+        <SectionHeader :is_load="defaultStore.is_load_personalTags">Теги</SectionHeader>
         <div class="personal-tags__container">
-            <PersonalTag :currentKey="-1">{{ 'Все теги' }}</PersonalTag>
             <PersonalTag 
-                v-for="(tag,key) in personalTags" 
+                v-for="(tag,key) in defaultStore.personalTags"
                 :key="tag.id"
-                :currentKey="key"
                 :tag="tag"
-            >
-                {{ tag.name }}
-            </PersonalTag>
+            />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref,reactive,onMounted } from 'vue';
+/*import { ref,reactive,onMounted } from 'vue';*/
+import {useDefaultStore} from "@/stores/DefaultStore";
 import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalTag from '@/components/UI/PersonalTag.vue';
 
-let is_load = ref(true);
-const personalTags = reactive([]);
-const getPersonalTags = async () => {
-  try {
-    const response = await fetch('http://localhost/tags');
-    const arr = await response.json();
-    if ((typeof arr) === "object") {
-      personalTags.length = 0;
-      arr.forEach(item => {
-        personalTags.push(item);
-      });
-      is_load.value = false;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
+const defaultStore = useDefaultStore();
 
-onMounted(async () => {
-  await getPersonalTags();
-});
 </script>
 
 <style lang="scss">
