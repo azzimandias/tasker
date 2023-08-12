@@ -1,9 +1,9 @@
 <template>
     <div class="personal-lists">
-        <SectionHeader :is_load="defaultStore.is_load_personalLists">Мои списки</SectionHeader>
+        <SectionHeader :is_load="bigMenuStore.is_load_personalLists">Мои списки</SectionHeader>
         <div class="personal-lists__container">
             <PersonalList 
-                v-for="list in defaultStore.personalLists"
+                v-for="list in bigMenuStore.personalLists"
                 :key="list.id"
                 :list="list">
                 <template #name>{{ list.name }}</template>
@@ -15,11 +15,11 @@
 
 <script setup>
 /*import { ref,reactive,onMounted } from 'vue';*/
-import {useDefaultStore} from "@/stores/DefaultStore";
+import { useBigMenuStore } from "@/stores/BigMenuStore";
 import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalList from '@/components/UI/PersonalList.vue';
 
-const defaultStore = useDefaultStore();
+const bigMenuStore = useBigMenuStore();
 
 </script>
 

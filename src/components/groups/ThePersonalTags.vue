@@ -1,9 +1,9 @@
 <template>
-    <div class="personal-tags" v-if="defaultStore.personalTags.length > 1">
-        <SectionHeader :is_load="defaultStore.is_load_personalTags">Теги</SectionHeader>
+    <div class="personal-tags" v-if="bigMenuStore.personalTags.length > 1">
+        <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
         <div class="personal-tags__container">
             <PersonalTag 
-                v-for="(tag,key) in defaultStore.personalTags"
+                v-for="(tag,key) in bigMenuStore.personalTags"
                 :key="tag.id"
                 :tag="tag"
             />
@@ -13,11 +13,11 @@
 
 <script setup>
 /*import { ref,reactive,onMounted } from 'vue';*/
-import {useDefaultStore} from "@/stores/DefaultStore";
+import { useBigMenuStore } from "@/stores/BigMenuStore";
 import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalTag from '@/components/UI/PersonalTag.vue';
 
-const defaultStore = useDefaultStore();
+const bigMenuStore = useBigMenuStore();
 
 </script>
 

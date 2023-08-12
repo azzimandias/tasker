@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, reactive, onMounted } from "vue";
-export const useDefaultStore = defineStore('defaultStore', () => {
+export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const sortLists = reactive([
         {
             id: 1,
@@ -66,6 +66,8 @@ export const useDefaultStore = defineStore('defaultStore', () => {
     const is_load_personalTags = ref(false);
     const firstRequest = async () => {
         await getSortListsCount();
+        await getPersonalLists();
+        await getPersonalTags();
     }
     const startIntervalUpdate =  async () => {
         const startInterval = setInterval(() => {
@@ -73,8 +75,9 @@ export const useDefaultStore = defineStore('defaultStore', () => {
             getSortListsCount();
             getPersonalLists();
             getPersonalTags();
-        },60000);
+        },30000);
         setTimeout(() => {
+            console.log('stop');
             clearInterval(startInterval);
         }, 60 * 60000);
     }
@@ -99,7 +102,7 @@ export const useDefaultStore = defineStore('defaultStore', () => {
             is_load_personalLists.value = true;
             const response = await fetch('http://localhost/lists');
             const arr = await response.json();
-            if ((typeof arr) === "object") {
+            if ((typeof arr) === "object" && arr.length > 0) {
                 personalLists.length = 0;
                 arr.forEach(item => {
                     personalLists.push(item);
@@ -116,7 +119,7 @@ export const useDefaultStore = defineStore('defaultStore', () => {
             is_load_personalTags.value = true;
             const response = await fetch('http://localhost/tags');
             const arr = await response.json();
-            if ((typeof arr) === "object") {
+            if ((typeof arr) === "object" && arr.length > 0) {
                 personalTags.length = 0;
                 personalTags.push({ id:0, name:'Все теги' });
                 arr.forEach(item => {
@@ -131,10 +134,9 @@ export const useDefaultStore = defineStore('defaultStore', () => {
 
     onMounted(async () => {
         await firstRequest();
-        await getPersonalLists();
-        await getPersonalTags();
         await startIntervalUpdate();
     });
+
     return {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,

@@ -1,9 +1,9 @@
 <template>
     <div class="sort-lists">
-        <SectionHeader :is_load="defaultStore.is_load_sortLists">Списки</SectionHeader>
+        <SectionHeader :is_load="bigMenuStore.is_load_sortLists">Списки</SectionHeader>
         <div class="sort-lists__container">
             <SortList 
-                v-for="sortList in defaultStore.sortLists"
+                v-for="sortList in bigMenuStore.sortLists"
                 :key="sortList.id"
                 :color="sortList.color"
                 :url="sortList.url"
@@ -17,11 +17,11 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import {useDefaultStore} from "@/stores/DefaultStore";
+import { useBigMenuStore } from "@/stores/BigMenuStore";
 import SectionHeader from '../UI/SectionHeader.vue';
 import SortList from '@/components/UI/SortList.vue';
 
-const defaultStore = useDefaultStore();
+const bigMenuStore = useBigMenuStore();
 
 onMounted( () => {
   //defaultStore.getSortListsCount();

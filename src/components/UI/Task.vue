@@ -3,12 +3,12 @@
     <div class="task__top-container">
       <DotBtn :is_done="props.task.is_done"/>
       <div class="task__group" :class="{focused: is_focused}">
-        <input class="task__name" v-model="listName" @focus="is_focused = true" @blur="saveChanges"/>
+        <input class="task__name" :name="`name_${task.id}`" v-model="listName" @focus="is_focused = true" @blur="saveChanges"/>
         <Flag :is_flagged="task.is_flagged" :is_visible="is_visible"/>
       </div>
     </div>
     <div class="task__bottom-container"></div>
-    <textarea class="task__description"></textarea>
+    <textarea class="task__description" :name="`description_${task.id}`"></textarea>
   </div>
 </template>
 

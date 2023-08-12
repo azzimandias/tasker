@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
-    { path: '/', name: 'welcome', component: () => import('../views/WorkspaceView.vue') },
+    { path: '/', name: 'welcome', component: () => import('../views/WelcomeView.vue') },
     { path: '/workspace', name: 'workspace', component: () => import('../views/WorkspaceView.vue'),
       children: [
         {
