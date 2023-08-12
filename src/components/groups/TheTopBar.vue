@@ -23,7 +23,7 @@ import TopButton from '@/components/UI/TopButton.vue';
 import InputText from '@/components/UI/InputText.vue'
 
 const cl = ref(['person','plus','loup']);
-let isSearchMode = ref(false);
+const isSearchMode = ref(false);
 
 </script>
 

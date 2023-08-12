@@ -19,9 +19,9 @@ import Flag from "@/components/UI/Flag.vue";
 const props = defineProps({
   task: Object
 });
-let is_visible = ref(false);
-let is_focused = ref(false);
-let listName = ref(props.task.name);
+const is_visible = ref(false);
+const is_focused = ref(false);
+const listName = ref(props.task.name);
 const saveChanges = () => {
   is_focused.value = false;
   //fetch()...

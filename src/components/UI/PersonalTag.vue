@@ -12,8 +12,8 @@ const props = defineProps({
     tag: Object,
 });
 const route = useRoute();
-let id = ref(0);
-let name = ref(props.tag.name);
+const id = ref(0);
+const name = ref(props.tag.name);
 const isTag = () => {
   if(props.tag.id !== 0) {
     name.value = `#${props.tag.name}`;
@@ -36,6 +36,9 @@ onMounted(() => {
         cursor: pointer;
         transition: .3s;
         &:active { opacity: 0.8; }
-        &.active { filter: brightness(1.5) }
+        &.active {
+          background-color: #d7bc76;
+          color: #171515;
+        }
     }
 </style>

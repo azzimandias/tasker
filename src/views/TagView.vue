@@ -1,24 +1,24 @@
 <template>
   <Transition mode="out-in" name="fade">
 
-    <LoaderBig v-if="loading"/>
+    <LoaderBig v-if="listView.loading"/>
 
-    <SomethingWrong v-else-if="is_somethingWrong"/>
+    <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
     <div class="workspace" v-else>
       <div class="workspace__label">
         <p class="workspace__name">По тегам:</p>
         <TagHeader>
-          {{ tag_name }}
+          {{ listView.tag_name }}
         </TagHeader>
       </div>
       <Task
-          v-for="task in tags"
+          v-for="task in listView.tags"
           :key="task.id"
           :task="task"
-          v-if="tags.length"
+          v-if="listView.tags.length"
       />
-      <div v-if="tags.length"></div>
+      <div v-if="listView.tags.length"></div>
       <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
     </div>
 
@@ -26,44 +26,16 @@
 </template>
 
 <script setup>
-import { ref,onMounted,reactive  } from "vue";
-import { useRoute } from "vue-router";
+import { useListViewStore } from "@/stores/ListViewStore";
 import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import TagHeader from "@/components/UI/TagHeader.vue";
 import Task from "@/components/UI/Task.vue";
 import LoaderBig from "@/components/UI/LoaderBig.vue";
+import {ref} from "vue";
 
-const tags = reactive([]);
-let tag_name = ref('');
-let loading = ref(true);
-let is_somethingWrong = ref(false);
-let request = ref('');
-const route = useRoute();
-const getTags = async () => {
-  loading.value = true;
-  try {
-    loading.value = true;
-    request.value = `http://localhost/tag?id=${route.params.id_tag}`;
-    const response = await fetch(request.value);
-    const arr = await response.json();
-    if ((typeof arr[1]) === "object" && arr.length) {
-      arr[1].forEach(item => {
-        tags.push(item);
-      });
-      tag_name = arr[0];
-    } else {
-      is_somethingWrong.value = true;
-    }
-  } catch (e) {
-    console.log(e);
-    is_somethingWrong.value = true;
-  }
-  loading.value = false;
-}
-
-onMounted(async () => {
-  await getTags();
-});
+const listView = useListViewStore();
+const loading = ref(listView.loading)
+console.log(listView.loading);
 </script>
 
 <style lang="scss" scoped>
