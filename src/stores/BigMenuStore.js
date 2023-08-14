@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, reactive, onMounted } from "vue";
+import {useListViewStore} from "@/stores/ListViewStore";
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const sortLists = reactive([
         {
@@ -61,9 +62,14 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             name:'Все теги'
         }
     ]);
+    const lv = useListViewStore();
     const is_load_sortLists = ref(false);
     const is_load_personalLists = ref(false);
     const is_load_personalTags = ref(false);
+    onMounted(async () => {
+        await firstRequest();
+        await startIntervalUpdate();
+    });
     const firstRequest = async () => {
         await getSortListsCount();
         await getPersonalLists();
@@ -72,10 +78,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const startIntervalUpdate =  async () => {
         const startInterval = setInterval(() => {
             console.log('request');
+            lv.getTasksOrTags();
             getSortListsCount();
             getPersonalLists();
             getPersonalTags();
-        },30000);
+        },60000);
         setTimeout(() => {
             console.log('stop');
             clearInterval(startInterval);
@@ -131,11 +138,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             console.log(e);
         }
     }
-
-    onMounted(async () => {
-        await firstRequest();
-        await startIntervalUpdate();
-    });
 
     return {
         sortLists, is_load_sortLists,

@@ -3,7 +3,14 @@
     <div class="task__top-container">
       <DotBtn :is_done="props.task.is_done"/>
       <div class="task__group" :class="{focused: is_focused}">
-        <input class="task__name" :name="`name_${task.id}`" v-model="listName" @focus="is_focused = true" @blur="saveChanges"/>
+        <input class="task__name"
+               :name="`name_${task.id}`"
+               v-model="imageOfTask.name"
+               @click.left="is_focused = true"
+               @blur="saveChanges"
+               @keyup.enter="saveChanges"
+               ref="taskNode"
+        />
         <Flag :is_flagged="task.is_flagged" :is_visible="is_visible"/>
       </div>
     </div>
@@ -14,17 +21,42 @@
 
 <script setup>
 import { ref,defineProps } from 'vue';
+import {useListViewStore} from "@/stores/ListViewStore";
 import DotBtn from "@/components/UI/DotBtn.vue";
 import Flag from "@/components/UI/Flag.vue";
 const props = defineProps({
   task: Object
 });
+const imageOfTask = props.task;
 const is_visible = ref(false);
 const is_focused = ref(false);
-const listName = ref(props.task.name);
+const listView = useListViewStore();
+const taskNode = ref(null);
 const saveChanges = () => {
   is_focused.value = false;
-  //fetch()...
+  //taskNode.value.blur();
+  if (objectsEqual(props.task, imageOfTask)) {
+    listView.updateTask(imageOfTask);
+  }
+};
+
+const objectsEqual = (o1, o2) => {
+  const entries1 = Object.entries(o1);
+  const entries2 = Object.entries(o2);
+  if (entries1.length !== entries2.length) {
+    return false;
+  }
+  for (let i = 0; i < entries1.length; ++i) {
+    // Ключи
+    if (entries1[i][0] !== entries2[i][0]) {
+      return false;
+    }
+    // Значения
+    if (entries1[i][1] !== entries2[i][1]) {
+      return false;
+    }
+  }
+  return true;
 };
 </script>
 

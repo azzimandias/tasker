@@ -9,7 +9,7 @@
       <ListHeader>{{ listView.header }}</ListHeader>
       <Task
           v-for="task in listView.tasks"
-          :key="task.id"
+          :key="task.key"
           :task="task"
           v-if="listView.tasks.length"
       />
@@ -21,6 +21,7 @@
 
 <script setup>
 import { useListViewStore } from "@/stores/ListViewStore";
+import {reactive, watchEffect} from 'vue';
 import ListHeader from "@/components/UI/ListHeader.vue";
 import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import Task from "@/components/UI/Task.vue";
