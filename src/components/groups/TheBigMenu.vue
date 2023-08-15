@@ -6,7 +6,10 @@
             <ThePersonalLists/>
             <ThePersonalTags/>
         </div>
-        <button class="new-personal-list-btn">Новый список</button>
+        <button class="new-personal-list-btn" @click="is_popup=true">Новый список</button>
+      <Teleport to="body">
+        <CreateNewListPopup v-if="is_popup" @close="is_popup=false"/>
+      </Teleport>
     </div>
 </template>
 
@@ -15,6 +18,9 @@ import ApplicationName from '@/components/UI/ApplicationName.vue';
 import TheSortLists from '@/components/groups/TheSortLists.vue';
 import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
 import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
+import CreateNewListPopup from "@/components/groups/CreateNewListPopup.vue";
+import {ref} from "vue";
+const is_popup = ref(false);
 </script>
 
 <style scoped lang="scss">
