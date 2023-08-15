@@ -1,5 +1,8 @@
 <template>
     <div class="top-bar">
+
+      <Transition mode="out-in" name="fade">
+
         <div class="top-bar__container" v-if="!isSearchMode">
             <TopButton :cl="cl[0]"/>
             <TopButton :cl="cl[1]"/>
@@ -10,10 +13,22 @@
                 :isSearchMode="isSearchMode"
             />
         </div>
-        <TopButton 
+
+      </Transition>
+
+      <Transition mode="out-in" name="fade">
+
+        <TopButton v-if="!isSearchMode"
             :cl="cl[2]"
-            @click="isSearchMode = !isSearchMode"
+            @click="isSearchMode = true"
         />
+        <TopButton v-else
+            :cl="cl[3]"
+            @click="isSearchMode = false"
+        />
+
+      </Transition>
+
     </div>
 </template>
 
@@ -22,7 +37,7 @@ import { ref, watch, nextTick } from 'vue';
 import TopButton from '@/components/UI/TopButton.vue';
 import InputText from '@/components/UI/InputText.vue'
 
-const cl = ref(['person','plus','loup']);
+const cl = ref(['person','plus','loup','close']);
 const isSearchMode = ref(false);
 
 </script>
@@ -42,5 +57,17 @@ const isSearchMode = ref(false);
         display: flex;
         justify-content: space-between;
         padding-right: 11px;
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: all 0.25s ease-out;
+    }
+
+    .fade-enter-from {
+      opacity: 0;
+    }
+
+    .fade-leave-to {
+      opacity: 0;
     }
 </style>

@@ -31,11 +31,8 @@ import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import TagHeader from "@/components/UI/TagHeader.vue";
 import Task from "@/components/UI/Task.vue";
 import LoaderBig from "@/components/UI/LoaderBig.vue";
-import {ref} from "vue";
 
 const listView = useListViewStore();
-const loading = ref(listView.loading)
-console.log(listView.loading);
 </script>
 
 <style lang="scss" scoped>

@@ -4,6 +4,7 @@
       <router-view v-if="route.params.name" :key="route.params.name"/>
       <router-view v-else-if="route.params.id_list" :key="route.params.id_list"/>
       <router-view v-else-if="route.params.id_tag" :key="route.params.id_tag"/>
+      <router-view v-else :key="route.path"/>
   </div>
 </template>
 

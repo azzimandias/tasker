@@ -1,17 +1,22 @@
 <template>
   <div class="task" @mouseover="is_visible = true" @mouseout="is_visible = false">
     <div class="task__top-container">
-      <DotBtn :is_done="props.task.is_done"/>
+      <DotBtn :is_done="props.task.is_done"
+              @dot="saveChangesDot"
+      />
       <div class="task__group" :class="{focused: is_focused}">
         <input class="task__name"
                :name="`name_${task.id}`"
-               v-model="imageOfTask.name"
+               v-model="props.task.name"
                @click.left="is_focused = true"
                @blur="saveChanges"
                @keyup.enter="saveChanges"
                ref="taskNode"
         />
-        <Flag :is_flagged="task.is_flagged" :is_visible="is_visible"/>
+        <Flag :is_flagged="props.task.is_flagged"
+              :is_visible="is_visible"
+              @flag="saveChangesFlag"
+        />
       </div>
     </div>
     <div class="task__bottom-container"></div>
@@ -24,18 +29,39 @@ import { ref,defineProps } from 'vue';
 import {useListViewStore} from "@/stores/ListViewStore";
 import DotBtn from "@/components/UI/DotBtn.vue";
 import Flag from "@/components/UI/Flag.vue";
+
 const props = defineProps({
   task: Object
 });
-const imageOfTask = props.task;
+
+const imageOfTask = Object.assign({}, props.task);
 const is_visible = ref(false);
 const is_focused = ref(false);
 const listView = useListViewStore();
 const taskNode = ref(null);
 const saveChanges = () => {
   is_focused.value = false;
-  //taskNode.value.blur();
-  if (objectsEqual(props.task, imageOfTask)) {
+  taskNode.value.blur();
+  if (!objectsEqual(props.task, imageOfTask)) {
+    imageOfTask.name = props.task.name;
+    listView.updateTask(imageOfTask);
+  }
+};
+
+const saveChangesFlag = () => {
+  if (props.task.is_flagged) { props.task.is_flagged = 0; }
+  else { props.task.is_flagged = 1; }
+  if (!objectsEqual(props.task, imageOfTask)) {
+    imageOfTask.is_flagged = props.task.is_flagged;
+    listView.updateTask(imageOfTask);
+  }
+};
+
+const saveChangesDot = () => {
+  if (props.task.is_done) { props.task.is_done = 0; }
+  else { props.task.is_done = 1; }
+  if (!objectsEqual(props.task, imageOfTask)) {
+    imageOfTask.is_done = props.task.is_done;
     listView.updateTask(imageOfTask);
   }
 };
@@ -47,11 +73,9 @@ const objectsEqual = (o1, o2) => {
     return false;
   }
   for (let i = 0; i < entries1.length; ++i) {
-    // Ключи
     if (entries1[i][0] !== entries2[i][0]) {
       return false;
     }
-    // Значения
     if (entries1[i][1] !== entries2[i][1]) {
       return false;
     }

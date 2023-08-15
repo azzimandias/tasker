@@ -1,17 +1,13 @@
 <template>
-  <button class="btn task__btn" :class="{ done: props.is_done }" @click="switchBtn"></button>
+  <button class="btn task__btn" :class="{ done: props.is_done }" @click="emits('dot')"></button>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-
+import { defineProps, defineEmits } from 'vue';
 const props = defineProps({
   is_done: Number
 });
-
-const switchBtn = () => {
-
-}
+const emits = defineEmits(['dot']);
 </script>
 
 <style lang="scss" scoped>

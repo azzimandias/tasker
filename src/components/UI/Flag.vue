@@ -1,13 +1,17 @@
 <template>
-  <button class="flag" :class="{active: props.is_flagged, not_active: !props.is_flagged, visible: is_visible}"></button>
+  <button class="flag"
+          :class="{active: props.is_flagged, not_active: !props.is_flagged, visible: is_visible}"
+          @click="emits('flag')"
+  ></button>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref, defineEmits } from "vue";
 const props = defineProps({
   is_flagged: Number,
   is_visible: Boolean
 });
+const emits = defineEmits(['flag']);
 </script>
 
 <style lang="scss" scoped>

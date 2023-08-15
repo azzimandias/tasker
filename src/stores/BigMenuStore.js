@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, reactive, onMounted } from "vue";
 import {useListViewStore} from "@/stores/ListViewStore";
+import api from '@/api';
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const sortLists = reactive([
         {
@@ -88,30 +89,25 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             clearInterval(startInterval);
         }, 60 * 60000);
     }
+
     const getSortListsCount = async () => {
-        try {
-            is_load_sortLists.value = true;
-            const response = await fetch('http://localhost/sortLists');
-            const arr = await response.json();
-            if ((typeof arr) === "object") {
-                arr.forEach(item => {
-                    sortLists[item.id-1].count = item.count;
-                });
-                is_load_sortLists.value = false;
-            }
-        } catch (e) {
-            console.log(e);
+        is_load_sortLists.value = true;
+        const response = await api.getInfo('http://localhost/sortLists');
+        if ((typeof response) === "object") {
+            response.forEach(item => {
+                sortLists[item.id-1].count = item.count;
+            });
+            is_load_sortLists.value = false;
         }
     }
 
     const getPersonalLists = async () => {
         try {
             is_load_personalLists.value = true;
-            const response = await fetch('http://localhost/lists');
-            const arr = await response.json();
-            if ((typeof arr) === "object" && arr.length > 0) {
+            const response = await api.getInfo('http://localhost/lists');
+            if ((typeof response) === "object" && response.length > 0) {
                 personalLists.length = 0;
-                arr.forEach(item => {
+                response.forEach(item => {
                     personalLists.push(item);
                 });
                 is_load_personalLists.value = false;
@@ -124,12 +120,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getPersonalTags = async () => {
         try {
             is_load_personalTags.value = true;
-            const response = await fetch('http://localhost/tags');
-            const arr = await response.json();
-            if ((typeof arr) === "object" && arr.length > 0) {
+            const response = await api.getInfo('http://localhost/tags');
+            if ((typeof response) === "object" && response.length > 0) {
                 personalTags.length = 0;
                 personalTags.push({ id:0, name:'Все теги' });
-                arr.forEach(item => {
+                response.forEach(item => {
                     personalTags.push(item);
                 });
                 is_load_personalTags.value = false;
@@ -143,5 +138,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
         personalTags, is_load_personalTags,
+        firstRequest
     };
 });

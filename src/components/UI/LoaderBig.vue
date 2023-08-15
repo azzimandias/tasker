@@ -44,15 +44,6 @@ $color: #d7bc76;
 $size: 12px;
 $time: 1;
 
-main {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background:  #090707;
-}
-
 .loader {
   display: flex;
   flex-direction: column;

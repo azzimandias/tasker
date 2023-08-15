@@ -21,4 +21,5 @@ export default {
     .person { background-image: url('../../assets/svgs/person.svg'); }
     .plus { background-image: url('../../assets/svgs/plus.svg'); }
     .loup { background-image: url('../../assets/svgs/magnifying-glass.svg'); }
+    .close { background-image: url('../../assets/svgs/close.svg'); }
 </style>

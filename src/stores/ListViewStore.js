@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import {ref, reactive, onMounted, watchEffect} from "vue";
 import {useRoute} from "vue-router";
+import api from "@/api";
+import {useBigMenuStore} from "@/stores/BigMenuStore";
 
 export const useListViewStore = defineStore('listViewStore', () => {
     const tasks = reactive([]);
@@ -13,6 +15,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const request = ref('');
     const route = useRoute();
     const currentPath = ref(route.path);
+    const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
         await getTasksOrTags();
@@ -45,12 +48,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
             request.value = `http://localhost/list?name=${route.params.name}`;
         } else if (route.params.id_tag) {
             request.value = `http://localhost/tag?id=${route.params.id_tag}`;
+        } else { request.value = ''; }
+        if (request.value) {
+            const response = await api.getInfo(request.value);
+            setTimeout(() => {
+                updateData(response);
+            }, 300);
         }
-        const response =  await fetch(request.value);
-        const arr =  await response.json();
-        setTimeout(() => {
-            updateData(arr);
-        }, 300);
     }
 
     const updateData = (arr) => {
@@ -83,22 +87,12 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateTask = async (task) => {
-        console.log(JSON.stringify(task));
         try {
-            const response =  await fetch(`http://localhost/updateTask`,{
-                method: 'POST',
-                headers: {
-                    'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify(task)
-            });
-            const arr =  await response.json();
-            console.log(arr);
+            const response = await api.postInfo(`http://localhost/updateTask`, task);
         } catch (e) {
             console.log(e);
         }
+        await bigMenu.firstRequest();
     }
 
     return {

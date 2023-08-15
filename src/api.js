@@ -1,17 +1,33 @@
 import axios from "axios";
-import config from "./config";
-
 export const HTTP = axios.create({
-    baseURL: config.MOCK,
+    baseURL: 'https://localhost',
+    headers: {
+        'Accept': 'application/json'
+    }
 });
-
 export default {
-    async getTags() {
+    async getCookies() {
+        HTTP.defaults.withCredentials = true;
         try {
-            const response = await HTTP.get('https://0a7f480b-e28b-43e2-bf10-0f77a152cddf.mock.pstmn.io');
-            return response.data;
+            await HTTP.get('http://localhost/sanctum/csrf-cookie');
         } catch (e) {
             console.log(e);
         }
-    }
+    },
+    async getInfo(path) {
+        try {
+            const response = await HTTP.get(path);
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
+    async postInfo(path, body) {
+        try {
+            const response = await HTTP.post(path, JSON.stringify(body));
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
 }
