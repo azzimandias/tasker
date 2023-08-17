@@ -44,10 +44,13 @@ const is_popup = ref(false);
 
       &::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-        background-color: #4b4b4b;
+        background-color: #26282B;
       }
     }
     .big-menu__wrapper {
+      flex: 1 0 100px;
+      display: flex;
+      flex-direction: column;
         > div {
             padding: 0 11px;
         }

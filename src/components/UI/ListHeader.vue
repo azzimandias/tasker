@@ -17,9 +17,9 @@ const listView = useListViewStore();
     position: sticky;
     top: 0;
     background-color: #1D1F22;
-    padding-top: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 15px 20px 0 20px;
   }
 </style>
