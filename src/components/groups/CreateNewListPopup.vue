@@ -38,9 +38,9 @@ const saveColor = (val) => {
   color.value = val;
 }
 const saveList = async () => {
-  await api.saveList({name: name.value, color: color.value});
-  await bigMenu.firstRequest();
   emits('close');
+  await api.saveList({name: name.value.trim(), color: color.value});
+  await bigMenu.firstRequest();
 };
 </script>
 

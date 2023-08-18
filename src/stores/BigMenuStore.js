@@ -8,7 +8,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             id: 1,
             name: 'Сегодня',
             count: '',
-            color: 'gray',
+            color: '#4ceba7',
             url: '/workspace/sortList=today'
         },
         {
@@ -16,7 +16,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             id: 2,
             name: 'С флажком',
             count: '',
-            color: '#be5252',
+            color: '#e76262',
             url: '/workspace/sortList=with_flag'
         },
         {
@@ -32,7 +32,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             id: 4,
             name: 'Все',
             count: '',
-            color: '#a66f0a',
+            color: '#c4c4c4',
             url: '/workspace/sortList=all'
         },
     ]);

@@ -1,15 +1,20 @@
 <template>
-  <button class="flag"
-          :class="{active: props.is_flagged, not_active: !props.is_flagged, visible: is_visible}"
-          @click="emits('flag')"
-  ></button>
+  <label
+      :for="`flag_${props.id}`"
+      class="flag"
+      :class="{active: props.is_flagged, not_active: !props.is_flagged, visible: is_visible}"
+      @click="emits('flag')"
+  >
+    <input type="checkbox" :id="`flag_${props.id}`" class="checkbox"/>
+  </label>
 </template>
 
 <script setup>
 import { defineProps, ref, defineEmits } from "vue";
 const props = defineProps({
   is_flagged: Number,
-  is_visible: Boolean
+  is_visible: Boolean,
+  id: Number,
 });
 const emits = defineEmits(['flag']);
 </script>
@@ -24,6 +29,7 @@ const emits = defineEmits(['flag']);
     background-repeat: no-repeat;
     cursor: pointer;
     opacity: 0;
+    transition: .3s;
     &.active {
       background-image: url("@/assets/svgs/flag_active.svg");
       opacity: 1;
@@ -34,5 +40,9 @@ const emits = defineEmits(['flag']);
     &.visible {
       opacity: 1;
     }
+  }
+  .checkbox {
+    opacity: 0;
+    cursor: pointer;
   }
 </style>

@@ -1,11 +1,15 @@
 <template>
   <div class="task" @mouseover="is_visible = true" @mouseout="is_visible = false">
     <div class="task__top-container">
-      <DotBtn :is_done="props.task.is_done"
-              @dot="saveChangesDot"
+      <DotBtn
+          :is_done="props.task.is_done"
+          :id="props.task.id"
+          :color="props.color"
+          @dot="saveChangesDot"
       />
       <div class="task__group" :class="{focused: is_focused}">
         <input class="task__name"
+               :style="{color: props.color}"
                :name="`name_${task.id}`"
                v-model="props.task.name"
                @click.left="is_focused = true"
@@ -15,6 +19,7 @@
         />
         <Flag :is_flagged="props.task.is_flagged"
               :is_visible="is_visible"
+              :id="props.task.id"
               @flag="saveChangesFlag"
         />
       </div>
@@ -31,7 +36,8 @@ import DotBtn from "@/components/UI/DotBtn.vue";
 import Flag from "@/components/UI/Flag.vue";
 
 const props = defineProps({
-  task: Object
+  task: Object,
+  color: String,
 });
 
 const imageOfTask = Object.assign({}, props.task);
@@ -126,6 +132,7 @@ const objectsEqual = (o1, o2) => {
     height: 25px;
     transition: .3s;
     cursor: pointer;
+    font-weight: 600;
   }
   .task__bottom-container {
     //min-height: 25px;

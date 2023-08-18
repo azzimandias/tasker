@@ -12,11 +12,11 @@ const router = createRouter({
         },
         {
           path: 'sortList=:name',
-          component: () => import('../views/ListView.vue'),
+          component: () => import('../views/SortListView.vue'),
         },
         {
           path: 'list=:id_list',
-          component: () => import('../views/ListView.vue'),
+          component: () => import('../views/PersonalListView.vue'),
         },
         {
           path: 'tag=:id_tag',

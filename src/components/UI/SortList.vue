@@ -38,14 +38,20 @@ let currentColor = props.color;
         cursor: pointer;
         transition: .3s;
         &:active {
-            //background-color: #5C5D5F;
+            background-color: #5C5D5F;
             opacity: 0.8;
             .sort-list__count, .sort-list__label {
                 color: #ADAEAF;
             }
         }
         &.active {
-          filter: brightness(1.5);
+          background-color: #5C5D5F;
+          .sort-list__count, .sort-list__label {
+            color: white;
+          }
+          .circle {
+            box-shadow: 0 0 6px #26282B;
+          }
         }
     }
     .sort-list__container {

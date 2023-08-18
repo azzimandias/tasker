@@ -31,8 +31,16 @@ import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import TagHeader from "@/components/UI/TagHeader.vue";
 import Task from "@/components/UI/Task.vue";
 import LoaderBig from "@/components/UI/LoaderBig.vue";
+import {useRoute} from "vue-router";
+import {watchEffect} from "vue";
 
 const listView = useListViewStore();
+const route = useRoute();
+watchEffect(() => {
+  if (!route.params.id_tag) {
+    listView.loading = true;
+  }
+})
 </script>
 
 <style lang="scss" scoped>

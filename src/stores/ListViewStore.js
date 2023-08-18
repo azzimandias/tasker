@@ -6,7 +6,15 @@ import {useBigMenuStore} from "@/stores/BigMenuStore";
 
 export const useListViewStore = defineStore('listViewStore', () => {
     const tasks = reactive([]);
-    const header = ref('');
+    const listInfo = reactive({
+        name: '',
+        color: '',
+    });
+    const sortListInfo = reactive({
+        id: 0,
+        name: '',
+        color: '',
+    });
     const tags = reactive([]);
     const tag_name = ref('');
     const loading = ref(true);
@@ -72,8 +80,15 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     tags.push(item);
                 }
             });
-            if (route.params.id_list || route.params.name) {
-                header.value = arr[0];
+            if (route.params.id_list) {
+                listInfo.name = arr[0].name;
+                listInfo.color = arr[0].color;
+            } else if (route.params.name) {
+                sortListInfo.id = arr[0].id;
+                sortListInfo.name = arr[0].name;
+                bigMenu.sortLists.forEach(sortList => {
+                    if (sortList.id === sortListInfo.id) { sortListInfo.color = sortList.color; }
+                });
             } else if (route.params.id_tag) {
                 tag_name.value = arr[0];
             }
@@ -97,7 +112,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     return {
         tasks,
-        header,
+        listInfo,
+        sortListInfo,
         loading,
         loadingSmall,
         is_somethingWrong,

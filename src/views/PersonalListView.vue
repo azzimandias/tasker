@@ -6,12 +6,13 @@
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
     <div class="workspace" v-else>
-      <ListHeader>{{ listView.header }}</ListHeader>
+      <ListHeader :color="listView.listInfo.color">{{ listView.listInfo.name }}</ListHeader>
       <div class="task__container">
         <Task
             v-for="task in listView.tasks"
             :key="task.key"
             :task="task"
+            :color="listView.listInfo.color"
             v-if="listView.tasks.length"
         />
         <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
@@ -23,13 +24,20 @@
 
 <script setup>
 import { useListViewStore } from "@/stores/ListViewStore";
-import {reactive, watchEffect} from 'vue';
 import ListHeader from "@/components/UI/ListHeader.vue";
 import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import Task from "@/components/UI/Task.vue";
 import LoaderBig from "@/components/UI/LoaderBig.vue";
+import {watchEffect} from "vue";
+import {useRoute} from "vue-router";
 
 const listView = useListViewStore();
+const route = useRoute();
+watchEffect(() => {
+  if (!route.params.id_list) {
+    listView.loading = true;
+  }
+})
 </script>
 
 <style lang="scss" scoped>
