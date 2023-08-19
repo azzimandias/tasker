@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import {defineEmits, ref} from 'vue';
+import {ref} from 'vue';
 import TopButton from "@/components/UI/TopButton.vue";
 import InputText from "@/components/UI/InputText.vue";
 import Coloris from "@/components/UI/Coloris.vue";

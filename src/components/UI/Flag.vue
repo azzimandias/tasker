@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits } from "vue";
+import { ref } from "vue";
 const props = defineProps({
   is_flagged: Number,
   is_visible: Boolean,

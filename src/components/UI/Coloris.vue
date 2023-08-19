@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits} from "vue";
+import {ref} from "vue";
 import coloris from '@/coloris';
 const props = defineProps({
   color: String,

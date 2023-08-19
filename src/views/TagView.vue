@@ -79,7 +79,7 @@ watchEffect(() => {
     width: 100%;
     min-height: 60px;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     grid-gap: 5px;
     padding: 10px 0;
     color: #aaadae;

@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import {defineProps, onMounted, ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({

@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
 import Loader from './Loader.vue';
 const props = defineProps({
   'is_load': Boolean,

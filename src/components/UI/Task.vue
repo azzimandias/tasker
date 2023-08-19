@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref,defineProps } from 'vue';
+import { ref } from 'vue';
 import {useListViewStore} from "@/stores/ListViewStore";
 import DotBtn from "@/components/UI/DotBtn.vue";
 import Flag from "@/components/UI/Flag.vue";
