@@ -19,7 +19,7 @@ const props = defineProps({
     color: #c4c4c4;
     position: sticky;
     top: 0;
-    background-color: #1D1F22;
+    background-color: transparent;
     display: flex;
     justify-content: space-between;
     align-items: center;

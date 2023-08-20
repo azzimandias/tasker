@@ -11,6 +11,7 @@
         <input class="task__name"
                :style="{color: props.color}"
                :name="`name_${task.id}`"
+               placeholder="Задача"
                v-model="props.task.name"
                @click.left="is_focused = true"
                @blur="saveChanges"
@@ -24,8 +25,34 @@
         />
       </div>
     </div>
-    <div class="task__bottom-container"></div>
-    <textarea class="task__description" :name="`description_${task.id}`"></textarea>
+    <div class="task__bottom-container">
+      <textarea
+                placeholder="Описание"
+                class="task__description"
+                :name="`description_${task.id}`"
+                v-model="props.task.description"
+                @blur="saveChangesTextarea"
+                ref="taskTextareaNode"
+      ></textarea>
+      <div class="info-btns__container">
+<!--        <label :for="`date_${task.id}`">
+          <input :id="`date_${task.id}`" class="date_inp" type="date"/>
+        </label>-->
+        <div class="lb">
+<!--          <VueDatePicker
+              v-model="props.task.deadline"
+              :dark="true"
+              :position="'center'"
+              :teleport="true"
+              :locale="'ru'"
+              :format="'dd-MM-yyyy'"
+              :close-on-scroll="true"
+              :placeholder="'Дата'"
+              :text-input="true"
+          />-->
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,6 +61,8 @@ import { ref } from 'vue';
 import {useListViewStore} from "@/stores/ListViewStore";
 import DotBtn from "@/components/UI/DotBtn.vue";
 import Flag from "@/components/UI/Flag.vue";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 const props = defineProps({
   task: Object,
@@ -45,12 +74,22 @@ const is_visible = ref(false);
 const is_focused = ref(false);
 const listView = useListViewStore();
 const taskNode = ref(null);
+const taskTextareaNode = ref(null);
 const saveChanges = () => {
   is_focused.value = false;
   taskNode.value.blur();
   if (!objectsEqual(props.task, imageOfTask)) {
     imageOfTask.name = props.task.name;
     listView.updateTask(imageOfTask);
+  }
+};
+
+const saveChangesTextarea = () => {
+  taskTextareaNode.value.blur();
+  if (!objectsEqual(props.task, imageOfTask)) {
+    imageOfTask.description = props.task.description;
+    listView.updateTask(imageOfTask);
+    console.log(imageOfTask)
   }
 };
 
@@ -94,7 +133,7 @@ const objectsEqual = (o1, o2) => {
   .task {
     width: 100%;
     min-height: 50px;
-    height: 50px;
+    //height: 50px;
     color: #C5C7CA;
     display: flex;
     flex-direction: column;
@@ -137,9 +176,32 @@ const objectsEqual = (o1, o2) => {
   .task__bottom-container {
     //min-height: 25px;
     margin-left: 35px;
+    padding-bottom: 5px;
     border-bottom: 2px solid #494B4E;
   }
   .task__description {
-    display: none;
+    width: 100%;
+    height: 25px;
+    color: #c4c4c4;
+  }
+  .info-btns__container {
+    width: 100%;
+    height: 25px;
+    display: flex;
+    grid-gap: 5px;
+  }
+  .lb {
+    width: 100px;
+    height: 20px;
+    //background-color: rgba(73, 75, 78, 0.4);
+    background-color: white;
+    border: 2px solid #494B4E;
+    border-radius: 5px;
+    overflow: hidden;
+    &:first-child {
+      opacity: 0;
+      border: none;
+      background: none;
+    }
   }
 </style>

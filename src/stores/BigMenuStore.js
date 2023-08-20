@@ -79,7 +79,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const startIntervalUpdate =  async () => {
         const startInterval = setInterval(() => {
             console.log('request');
-            lv.getTasksOrTags();
+            //lv.getTasksOrTags();
             getSortListsCount();
             getPersonalLists();
             getPersonalTags();
