@@ -13,9 +13,17 @@
             :key="task.key"
             :task="task"
             :color="listView.listInfo.color"
+            :is_new="false"
             v-if="listView.tasks.length"
         />
-        <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
+        <Task
+            :task="emptyTask"
+            :color="listView.listInfo.color"
+            :is_new="true"
+            @close="emit('close')"
+            v-if="props.newTask"
+        />
+<!--        <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>-->
       </div>
     </div>
 
@@ -31,6 +39,10 @@ import LoaderBig from "@/components/UI/LoaderBig.vue";
 import {watchEffect} from "vue";
 import {useRoute} from "vue-router";
 
+const props = defineProps({
+  newTask: Boolean,
+})
+const emit = defineEmits(['close']);
 const listView = useListViewStore();
 const route = useRoute();
 watchEffect(() => {
@@ -38,6 +50,13 @@ watchEffect(() => {
     listView.loading = true;
   }
 })
+const emptyTask = {
+  id: 0,
+  name: '',
+  color: '',
+  description: '',
+  deadline: ''
+}
 </script>
 
 <style lang="scss" scoped>

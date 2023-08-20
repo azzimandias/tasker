@@ -1,17 +1,33 @@
 <template>
   <div class="tasker">
-      <TheTopBar/>
-      <router-view v-if="route.params.name" :key="route.params.name"/>
-      <router-view v-else-if="route.params.id_list" :key="route.params.id_list"/>
-      <router-view v-else-if="route.params.id_tag" :key="route.params.id_tag"/>
-      <router-view v-else :key="route.path"/>
+      <TheTopBar @newTask="newTask = true"/>
+      <router-view
+          v-if="route.params.name"
+          :key="route.params.name"
+      />
+      <router-view
+          v-else-if="route.params.id_list"
+          :key="route.params.id_list"
+          :newTask="newTask"
+          @close="newTask = false"
+      />
+      <router-view
+          v-else-if="route.params.id_tag"
+          :key="route.params.id_tag"
+      />
+      <router-view
+          v-else
+          :key="route.path"
+      />
   </div>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
 import TheTopBar from '@/components/groups/TheTopBar.vue';
+import {ref} from "vue";
 const route = useRoute();
+const newTask = ref(false);
 </script>
 
 <style>

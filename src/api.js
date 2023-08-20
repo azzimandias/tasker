@@ -30,6 +30,14 @@ export default {
             console.log(e);
         }
     },
+    async createTask(path, body) {
+        try {
+            const response = await HTTP.post(path, JSON.stringify(body));
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
     async saveList(obj) {
         try {
             const response = await HTTP.post('http://localhost/saveList', JSON.stringify(obj));

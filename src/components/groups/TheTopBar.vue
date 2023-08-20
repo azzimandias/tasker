@@ -5,7 +5,7 @@
 
         <div class="top-bar__container" v-if="!isSearchMode">
             <TopButton :cl="cl[0]"/>
-            <TopButton :cl="cl[1]"/>
+            <TopButton :cl="cl[1]" @mouseup="emit('newTask')"/>
         </div>
         <div class="top-bar__container vide" v-else>
             <InputText 
@@ -37,6 +37,7 @@ import { ref, watch, nextTick } from 'vue';
 import TopButton from '@/components/UI/TopButton.vue';
 import InputText from '@/components/UI/InputText.vue'
 
+const emit = defineEmits(['newTask']);
 const cl = ref(['person','plus','loup','close']);
 const isSearchMode = ref(false);
 

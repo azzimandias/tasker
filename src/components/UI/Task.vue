@@ -49,32 +49,36 @@
           />
           <div class="date__wrapper">
             <img class="date-pic" src="../../assets/svgs/calendar.svg" alt="calendar">
-            <p class="date">{{ props.task.deadline }}</p>
+            <p class="date" v-if="props.task.deadline">{{ props.task.deadline }}</p>
+            <p class="date" v-else>Дата</p>
           </div>
         </div>
-
-        <div class="lb">
-
-        </div>
-
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import {useListViewStore} from "@/stores/ListViewStore";
 import DotBtn from "@/components/UI/DotBtn.vue";
 import Flag from "@/components/UI/Flag.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
+onMounted(() => {
+  if (props.is_new) {
+    taskNode.value.focus();
+  }
+});
+
 const props = defineProps({
   task: Object,
   color: String,
+  is_new: Boolean,
 });
+
+const emit = defineEmits(['close']);
 
 const imageOfTask = Object.assign({}, props.task);
 const is_visible = ref(false);
@@ -91,7 +95,22 @@ const openDatePicker = () => {
 const saveChanges = () => {
   is_focused.value = false;
   taskNode.value.blur();
-  if (!objectsEqual(props.task, imageOfTask)) {
+  if (props.is_new) {
+    if (!props.task.name) {
+      emit('close');
+    } else {
+      let newTask = {
+        name: props.task.name,
+        id_list: listView.listInfo.id,
+      };
+      listView.createTask(newTask);
+      emit('close');
+      listView.getTasksOrTags();
+      props.task.name = '';
+      props.task.description = '';
+      props.task.deadline = '';
+    }
+  } else if (!objectsEqual(props.task, imageOfTask)) {
     imageOfTask.name = props.task.name;
     listView.updateTask(imageOfTask);
   }
