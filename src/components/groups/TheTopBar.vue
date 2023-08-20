@@ -49,7 +49,7 @@ const isSearchMode = ref(false);
         display: flex;
         align-items: center;
         padding: 11px 17.5px;
-        background-color: #3F4041;
+        background-color: transparent;
     }
     .top-bar__container {
         &.vide { height: 100%; }

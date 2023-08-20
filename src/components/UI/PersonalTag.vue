@@ -25,9 +25,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+  @import "../../assets/styles/global.scss";
     .personal-tag {
-        background-color: #45474A;
-        color: #aaadae;
+        background-color: $personal;
+        color: $textColor;
         font-size: 13px;
         padding: 5px 8px;
         border-radius: 5px;
@@ -37,8 +38,8 @@ onMounted(() => {
         transition: .3s;
         &:active { opacity: 0.8; }
         &.active {
-          background-color: #d7bc76;
-          color: #171515;
+          background-color: $gold;
+          color: $textColorActive;
         }
     }
 </style>

@@ -15,8 +15,9 @@ const route = useRoute();
 </script>
 
 <style>
+    @import "../../assets/styles/global.scss";
     .tasker {
-        background-color: #1D1F22;
+        background-color: $tasker;
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 40px 1fr;

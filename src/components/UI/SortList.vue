@@ -25,10 +25,11 @@ let currentColor = props.color;
 </script>
 
 <style scoped lang="scss">
+    @import "../../assets/styles/global.scss";
     .sort-list {
         width: 100%;
         height: 70px;
-        background-color: #494B4E;
+        background-color: $personal;
         border-radius: 13px;
         padding: 8px 9px 5px 9px;
         display: flex;
@@ -37,16 +38,16 @@ let currentColor = props.color;
         cursor: pointer;
         transition: .3s;
         &:active {
-            background-color: #5C5D5F;
+            background-color: $gold;
             opacity: 0.8;
             .sort-list__count, .sort-list__label {
-                color: #ADAEAF;
+                color: $textColorActive;
             }
         }
         &.active {
-          background-color: #5C5D5F;
+          background-color: $gold;
           .sort-list__count, .sort-list__label {
-            color: white;
+            color: $textColorActive;
           }
           .circle {
             box-shadow: 0 0 6px #26282B;
@@ -63,10 +64,11 @@ let currentColor = props.color;
         border-radius: 90px;
         width: 30px;
         height: 30px;
+        transition: .3s;
     }
     .sort-list__count, .sort-list__label {
         font-size: 18px;
-        color: #C5C7CA;
+        color: $textColor;
     }
     .sort-list__count { font-weight: 600; }
     .sort-list__label { font-weight: 400; font-size: 15px; }

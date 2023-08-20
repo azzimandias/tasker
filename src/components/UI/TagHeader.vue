@@ -16,10 +16,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+  @import "../../assets/styles/global.scss";
   .tag-header {
     width: auto;
     height: auto;
-    background-color: #d7bc76;
+    background-color: $gold;
     color: #171515;
     font-size: 20px;
     padding: 5px 8px;

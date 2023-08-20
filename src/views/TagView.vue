@@ -5,7 +5,7 @@
 
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
-    <div class="workspace" v-else>
+    <div class="workspace scroll" v-else>
       <div class="workspace__label">
         <p class="workspace__name">По тегам:</p>
         <TagHeader>
@@ -52,21 +52,6 @@ watchEffect(() => {
     align-items: center;
     grid-gap: 20px;
     padding: 0 20px;
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-      width: 5px;
-      background-color: #0a0a0a;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-      background-color: #c4c4c4;
-    }
-
-    &::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-      background-color: #26282B;
-    }
   }
   .empty-list__title {
     flex: 1 0 100px;

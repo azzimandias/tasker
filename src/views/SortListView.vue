@@ -6,7 +6,7 @@
 
     <div class="workspace" v-else>
       <ListHeader :color="listView.sortListInfo.color">{{ listView.sortListInfo.name }}</ListHeader>
-      <div class="task__container">
+      <div class="task__container scroll">
         <Task
             v-for="task in listView.tasks"
             :key="task.key"
@@ -56,19 +56,6 @@ watchEffect(() => {
   justify-content: flex-start;
   align-items: center;
   grid-gap: 20px;
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 5px;
-    background-color: #0a0a0a;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: #c4c4c4;
-  }
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-    background-color: #26282B;
-  }
 }
 .empty-list__title {
   flex: 1 0 100px;

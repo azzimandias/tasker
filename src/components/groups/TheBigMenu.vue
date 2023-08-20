@@ -24,12 +24,13 @@ const is_popup = ref(false);
 </script>
 
 <style scoped lang="scss">
+    @import "../../assets/styles/global.scss";
     .big-menu {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding-bottom: 10px;
-        background-color: #26282B;
+        background-color: $bigMenu;
         user-select: none;
         overflow-y: auto;
       &::-webkit-scrollbar {
@@ -57,7 +58,7 @@ const is_popup = ref(false);
     }
     .new-personal-list-btn {
         width: 155px;
-        color: white;
+        color: $textColor;
         cursor: pointer;
         position: relative;
         &:active { opacity: 0.8; }

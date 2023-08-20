@@ -1,7 +1,7 @@
 <template>
     <div class="personal-lists">
         <SectionHeader :is_load="bigMenuStore.is_load_personalLists">Мои списки</SectionHeader>
-        <div class="personal-lists__container">
+        <div class="personal-lists__container scroll">
             <PersonalList 
                 v-for="list in bigMenuStore.personalLists"
                 :key="list.id"
@@ -33,20 +33,6 @@ const bigMenuStore = useBigMenuStore();
     .personal-lists__container {
         display: grid;
         max-height: 200px;
-        overflow-y: auto;
-        &::-webkit-scrollbar {
-          width: 5px;
-          background-color: #0a0a0a;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          border-radius: 10px;
-          background-color: #c4c4c4;
-        }
-
-        &::-webkit-scrollbar-track {
-          -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-          background-color: #26282B;
-        }
+        padding-right: 5px;
     }
 </style>

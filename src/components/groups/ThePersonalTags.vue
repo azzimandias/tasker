@@ -1,7 +1,7 @@
 <template>
     <div class="personal-tags" v-if="bigMenuStore.personalTags.length > 1">
         <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
-        <div class="personal-tags__container">
+        <div class="personal-tags__container scroll">
             <PersonalTag 
                 v-for="(tag,key) in bigMenuStore.personalTags"
                 :key="tag.id"
@@ -26,21 +26,6 @@ const bigMenuStore = useBigMenuStore();
         display: flex;
         flex-wrap: wrap;
         padding: 6px 15px 6px 6px;
-        overflow-y: auto;
         max-height: 105px;
-        &::-webkit-scrollbar {
-          width: 5px;
-          background-color: #0a0a0a;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          border-radius: 10px;
-          background-color: #c4c4c4;
-        }
-
-        &::-webkit-scrollbar-track {
-          -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-          background-color: #26282B;
-        }
     }
 </style>

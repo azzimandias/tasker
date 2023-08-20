@@ -11,6 +11,7 @@ import TheTasker from '@/components/groups/TheTasker.vue';
 </script>
 
 <style scoped lang="scss">
+@import "../assets/styles/global.scss";
   .workspace {
     width: 100%;
     height: 100%;
@@ -18,6 +19,6 @@ import TheTasker from '@/components/groups/TheTasker.vue';
     grid-template-columns: 300px 2fr;
     grid-template-rows: 100vh;
     grid-column-gap: 2px;
-    background-color: black;
+    background-color: $workspace;
   }
 </style>

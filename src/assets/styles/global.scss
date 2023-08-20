@@ -1,4 +1,50 @@
-$day-theme: #f6f6f6;
+$workspace: black;
+$bigMenu: #26282B;
+$tasker: #1D1F22;
+$gold: #d7bc76;
+$personal: #494B4E;
+$textColorActive: #171515;
+$textColor: #c5c7ca;
+$smallTextColor: #f8f8f8;
+
+[data-theme="light"] {
+  $workspace: white;
+  $bigMenu: #e0e0e0;
+  $tasker: #f6f6f6;
+  $gold: #ffd700ff;
+  $personal: #f9f9f9;
+  $textColorActive: #171515;
+  $textColor: #736f6f;
+  $smallTextColor: #f8f8f8;
+}
+
+[data-theme="dark"] {
+  $workspace: black;
+  $bigMenu: #26282B;
+  $tasker: #1D1F22;
+  $gold: #d7bc76;
+  $personal: #494B4E;
+  $textColorActive: #171515;
+  $textColor: #c5c7ca;
+  $smallTextColor: #f8f8f8;
+}
+
+.scroll {
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #c4c4c4;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+}
 
 * {
     box-sizing: border-box;

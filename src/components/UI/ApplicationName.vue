@@ -14,8 +14,7 @@
         height: 40px;
         position: sticky;
         top: 0;
-        background-color: #26282B;
-        //padding-bottom: 30px;
+        background-color: transparent;
     }
     .application-name__label {
         width: auto;

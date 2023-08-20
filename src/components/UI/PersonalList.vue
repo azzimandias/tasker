@@ -18,6 +18,7 @@ const route = useRoute();
 </script>
 
 <style lang="scss">
+    @import "../../assets/styles/global.scss";
     .personal-list {
         display: flex;
         align-items: center;
@@ -27,9 +28,9 @@ const route = useRoute();
         cursor: pointer;
         transition: .3s;
         &.active {
-          background-color: #5C5D5F;
+          background-color: $gold;
           .personal-list__circle { box-shadow: 0 0 6px #26282B; }
-          .personal-list__count { color: white; }
+          .personal-list__count, .personal-list__label { color: $textColorActive; }
         }
     }
     .personal-list__circle {
@@ -42,13 +43,13 @@ const route = useRoute();
     .personal-list__label {
         margin-left: 8px;
         font-size: 14px;
-        color: white;
+        color: $textColor;
         flex-grow: 1;
     }
     .personal-list__count {
         font-size: 14px;
         font-weight: 600;
-        color: #5F6164;
+        color: $textColor;
         transition: .3s;
     }
 </style>

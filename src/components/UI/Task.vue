@@ -35,22 +35,29 @@
                 ref="taskTextareaNode"
       ></textarea>
       <div class="info-btns__container">
-<!--        <label :for="`date_${task.id}`">
-          <input :id="`date_${task.id}`" class="date_inp" type="date"/>
-        </label>-->
-        <div class="lb">
-<!--          <VueDatePicker
+        <div class="lb" @mousedown="openDatePicker" ref="datePicker">
+          <VueDatePicker
               v-model="props.task.deadline"
               :dark="true"
               :position="'center'"
               :teleport="true"
               :locale="'ru'"
-              :format="'dd-MM-yyyy'"
+              :format="'yyyy-MM-dd'"
               :close-on-scroll="true"
               :placeholder="'Дата'"
               :text-input="true"
-          />-->
+          />
+          <div class="date__wrapper">
+            <img class="date-pic" src="../../assets/svgs/calendar.svg" alt="calendar">
+            <p class="date">{{ props.task.deadline }}</p>
+          </div>
         </div>
+
+        <div class="lb">
+
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -75,6 +82,12 @@ const is_focused = ref(false);
 const listView = useListViewStore();
 const taskNode = ref(null);
 const taskTextareaNode = ref(null);
+const datePicker = ref(null);
+
+const openDatePicker = () => {
+  const node = datePicker.value.firstElementChild;
+  node.querySelector('.dp__input').click();
+};
 const saveChanges = () => {
   is_focused.value = false;
   taskNode.value.blur();
@@ -130,10 +143,10 @@ const objectsEqual = (o1, o2) => {
 </script>
 
 <style lang="scss" scoped>
+  @import "../../assets/styles/global.scss";
   .task {
     width: 100%;
     min-height: 50px;
-    //height: 50px;
     color: #C5C7CA;
     display: flex;
     flex-direction: column;
@@ -193,15 +206,37 @@ const objectsEqual = (o1, o2) => {
   .lb {
     width: 100px;
     height: 20px;
-    //background-color: rgba(73, 75, 78, 0.4);
-    background-color: white;
-    border: 2px solid #494B4E;
+    background-color: rgba(73, 75, 78, 0.3);
     border-radius: 5px;
     overflow: hidden;
-    &:first-child {
+    padding: 0 1px 1px 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    & .dp__main {
       opacity: 0;
-      border: none;
-      background: none;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: circle(1%);
     }
+  }
+  .date__wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 0 5px 0 2px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .date {
+    width: 100%;
+    color: $smallTextColor;
+    text-align: right;
+    font-size: 12px;
+  }
+  .date-pic {
+    width: 18px;
+    height: 18px;
   }
 </style>

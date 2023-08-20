@@ -41,7 +41,7 @@
 
 <style lang="scss" scoped>
 @use "sass:math";
-$color: #d7bc76;
+@import "../../assets/styles/global.scss";
 $size: 12px;
 $time: 1;
 
@@ -61,9 +61,9 @@ $time: 1;
   margin: 0 math.div(-$size , 2);
   border-left: $size solid transparent;
   border-right: $size solid transparent;
-  border-bottom: ($size * 1.8) solid $color;
+  border-bottom: ($size * 1.8) solid $gold;
   animation: blink $time + s infinite;
-  filter: drop-shadow(0 0 ($size * 1.5) $color);
+  filter: drop-shadow(0 0 ($size * 1.5) $gold);
 
   &.down {
     transform: rotate(180deg);
