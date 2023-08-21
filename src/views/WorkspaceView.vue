@@ -8,6 +8,8 @@
 <script setup>
 import TheBigMenu from '@/components/groups/TheBigMenu.vue';
 import TheTasker from '@/components/groups/TheTasker.vue';
+import {useImageDBStore} from "@/stores/imageDBStore";
+const imageDB = useImageDBStore();
 </script>
 
 <style scoped lang="scss">

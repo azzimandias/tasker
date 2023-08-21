@@ -5,13 +5,13 @@ import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
 
 export const useListViewStore = defineStore('listViewStore', () => {
-    const tasks = reactive([]);
-    const listInfo = reactive({
+    const currentTasks = reactive([]);
+    const currentListInfo = reactive({
         id: '',
         name: '',
         color: '',
     });
-    const sortListInfo = reactive({
+    const currentSortListInfo = reactive({
         id: 0,
         name: '',
         color: '',
@@ -69,27 +69,27 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const updateData = (arr) => {
         if ((typeof arr[1]) === "object" && arr.length) {
             if (route.params.id_list || route.params.name) {
-                tasks.length = 0;
+                currentTasks.length = 0;
             } else if (route.params.id_tag) {
                 tags.length = 0;
             }
             arr[1].forEach(item => {
                 item.key = Math.random();
                 if (route.params.id_list || route.params.name) {
-                    tasks.push(item);
+                    currentTasks.push(item);
                 } else if (route.params.id_tag) {
                     tags.push(item);
                 }
             });
             if (route.params.id_list) {
-                listInfo.id = arr[0].id;
-                listInfo.name = arr[0].name;
-                listInfo.color = arr[0].color;
+                currentListInfo.id = arr[0].id;
+                currentListInfo.name = arr[0].name;
+                currentListInfo.color = arr[0].color;
             } else if (route.params.name) {
-                sortListInfo.id = arr[0].id;
-                sortListInfo.name = arr[0].name;
+                currentSortListInfo.id = arr[0].id;
+                currentSortListInfo.name = arr[0].name;
                 bigMenu.sortLists.forEach(sortList => {
-                    if (sortList.id === sortListInfo.id) { sortListInfo.color = sortList.color; }
+                    if (sortList.id === currentSortListInfo.id) { currentSortListInfo.color = sortList.color; }
                 });
             } else if (route.params.id_tag) {
                 tag_name.value = arr[0];
@@ -112,9 +112,31 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await bigMenu.firstRequest();
     }
 
+    const addNewTask = () => {
+        currentTasks.push({
+            id: null,
+            id_list: currentListInfo.id,
+            name: null,
+            description: null,
+            deadline: null,
+            is_done: 0,
+            is_flagged: 0,
+            url: null,
+            priority: null,
+        });
+    };
+
+    const removeNewTask = () => {
+        currentTasks.forEach((task, idx) => {
+            if (!task.id) {
+                currentTasks.splice(idx,1);
+            }
+        });
+    };
+
     const createTask = async (task) => {
         try {
-            const response = await api.createTask(`http://localhost/createTask`, task);
+            return await api.createTask(`http://localhost/createTask`, task);
         } catch (e) {
             console.log(e);
         }
@@ -122,9 +144,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     return {
-        tasks,
-        listInfo,
-        sortListInfo,
+        tasks: currentTasks,
+        listInfo: currentListInfo,
+        sortListInfo: currentSortListInfo,
         loading,
         loadingSmall,
         is_somethingWrong,
@@ -134,6 +156,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
         currentPath,
         getTasksOrTags,
         updateTask,
+        addNewTask,
+        removeNewTask,
         createTask
     };
 });

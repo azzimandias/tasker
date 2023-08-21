@@ -36,27 +36,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             url: '/workspace/sortList=all'
         },
     ]);
-    const personalLists = reactive([
-        {
-            id: 1,
-            name: '',
-            count_of_active_tasks: '—',
-            color: 'grey'
-        },
-        {
-            id: 2,
-            name: '',
-            count_of_active_tasks: '—',
-            color: 'grey'
-        },
-        {
-
-            id: 3,
-            name: '',
-            count_of_active_tasks: '—',
-            color: 'grey'
-        }
-    ]);
+    const personalLists = reactive([]);
     const personalTags = reactive([
         {
             id:0,

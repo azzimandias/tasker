@@ -16,14 +16,7 @@
             :is_new="false"
             v-if="listView.tasks.length"
         />
-        <Task
-            :task="emptyTask"
-            :color="listView.listInfo.color"
-            :is_new="true"
-            @close="emit('close')"
-            v-if="props.newTask"
-        />
-<!--        <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>-->
+        <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
       </div>
     </div>
 
@@ -32,6 +25,7 @@
 
 <script setup>
 import { useListViewStore } from "@/stores/ListViewStore";
+import {useImageDBStore} from "@/stores/imageDBStore";
 import ListHeader from "@/components/UI/ListHeader.vue";
 import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import Task from "@/components/UI/Task.vue";
@@ -39,24 +33,14 @@ import LoaderBig from "@/components/UI/LoaderBig.vue";
 import {watchEffect} from "vue";
 import {useRoute} from "vue-router";
 
-const props = defineProps({
-  newTask: Boolean,
-})
-const emit = defineEmits(['close']);
 const listView = useListViewStore();
+const imageDB = useImageDBStore();
 const route = useRoute();
 watchEffect(() => {
   if (!route.params.id_list) {
     listView.loading = true;
   }
 })
-const emptyTask = {
-  id: 0,
-  name: '',
-  color: '',
-  description: '',
-  deadline: ''
-}
 </script>
 
 <style lang="scss" scoped>

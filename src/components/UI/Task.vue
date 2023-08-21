@@ -14,8 +14,8 @@
                placeholder="Задача"
                v-model="props.task.name"
                @click.left="is_focused = true"
-               @blur="saveChanges"
-               @keyup.enter="saveChanges"
+               @blur="createOrUpdate"
+               @keyup.enter="createOrUpdate"
                ref="taskNode"
         />
         <Flag :is_flagged="props.task.is_flagged"
@@ -67,7 +67,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
 onMounted(() => {
-  if (props.is_new) {
+  if (!props.task.id) {
     taskNode.value.focus();
   }
 });
@@ -75,10 +75,8 @@ onMounted(() => {
 const props = defineProps({
   task: Object,
   color: String,
-  is_new: Boolean,
 });
 
-const emit = defineEmits(['close']);
 
 const imageOfTask = Object.assign({}, props.task);
 const is_visible = ref(false);
@@ -92,25 +90,23 @@ const openDatePicker = () => {
   const node = datePicker.value.firstElementChild;
   node.querySelector('.dp__input').click();
 };
-const saveChanges = () => {
+const createOrUpdate = () => {
   is_focused.value = false;
-  taskNode.value.blur();
-  if (props.is_new) {
-    if (!props.task.name) {
-      emit('close');
-    } else {
-      let newTask = {
-        name: props.task.name,
-        id_list: listView.listInfo.id,
-      };
-      listView.createTask(newTask);
-      emit('close');
-      listView.getTasksOrTags();
-      props.task.name = '';
-      props.task.description = '';
-      props.task.deadline = '';
-    }
-  } else if (!objectsEqual(props.task, imageOfTask)) {
+  if (taskNode.value) taskNode.value.blur();
+  if (!imageOfTask.id) createTask();
+  else saveChanges();
+};
+const createTask = async () => {
+  if (props.task.name) {
+    imageOfTask.name = props.task.name;
+    const newTask = await listView.createTask(imageOfTask);
+    imageOfTask.id = newTask.id;
+  } else {
+    listView.removeNewTask();
+  }
+}
+const saveChanges = () => {
+  if (!objectsEqual(props.task, imageOfTask)) {
     imageOfTask.name = props.task.name;
     listView.updateTask(imageOfTask);
   }
