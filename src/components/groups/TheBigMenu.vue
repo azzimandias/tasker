@@ -8,7 +8,7 @@
         </div>
         <button class="new-personal-list-btn" @click="is_popup=true">Новый список</button>
       <Teleport to="body">
-        <CreateNewListPopup v-if="is_popup" @close="is_popup=false"/>
+        <CreateNewListPopup :is_popup="is_popup" @close="is_popup=false"/>
       </Teleport>
     </div>
 </template>

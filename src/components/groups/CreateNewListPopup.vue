@@ -1,19 +1,38 @@
 <template>
-  <div class="blur" @click="emits('close')"></div>
-  <div class="popup">
-    <div class="popup__header">
-      <h4 class="popup__label">Создать новый список</h4>
-      <TopButton :cl="'close'" @click.prevent="emits('close')"/>
+  <Transition mode="out-in" name="fade">
+    <div v-if="props.is_popup">
+      <div class="blur" @click="emits('close')"></div>
+      <div class="popup">
+        <div class="popup__header">
+          <h4 class="popup__label">Создать новый список</h4>
+          <TopButton :cl="'close'" @click.prevent="emits('close')"/>
+        </div>
+        <div class="popup__body">
+          <div class="body__wrapper">
+            <InputText
+                :name="name"
+                @underDeroch="saveName"
+                :width="width"
+                :border="border"
+                :placeholder="'Имя списка'"
+            />
+            <div class="line">
+              Цвет:
+              <Coloris
+                  :color="color"
+                  @onDroch="saveColor"
+              />
+            </div>
+          </div>
+          <p :style="{color: color}">A</p>
+        </div>
+        <div class="popup__btns">
+          <button class="popup__btn cancel" @click="emits('close')">Отмена</button>
+          <button class="popup__btn add" @click="saveList">Создать</button>
+        </div>
+      </div>
     </div>
-    <div class="popup__body">
-      <div class="line">Придумайте имя: <InputText :name="name" @underDeroch="saveName" :width="width" :border="border"/></div>
-      <div class="line">Выберите цвет: <Coloris :color="color" @onDroch="saveColor"/></div>
-    </div>
-    <div class="popup__btns">
-      <button class="popup__btn cancel" @click="emits('close')">Отмена</button>
-      <button class="popup__btn add" @click="saveList">Создать</button>
-    </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -24,11 +43,12 @@ import Coloris from "@/components/UI/Coloris.vue";
 import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
 
+const props = defineProps({is_popup: Boolean});
 const emits = defineEmits(['close'])
 const border = '2px solid #706767';
 const width = 'auto';
 const name = ref('');
-const color = ref('#ffffff');
+const color = ref('#e0e0e0');
 const bigMenu = useBigMenuStore();
 
 const saveName = (val) => {
@@ -41,10 +61,13 @@ const saveList = async () => {
   emits('close');
   await api.saveList({name: name.value.trim(), color: color.value});
   await bigMenu.firstRequest();
+  name.value = '';
+  color.value = '#e0e0e0';
 };
 </script>
 
 <style lang="scss" scoped>
+  @import "../../assets/styles/global.scss";
   .blur {
     position: absolute;
     top: 0;
@@ -67,8 +90,8 @@ const saveList = async () => {
     top: calc(50vh - 200px);
     left: calc(50vw - 250px);
     border-radius: 10px;
-    border: 2px solid black;
-    background-color: #26282B;
+    border: 2px solid grey;
+    background-color: $bigMenu;
     padding: 10px 20px;
     z-index: 100;
   }
@@ -81,19 +104,30 @@ const saveList = async () => {
   .popup__label {
     width: auto;
     font-size: 30px;
-    color: #c4c4c4;
+    color: $textColor;
   }
   .popup__body {
-    height: 70px;
+    height: 100px;
     display: flex;
     justify-content: space-between;
-    flex-direction: column;
-    color: #c4c4c4;
+    color:$textColorActive;
     font-size: 20px;
+    p {
+      flex: 1 0 100px;
+      text-align: center;
+      font-size: 100px;
+      font-weight: 600;
+      text-shadow: 0 0 6px #26282B;
+    }
+  }
+  .body__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
   }
   .line {
     display: flex;
-    justify-content: space-between;
+    grid-gap: 5px;
     align-items: center;
   }
   .popup__btns {
@@ -106,9 +140,21 @@ const saveList = async () => {
   }
   .popup__btn {
     width: 100px;
-    border: 2px solid #33333a;
     border-radius: 5px;
-    color: #c4c4c4;
-    background-color: #1D1F22;
+    color: $textColorActive;
+    background-color: $personal;
+    &:active { opacity: 0.8 }
+  }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.25s ease-out;
+  }
+
+  .fade-enter-from {
+    opacity: 0;
+  }
+
+  .fade-leave-to {
+    opacity: 0;
   }
 </style>

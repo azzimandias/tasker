@@ -3,7 +3,7 @@
            class="searcher"
            v-model="name"
            :placeholder="placeholder"
-           :style="{width: width, border: border}"
+           :style="{width: width, borderBottom: border}"
            @change="emit('underDeroch', name)"
            ref="inputFocus"
     />
@@ -26,9 +26,12 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+    @import "../../assets/styles/global.scss";
     .searcher {
         width: 100%;
         color: #aaadae;
-      border-radius: 5px;
+      &::placeholder {
+        color: $placeholder;
+      }
     }
 </style>

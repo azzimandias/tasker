@@ -52,6 +52,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         await startIntervalUpdate();
     });
     const firstRequest = async () => {
+        console.log('go')
         await getSortListsCount();
         await getPersonalLists();
         await getPersonalTags();

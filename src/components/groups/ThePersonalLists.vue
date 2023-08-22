@@ -1,5 +1,5 @@
 <template>
-    <div class="personal-lists">
+    <div class="personal-lists" v-if="bigMenuStore.personalLists.length">
         <SectionHeader :is_load="bigMenuStore.is_load_personalLists">Мои списки</SectionHeader>
         <div class="personal-lists__container scroll">
             <PersonalList 

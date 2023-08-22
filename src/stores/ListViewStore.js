@@ -135,12 +135,14 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const createTask = async (task) => {
-        try {
-            return await api.createTask(`http://localhost/createTask`, task);
-        } catch (e) {
-            console.log(e);
-        }
+        const response = await api.createTask(`http://localhost/createTask`, task);
+        currentTasks.forEach((task, idx) => {
+            if (!task.id) {
+                task.id = response.id;
+            }
+        });
         await bigMenu.firstRequest();
+        return response;
     }
 
     return {

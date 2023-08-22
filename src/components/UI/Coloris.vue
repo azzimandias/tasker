@@ -17,7 +17,7 @@ const emit = defineEmits(['onDroch']);
 const value = ref(props.color);
 Coloris({
   el: '.coloris',
-  theme: 'pill',
+
   themeMode: 'auto',
   format: 'hex',
   swatches: [
@@ -39,6 +39,7 @@ Coloris({
 <style lang="scss" scoped>
 @import "../../assets/styles/coloris.css";
 .inp {
+  width: 30px;
   color: #c4c4c4;
   border: 2px solid #706767;
   border-radius: 5px;

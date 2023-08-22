@@ -13,7 +13,6 @@
                :name="`name_${task.id}`"
                placeholder="Задача"
                v-model="props.task.name"
-               @click.left="is_focused = true"
                @blur="createOrUpdate"
                @keyup.enter="createOrUpdate"
                ref="taskNode"
@@ -91,7 +90,6 @@ const openDatePicker = () => {
   node.querySelector('.dp__input').click();
 };
 const createOrUpdate = () => {
-  is_focused.value = false;
   if (taskNode.value) taskNode.value.blur();
   if (!imageOfTask.id) createTask();
   else saveChanges();
@@ -161,7 +159,6 @@ const objectsEqual = (o1, o2) => {
   @import "../../assets/styles/global.scss";
   .task {
     width: 100%;
-    min-height: 50px;
     color: #C5C7CA;
     display: flex;
     flex-direction: column;
@@ -200,9 +197,9 @@ const objectsEqual = (o1, o2) => {
     transition: .3s;
     cursor: pointer;
     font-weight: 600;
+    &::placeholder { color: $placeholder; }
   }
   .task__bottom-container {
-    //min-height: 25px;
     margin-left: 35px;
     padding-bottom: 5px;
     border-bottom: 2px solid #494B4E;
@@ -210,7 +207,8 @@ const objectsEqual = (o1, o2) => {
   .task__description {
     width: 100%;
     height: 25px;
-    color: #c4c4c4;
+    color: $description;
+    &::placeholder { color: $placeholder; }
   }
   .info-btns__container {
     width: 100%;
