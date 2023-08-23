@@ -23,8 +23,9 @@
                   @onDroch="saveColor"
               />
             </div>
+            <p class="tip">Совет: выбирайте цвета которые будут заметны на светлом/темном фоне</p>
           </div>
-          <p :style="{color: color}">A</p>
+          <p class="big-a" :style="{color: color}">A</p>
         </div>
         <div class="popup__btns">
           <button class="popup__btn cancel" @click="emits('close')">Отмена</button>
@@ -107,18 +108,23 @@ const saveList = async () => {
     color: $textColor;
   }
   .popup__body {
-    height: 100px;
+    height: 130px;
     display: flex;
     justify-content: space-between;
     color:$textColorActive;
     font-size: 20px;
-    p {
-      flex: 1 0 100px;
-      text-align: center;
-      font-size: 100px;
-      font-weight: 600;
-      text-shadow: 0 0 6px #26282B;
-    }
+  }
+  .big-a {
+    flex: 1 0 100px;
+    text-align: center;
+    font-size: 100px;
+    font-weight: 600;
+    text-shadow: 0 0 6px #26282B;
+  }
+  .tip {
+    width: 250px;
+    font-size: 12px;
+    text-align: justify;
   }
   .body__wrapper {
     display: flex;
