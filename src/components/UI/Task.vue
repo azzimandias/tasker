@@ -48,7 +48,7 @@
           />
           <div class="date__wrapper">
             <img class="date-pic" src="../../assets/svgs/calendar.svg" alt="calendar">
-            <p class="date" v-if="props.task.deadline">{{ props.task.deadline }}</p>
+            <p class="date" v-if="props.task.deadline">{{ transitDate(props.task.deadline) }}</p>
             <p class="date" v-else>Дата</p>
           </div>
         </div>
@@ -84,10 +84,24 @@ const listView = useListViewStore();
 const taskNode = ref(null);
 const taskTextareaNode = ref(null);
 const datePicker = ref(null);
+const deadline = ref();
 
 const openDatePicker = () => {
   const node = datePicker.value.firstElementChild;
   node.querySelector('.dp__input').click();
+};
+const transitDate = (date) => {
+  console.log(date)
+  deadline.value = Date.parse(date);
+  console.log(deadline.value)
+  saveChangesDate();
+  return 0//('0' + deadline.value.getDate()).slice(-2) + '.' + ('0' + (deadline.value.getMonth() + 1)).slice(-2) + '.' + deadline.value.getFullYear();
+};
+const saveChangesDate = () => {
+  if (!objectsEqual(props.task, imageOfTask)) {
+    imageOfTask.deadline = deadline.value;
+    listView.updateTask(imageOfTask);
+  }
 };
 const createOrUpdate = () => {
   if (taskNode.value) taskNode.value.blur();

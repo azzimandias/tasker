@@ -115,10 +115,19 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         }
     }
 
+    const addNewList = (list) => {
+        personalLists.push(list);
+    };
+
+    const saveList = async (list) => {
+        await api.saveList(list);
+        await firstRequest();
+    };
+
     return {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
         personalTags, is_load_personalTags,
-        firstRequest
+        firstRequest, addNewList, saveList
     };
 });

@@ -60,8 +60,16 @@ const saveColor = (val) => {
 }
 const saveList = async () => {
   emits('close');
-  await api.saveList({name: name.value.trim(), color: color.value});
-  await bigMenu.firstRequest();
+  bigMenu.addNewList({
+    id: null,
+    name: name.value.trim(),
+    color: color.value,
+    count_of_active_tasks: 0
+  });
+  await bigMenu.saveList({
+    name: name.value.trim(),
+    color: color.value
+  });
   name.value = '';
   color.value = '#e0e0e0';
 };

@@ -104,6 +104,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateTask = async (task) => {
+        console.log(task)
         try {
             const response = await api.postInfo(`http://localhost/updateTask`, task);
         } catch (e) {
