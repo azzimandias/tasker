@@ -91,11 +91,12 @@ const openDatePicker = () => {
   node.querySelector('.dp__input').click();
 };
 const transitDate = (date) => {
-  console.log(date)
-  deadline.value = Date.parse(date);
-  console.log(deadline.value)
+  const timestamp = Date.parse(date);
+  deadline.value = ("" + (new Date(timestamp)).toISOString()).replace(/^([^T]+)T(.+)$/,'$1');
+  console.log(date);
+  console.log(deadline.value);
   saveChangesDate();
-  return 0//('0' + deadline.value.getDate()).slice(-2) + '.' + ('0' + (deadline.value.getMonth() + 1)).slice(-2) + '.' + deadline.value.getFullYear();
+  return ("" + (new Date(timestamp)).toISOString()).replace(/^([^T]+)T(.+)$/,'$1').replace(/^(\d+)-(\d+)-(\d+)$/,'$3.$2.$1');
 };
 const saveChangesDate = () => {
   if (!objectsEqual(props.task, imageOfTask)) {
