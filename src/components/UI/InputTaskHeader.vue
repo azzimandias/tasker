@@ -5,18 +5,18 @@
          :placeholder="props.placeholder"
          v-model="taskName"
          @blur="createOrUpdate"
-         @keyup.enter="createOrUpdate"
+         @keyup.enter="blurInput"
          ref="taskNode"
   />
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useListViewStore} from "@/stores/ListViewStore";
 
 const listView = useListViewStore();
 const taskNode = ref(null);
-const emit = defineEmits(['createOrUpdate']);
+const emit = defineEmits(['saveChangesName']);
 const props = defineProps({
   id: Number,
   color: String,
@@ -26,13 +26,21 @@ const props = defineProps({
 });
 let taskName = props.taskName;
 
-const createOrUpdate = () => {
+onMounted(() => {
+  if (!props.id) {
+    taskNode.value.focus();
+  }
+});
+
+const blurInput = () => {
   if (taskNode.value) taskNode.value.blur();
+};
+const createOrUpdate = () => {
   if (!props.id) createTask();
   else saveChanges();
 };
 const createTask = async () => {
-  if (props.task.name) {
+  if (taskName) {
     const newTask = await listView.createTask({name: taskName});
   } else {
     listView.removeNewTask();
@@ -40,11 +48,7 @@ const createTask = async () => {
 }
 const saveChanges = () => {
   if (props.taskName !== taskName) {
-    listView.updateTask({
-      id: props.id,
-      name: 'name',
-      value: taskName,
-    });
+    emit('saveChangesName',taskName);
   }
 };
 </script>

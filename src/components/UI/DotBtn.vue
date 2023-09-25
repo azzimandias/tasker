@@ -1,7 +1,7 @@
 <template>
   <div
       class="dot-btn"
-      @click="emits('dot')"
+      @click="changeState"
   >
     <label
         :for="`dot_${props.id}`"
@@ -11,19 +11,27 @@
       <input type="checkbox" :id="`dot_${props.id}`" class="checkbox"/>
     </label>
     <Transition mode="out-in" name="fade">
-      <div class="inner-dot" v-if="props.is_done" :style="{backgroundColor: color}"></div>
+      <div class="inner-dot" v-if="is_doneModel" :style="{backgroundColor: color}"></div>
       <div class="inner-dot" v-else></div>
     </Transition>
   </div>
 </template>
 
 <script setup>
+import {ref} from 'vue';
+
 const props = defineProps({
   is_done: Number,
   id: Number,
   color: String,
 });
 const emits = defineEmits(['dot']);
+const is_doneModel = ref(Boolean(props.is_done));
+
+const changeState = () => {
+  is_doneModel.value = !is_doneModel.value;
+  emits('dot', is_doneModel.value);
+};
 </script>
 
 <style lang="scss" scoped>

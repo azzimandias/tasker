@@ -2,8 +2,8 @@
   <label
       :for="`flag_${props.id}`"
       class="flag"
-      :class="{active: props.is_flagged, not_active: !props.is_flagged, visible: is_visible}"
-      @click="emits('flag')"
+      :class="{active: is_flaggedModel, not_active: !is_flaggedModel, visible: is_visible}"
+      @click="changeState"
   >
     <input type="checkbox" :id="`flag_${props.id}`" class="checkbox"/>
   </label>
@@ -17,6 +17,11 @@ const props = defineProps({
   id: Number,
 });
 const emits = defineEmits(['flag']);
+const is_flaggedModel = ref(Boolean(props.is_flagged));
+const changeState = () => {
+  is_flaggedModel.value = !is_flaggedModel.value;
+  emits('flag', is_flaggedModel.value);
+}
 </script>
 
 <style lang="scss" scoped>

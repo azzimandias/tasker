@@ -14,6 +14,7 @@
             :name="`name_${props.task.id}`"
             :taskName="props.task.name"
             :placeholder="'Задача'"
+            @saveChangesName="saveChangesName"
         />
         <Flag :is_flagged="props.task.is_flagged"
               :is_visible="is_visible"
@@ -28,11 +29,13 @@
           :placeholder="'Описание'"
           :name="`description_${props.task.id}`"
           :value="props.task.description"
+          @saveChangesDescription="saveChangesDescription"
       />
       <div class="info-btns__container">
         <InputDate
             :id="props.task.id"
             :deadline="props.task.deadline"
+            @saveChangesDate="saveChangesDate"
         />
       </div>
     </div>
@@ -48,57 +51,28 @@ import Flag from "@/components/UI/Flag.vue";
 import TextArea from "@/components/UI/TextArea.vue";
 import InputDate from "@/components/UI/InputDate.vue";
 
-onMounted(() => {
-  if (!props.task.id) {
-    taskNode.value.focus();
-  }
-});
-
 const props = defineProps({
   task: Object,
   color: String,
 });
 
-
-const imageOfTask = Object.assign({}, props.task);
 const is_visible = ref(false);
 const listView = useListViewStore();
 const taskNode = ref(null);
 
-const saveChangesFlag = () => {
-  if (props.task.is_flagged) { props.task.is_flagged = 0; }
-  else { props.task.is_flagged = 1; }
-  if (!objectsEqual(props.task, imageOfTask)) {
-    imageOfTask.is_flagged = props.task.is_flagged;
-    listView.updateTask(imageOfTask);
-  }
-};
-
-const saveChangesDot = () => {
-  if (props.task.is_done) { props.task.is_done = 0; }
-  else { props.task.is_done = 1; }
-  if (!objectsEqual(props.task, imageOfTask)) {
-    imageOfTask.is_done = props.task.is_done;
-    listView.updateTask(imageOfTask);
-  }
-};
-
-const objectsEqual = (o1, o2) => {
-  const entries1 = Object.entries(o1);
-  const entries2 = Object.entries(o2);
-  if (entries1.length !== entries2.length) {
-    return false;
-  }
-  for (let i = 0; i < entries1.length; ++i) {
-    if (entries1[i][0] !== entries2[i][0]) {
-      return false;
-    }
-    if (entries1[i][1] !== entries2[i][1]) {
-      return false;
-    }
-  }
-  return true;
-};
+const saveChangesName = (name) => {saveChanges('name', name);};
+const saveChangesDescription = (description) => {saveChanges('description', description);};
+const saveChangesDate = (date) => {saveChanges('deadline', date);};
+const saveChangesFlag = (is_flagged) => {saveChanges('is_flagged', is_flagged);};
+const saveChangesDot = (is_done) => {saveChanges('is_done', is_done);};
+const saveChanges = (whatChanges, changeValue) => {
+  let update = {
+    id: props.task.id,
+    name: whatChanges,
+    value: changeValue,
+  };
+  listView.updateTask(update);
+}
 </script>
 
 <style lang="scss" scoped>

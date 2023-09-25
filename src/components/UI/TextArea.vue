@@ -4,9 +4,8 @@
       ref="taskTextareaNode"
       :placeholder="props.placeholder"
       :name="props.name"
-      v-model="valueModel"
       @blur="saveChangesTextarea"
-  ></textarea>
+  >{{ props.value }}</textarea>
 </template>
 
 <script setup>
@@ -14,6 +13,7 @@
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
+  const emit = defineEmits(['saveChangesDescription'])
   const props = defineProps({
     id: Number,
     placeholder: String,
@@ -21,16 +21,12 @@
     value: String,
   });
   const taskTextareaNode = ref(null);
-  const valueModel = props.value;
 
   const saveChangesTextarea = () => {
     taskTextareaNode.value.blur();
+    let valueModel = taskTextareaNode.value.value;
     if (props.value !== valueModel) {
-      listView.updateTask({
-        id: props.id,
-        name: 'description',
-        value: valueModel,
-      });
+      emit('saveChangesDescription', valueModel);
     }
   };
 </script>

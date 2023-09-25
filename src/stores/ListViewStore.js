@@ -104,7 +104,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateTask = async (task) => {
-        console.log(task)
         try {
             const response = await api.postInfo(`http://localhost/updateTask`, task);
         } catch (e) {
@@ -136,6 +135,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const createTask = async (task) => {
+        task.id_list = currentListInfo.id;
         const response = await api.createTask(`http://localhost/createTask`, task);
         currentTasks.forEach((task, idx) => {
             if (!task.id) {

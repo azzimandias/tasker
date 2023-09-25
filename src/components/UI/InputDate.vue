@@ -22,17 +22,23 @@
 <script setup>
   import VueDatePicker from "@vuepic/vue-datepicker";
   import '@vuepic/vue-datepicker/dist/main.css';
-  import {ref} from "vue";
+  import {ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
+  const emit = defineEmits(['saveChangesDate'])
   const props = defineProps({
     id: Number,
     deadline: String,
   })
   const datePicker = ref(null);
   const deadline = ref();
-  const deadlineModel = props.deadline;
+  const deadlineModel = ref(props.deadline);
+
+  watch(deadlineModel, (newDeadlineModel) => {
+    transitDate(newDeadlineModel);
+  })
+
   const openDatePicker = () => {
     const node = datePicker.value.firstElementChild;
     node.querySelector('.dp__input').click();
@@ -40,20 +46,11 @@
   const transitDate = (date) => {
     const timestamp = Date.parse(date);
     deadline.value = ("" + (new Date(timestamp)).toISOString()).replace(/^([^T]+)T(.+)$/,'$1');
-    console.log(date);
-    console.log(deadline.value);
-    saveChangesDate();
+    if (props.deadline !== deadline.value) saveChangesDate();
     return ("" + (new Date(timestamp)).toISOString()).replace(/^([^T]+)T(.+)$/,'$1').replace(/^(\d+)-(\d+)-(\d+)$/,'$3.$2.$1');
   };
   const saveChangesDate = () => {
-    console.log('save date');
-    if (props.deadline !== deadlineModel) {
-      listView.updateTask({
-        id: props.id,
-        name: 'deadline',
-        value: deadlineModel,
-      });
-    }
+    emit('saveChangesDate', deadline.value);
   };
 </script>
 
