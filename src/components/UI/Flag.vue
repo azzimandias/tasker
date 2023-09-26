@@ -3,7 +3,7 @@
       :for="`flag_${props.id}`"
       class="flag"
       :class="{active: is_flaggedModel, not_active: !is_flaggedModel, visible: is_visible}"
-      @click="changeState"
+      @mouseup="changeState"
   >
     <input type="checkbox" :id="`flag_${props.id}`" class="checkbox"/>
   </label>
@@ -29,6 +29,7 @@ const changeState = () => {
     flex: 0 0 20px;
     width: 20px;
     height: 20px;
+    margin: 0 10px;
     background-position: center;
     background-size: 20px 20px;
     background-repeat: no-repeat;

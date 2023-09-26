@@ -21,6 +21,9 @@
               :id="props.task.id"
               @flag="saveChangesFlag"
         />
+        <InfoList
+            @deleteTask="deleteTask"
+        />
       </div>
     </div>
     <div class="task__bottom-container">
@@ -48,6 +51,7 @@ import {useListViewStore} from "@/stores/ListViewStore";
 import InputTaskHeader from "@/components/UI/InputTaskHeader.vue";
 import DotBtn from "@/components/UI/DotBtn.vue";
 import Flag from "@/components/UI/Flag.vue";
+import InfoList from "@/components/UI/InfoList.vue";
 import TextArea from "@/components/UI/TextArea.vue";
 import InputDate from "@/components/UI/InputDate.vue";
 
@@ -73,6 +77,9 @@ const saveChanges = (whatChanges, changeValue) => {
   };
   listView.updateTask(update);
 }
+const deleteTask = () => {
+  listView.deleteTask({id: props.task.id});
+};
 </script>
 
 <style lang="scss" scoped>

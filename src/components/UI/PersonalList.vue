@@ -3,6 +3,9 @@
     <div class="personal-list" :class="{ active: props.list.id === +route.params.id_list }">
         <div class="personal-list__circle" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
+        <div class="info-list__wrapper">
+          <InfoList/>
+        </div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
   </router-link>
@@ -10,6 +13,7 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
+import InfoList from "@/components/UI/InfoList.vue";
 
 const props = defineProps({
     list: Object,
@@ -51,5 +55,8 @@ const route = useRoute();
         font-weight: 600;
         color: $textColor;
         transition: .3s;
+    }
+    .info-list__wrapper {
+      margin: 0 10px;
     }
 </style>

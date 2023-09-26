@@ -104,11 +104,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateTask = async (task) => {
-        try {
-            const response = await api.postInfo(`http://localhost/updateTask`, task);
-        } catch (e) {
-            console.log(e);
-        }
+        const response = await api.postInfo(`http://localhost/updateTask`, task);
         await bigMenu.firstRequest();
     }
 
@@ -136,7 +132,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const createTask = async (task) => {
         task.id_list = currentListInfo.id;
-        const response = await api.createTask(`http://localhost/createTask`, task);
+        const response = await api.postInfo(`http://localhost/createTask`, task);
         currentTasks.forEach((task, idx) => {
             if (!task.id) {
                 task.id = response.id;
@@ -144,6 +140,16 @@ export const useListViewStore = defineStore('listViewStore', () => {
         });
         await bigMenu.firstRequest();
         return response;
+    }
+
+    const deleteTask = async (obj) => {
+        currentTasks.forEach((task, idx) => {
+            if (task.id === obj.id) {
+                currentTasks.splice(idx,1);
+            }
+        });
+        await api.postInfo(`http://localhost/deleteTask`, obj);
+        await bigMenu.firstRequest();
     }
 
     return {
@@ -161,6 +167,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         updateTask,
         addNewTask,
         removeNewTask,
-        createTask
+        createTask,
+        deleteTask,
     };
 });
