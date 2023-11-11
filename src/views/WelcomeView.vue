@@ -1,10 +1,13 @@
 <template>
   <div class="skin">
     <div style="display: none;"><router-link to="/workspace">К работе!</router-link></div>
-    <div class="top-block"></div>
+    <div class="top-block">Reminder: This is a test project</div>
     <div class="header">
-      <div class="logo-wrapper">
-        <ApplicationName/>
+      <div class="group-wrapper">
+        <div class="logo-wrapper">
+          <ApplicationName/>
+        </div>
+        <p class="logo-description">all your goals will be here</p>
       </div>
       <div class="btns-wrapper">
         <SignButton :class="'sign-in'">Sign in</SignButton>
@@ -32,6 +35,8 @@
   .top-block {
     width: 100%;
     height: 40px;
+    line-height: 40px;
+    text-align: center;
     background-color: $personal;
   }
   .header {
@@ -42,12 +47,24 @@
     justify-content: space-between;
     align-items: center;
   }
+  .group-wrapper {
+    width: 400px;
+    display: flex;
+    align-items: flex-start;
+  }
   .logo-wrapper {
     width: 200px;
     height: 100%;
+    display: flex;
+    align-items: flex-start;
+  }
+  .logo-description {
+    height: 47px;
+    line-height: 50px;
+    color: #5C5D5F;
   }
   .btns-wrapper {
-    width: 350px;
+    width: 320px;
     height: 100%;
     display: flex;
     justify-content: space-between;
