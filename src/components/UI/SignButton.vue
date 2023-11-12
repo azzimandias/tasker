@@ -13,6 +13,7 @@
   .sign-btn {
     width: 130px;
     height: 50px;
+    font-weight: 600;
     font-size: 16px;
     cursor: pointer;
     &:active {
