@@ -5,26 +5,24 @@
     <div class="header">
       <div class="group-wrapper">
         <div class="logo-wrapper">
-          <ApplicationName/>
+          <router-link to="/">
+            <ApplicationName/>
+          </router-link>
         </div>
         <p class="logo-description">all your goals will be here</p>
       </div>
       <div class="btns-wrapper">
-        <SignButton :class="'sign-in'">Sign in</SignButton>
-        <SignButton :class="'sign-up'">Sign up</SignButton>
+        <router-link to="/signIn">
+          <SignButton :class="'sign-in'">Sign in</SignButton>
+        </router-link>
+        <router-link to="/signUp">
+          <SignButton :class="'sign-up'">Sign up</SignButton>
+        </router-link>
       </div>
     </div>
     <div class="main-block">
       <div class="main-block__left">
-        <h2 class="header_big">Are you constantly planning something?</h2>
-        <p class="description">
-          Then we have a solution for you — TASKER.
-          With this application you can easily plan your day and learn to manage your life.
-        </p>
-        <p class="description">
-          The frontend part of the application is developed on the basis of Vue.js, the backend part is developed on Laravel.
-        </p>
-        <SignButton :class="'sign-up'">Start using</SignButton>
+        <router-view/>
       </div>
       <div class="main-block__right">
         <div class="mac-window">
@@ -249,7 +247,7 @@
   .header {
     width: 100%;
     height: 90px;
-    padding: 15px 40px 15px 20px;
+    padding: 15px 40px 15px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -260,7 +258,7 @@
     align-items: flex-start;
   }
   .logo-wrapper {
-    width: 200px;
+    width: 170px;
     height: 100%;
     display: flex;
     align-items: flex-start;
@@ -288,18 +286,6 @@
     width: 500px;
     height: 100%;
     padding-top: 100px;
-  }
-  .header_big {
-    font-size: 50px;
-    line-height: 60px;
-    color: $description;
-    margin-bottom: 20px;
-  }
-  .description {
-    font-size: 20px;
-    line-height: 30px;
-    color: $description;
-    margin-bottom: 20px;
   }
   .main-block__right {
     padding-top: 50px;
