@@ -52,9 +52,9 @@
                   <div class="circle second"></div>
                   <p class="count">3</p>
                 </div>
-                <div class="personal-list">
+                <div class="personal-list" ref="listToActive">
                   <div class="circle fourth"></div>
-                  <p class="count">6</p>
+                  <p class="count">{{ mainListCount }}</p>
                 </div>
                 <div class="personal-list">
                   <div class="circle first"></div>
@@ -72,16 +72,16 @@
               </div>
             </div>
             <div class="mac-window__tasker">
-              <div class="list-label">List name</div>
-              <div class="task">
+              <div class="list-label" ref="listLabel">List name</div>
+              <div class="task" ref="taskOne">
                 <div class="dot">
-                  <div class="inner-dot"></div>
+                  <div class="inner-dot" ref="dotOne"></div>
                 </div>
                 <div class="task-body">
                   <p class="task-name">Task name №1</p>
                 </div>
               </div>
-              <div class="task">
+              <div class="task" ref="taskTwo">
                 <div class="dot">
                   <div class="inner-dot"></div>
                 </div>
@@ -89,15 +89,15 @@
                   <p class="task-name">Task name №2</p>
                 </div>
               </div>
-              <div class="task">
+              <div class="task" ref="taskThree">
                 <div class="dot">
-                  <div class="inner-dot"></div>
+                  <div class="inner-dot" ref="dotThree"></div>
                 </div>
                 <div class="task-body">
                   <p class="task-name">Task name №3</p>
                 </div>
               </div>
-              <div class="task">
+              <div class="task" ref="taskFour">
                 <div class="dot">
                   <div class="inner-dot"></div>
                 </div>
@@ -105,7 +105,7 @@
                   <p class="task-name">Task name №4</p>
                 </div>
               </div>
-              <div class="task">
+              <div class="task" ref="taskFive">
                 <div class="dot">
                   <div class="inner-dot"></div>
                 </div>
@@ -124,6 +124,112 @@
 <script setup>
   import ApplicationName from '@/components/UI/ApplicationName.vue';
   import SignButton from '@/components/UI/SignButton.vue';
+  import {onMounted, ref} from "vue";
+
+  let mainListCount = ref(0);
+
+  const listToActive = ref(null);
+  const listLabel = ref(null);
+
+  const taskOne = ref(null);
+  const taskTwo = ref(null);
+  const taskThree = ref(null);
+  const taskFour = ref(null);
+  const taskFive = ref(null);
+
+  const dotOne = ref(null);
+  const dotThree = ref(null);
+
+  const startMacWindowAnim = () => {
+    setTimeout(() => {
+      listToActive.value.classList.remove('deactivate');
+      listToActive.value.classList.add('active');
+      }, 1000);
+    setTimeout(() => {
+      listLabel.value.classList.remove('deactivate');
+      listLabel.value.classList.add('active');
+      }, 1300);
+    setTimeout(() => {
+      taskOne.value.classList.remove('deactivate');
+      taskOne.value.classList.add('active'); PlusCountMain();
+      }, 2000);
+    setTimeout(() => {
+      taskTwo.value.classList.remove('deactivate');
+      taskTwo.value.classList.add('active'); PlusCountMain();
+      }, 3000);
+    setTimeout(() => {
+      taskThree.value.classList.remove('deactivate');
+      taskThree.value.classList.add('active'); PlusCountMain();
+      }, 4000);
+    setTimeout(() => {
+      dotOne.value.classList.remove('deactivate');
+      dotOne.value.classList.add('active');
+      }, 4000);
+    setTimeout(() => {
+      taskFour.value.classList.remove('deactivate');
+      taskFour.value.classList.add('active'); PlusCountMain();
+      }, 5000);
+    setTimeout(() => {
+      taskFive.value.classList.remove('deactivate');
+      taskFive.value.classList.add('active'); PlusCountMain();
+      }, 6000);
+    setTimeout(() => {
+      dotThree.value.classList.remove('deactivate');
+      dotThree.value.classList.add('active');
+      }, 6000);
+  };
+
+  const PlusCountMain = () => {
+    setTimeout(() => {
+      mainListCount.value++;
+    },300);
+  };
+
+  const MinusCountMain = () => {
+    setTimeout(() => {
+      mainListCount.value--;
+    },300);
+  };
+
+  const clearWindow = () => {
+    taskOne.value.classList.remove('active');
+    taskOne.value.classList.add('deactivate');
+    taskTwo.value.classList.remove('active');
+    taskTwo.value.classList.add('deactivate');
+    taskThree.value.classList.remove('active');
+    taskThree.value.classList.add('deactivate');
+    taskFour.value.classList.remove('active');
+    taskFour.value.classList.add('deactivate');
+    taskFive.value.classList.remove('active');
+    taskFive.value.classList.add('deactivate');
+
+    listToActive.value.classList.remove('active');
+    listToActive.value.classList.add('deactivate');
+    listLabel.value.classList.remove('active');
+    listLabel.value.classList.add('deactivate');
+
+    setTimeout(() => {
+      mainListCount.value = 0;
+      dotOne.value.classList.remove('active');
+      dotOne.value.classList.add('deactivate');
+      dotThree.value.classList.remove('active');
+      dotThree.value.classList.add('deactivate');
+    },1000);
+
+  };
+
+  onMounted(() => {
+    startMacWindowAnim();
+    setTimeout(() => {
+      clearWindow();
+    },10000);
+    const animInterval = setInterval(() => {
+      startMacWindowAnim();
+      setTimeout(() => {
+        clearWindow();
+      },10000);
+    },12000);
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -308,6 +414,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 7px;
+    transition: .3s;
+    border-radius: 3px;
+    &.active {
+      background-color: #6b6c6d;
+    }
+    &.deactivate {
+      background-color: transparent;
+    }
   }
   .circle {
     width: 15px;
@@ -324,7 +438,7 @@
       background-color: rgb(218, 173, 173);
     }
     &.fourth {
-      background-color: rgb(196, 196, 196);
+      background-color: $gold;
     }
     &:before {
       content: '';
@@ -366,6 +480,21 @@
     font-weight: 600;
     color: $gold;
     padding-left: 30px;
+    opacity: 0;
+    &.active {
+      animation: show-list-label .5s forwards;
+    }
+    &.deactivate {
+      animation: hide-list-label .5s forwards;
+    }
+  }
+  @keyframes show-list-label {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes hide-list-label {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
   }
   .task {
     width: 100%;
@@ -374,6 +503,21 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    opacity: 0;
+    &.active {
+      animation: show-task 1s forwards;
+    }
+    &.deactivate {
+      animation: hide-task 1s forwards;
+    }
+  }
+  @keyframes show-task {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+  }
+  @keyframes hide-task {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
   }
   .dot {
     display: block;
@@ -382,7 +526,6 @@
     transition: 0.3s;
     border: 2px solid $gold;
     border-radius: 50%;
-    cursor: pointer;
     position: relative;
   }
   .inner-dot {
@@ -393,7 +536,20 @@
     height: 72%;
     border-radius: 50%;
     transition: 0.3s;
-    background-color: $gold;
+    &.active {
+      animation: click-dot 1s 1s forwards;
+    }
+    &.deactivate {
+      animation: undo-dot 1s 1s forwards;
+    }
+  }
+  @keyframes click-dot {
+    0% { background-color: transparent; }
+    100% { background-color: $gold; }
+  }
+  @keyframes undo-dot {
+    0% { background-color: $gold; }
+    100% { background-color: transparent; }
   }
   .task-body {
     width: calc(100% - 20px - 20px);
