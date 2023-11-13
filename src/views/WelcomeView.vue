@@ -288,13 +288,16 @@
     padding-top: 100px;
   }
   .main-block__right {
-    padding-top: 50px;
+    //display: none;
+    padding: 50px 0 0 15rem;
     width: calc(100% - 500px);
+    max-width: 1500px;
     display: flex;
     justify-content: flex-end;
   }
   .mac-window {
-    width: 800px;
+    min-width: 800px;
+    flex: 1 1 800px;
     height: 500px;
     border-radius: 20px;
     background-color: $macWindow;
