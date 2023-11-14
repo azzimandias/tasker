@@ -2,7 +2,7 @@
   <h2 class="header_big">Sign In</h2>
 
   <div class="input-block">
-    <p class="input-label">Login</p>
+    <p class="input-label">Email or login</p>
     <label for="login">
       <input id="login" class="inputText" name="login" type="text">
     </label>
@@ -44,7 +44,7 @@
       border-bottom: 1px solid white;
     }
     & input {
-      width: 100%;
+      width: 90%;
       height: 28px;
       font-size: 28px;
       color: $description;

@@ -16,6 +16,13 @@
   </div>
 
   <div class="input-block">
+    <p class="input-label">Email <span>*</span></p>
+    <label for="email">
+      <input id="email" ref="email" class="inputText" name="email" type="text">
+    </label>
+  </div>
+
+  <div class="input-block">
     <p class="input-label">Login <span>*</span></p>
     <label for="login">
       <input id="login" ref="login" class="inputText" name="login" type="text">
@@ -38,20 +45,25 @@ import {ref} from "vue";
 
   const userName = ref(null);
   const userSurname = ref(null);
+  const email = ref(null);
   const login = ref(null);
   const password = ref(null);
   const signUp = async () => {
     removeHighlight();
     const signUpData = {
+      email: email.value.value,
       login: login.value.value,
       password: password.value.value,
       userName: userName.value.value,
       userSurname: userSurname.value.value,
     }
-    if (signUpData.login !== '' && signUpData.password !== '') {
+    if (signUpData.email !== '' && signUpData.login !== '' && signUpData.password !== '') {
       removeHighlight();
       const response = await api.signUp(signUpData);
     } else {
+      if (signUpData.email === '') {
+        email.value.parentElement.classList.add('empty');
+      }
       if (signUpData.login === '') {
         login.value.parentElement.classList.add('empty');
       }
@@ -61,6 +73,7 @@ import {ref} from "vue";
     }
   };
   const removeHighlight = () => {
+    email.value.parentElement.classList.remove('empty');
     login.value.parentElement.classList.remove('empty');
     password.value.parentElement.classList.remove('empty');
   }
@@ -91,7 +104,7 @@ import {ref} from "vue";
       }
     }
     & input {
-      width: 100%;
+      width: 90%;
       height: 28px;
       font-size: 28px;
       color: $description;
