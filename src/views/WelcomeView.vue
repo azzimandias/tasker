@@ -11,10 +11,21 @@
         </div>
         <p class="logo-description">all your goals will be here</p>
       </div>
-      <div class="btns-wrapper">
+
+      <div class="btns-wrapper" v-if="route.path === '/'">
         <router-link to="/signIn">
           <SignButton :class="'sign-in'">Sign in</SignButton>
         </router-link>
+        <router-link to="/signUp">
+          <SignButton :class="'sign-up'">Sign up</SignButton>
+        </router-link>
+      </div>
+      <div class="btns-wrapper flex-right" v-else-if="route.path === '/signUp'">
+        <router-link to="/signIn">
+          <SignButton :class="'sign-in'">Sign in</SignButton>
+        </router-link>
+      </div>
+      <div class="btns-wrapper flex-right" v-else-if="route.path === '/signIn'">
         <router-link to="/signUp">
           <SignButton :class="'sign-up'">Sign up</SignButton>
         </router-link>
@@ -123,6 +134,9 @@
   import ApplicationName from '@/components/UI/ApplicationName.vue';
   import SignButton from '@/components/UI/SignButton.vue';
   import {onMounted, ref} from "vue";
+  import {useRoute} from "vue-router";
+
+  const route = useRoute();
 
   let mainListCount = ref(0);
 
@@ -137,6 +151,25 @@
 
   const dotOne = ref(null);
   const dotThree = ref(null);
+
+  let animInterval = '';
+
+  onMounted(() => {
+    macWindowAnim();
+  });
+
+  const macWindowAnim = () => {
+    startMacWindowAnim();
+    setTimeout(() => {
+      clearWindow();
+    },10000);
+    animInterval = setInterval(() => {
+      startMacWindowAnim();
+      setTimeout(() => {
+        clearWindow();
+      },10000);
+    },12000);
+  };
 
   const startMacWindowAnim = () => {
     setTimeout(() => {
@@ -215,19 +248,6 @@
     },1000);
 
   };
-
-  onMounted(() => {
-    startMacWindowAnim();
-    setTimeout(() => {
-      clearWindow();
-    },10000);
-    const animInterval = setInterval(() => {
-      startMacWindowAnim();
-      setTimeout(() => {
-        clearWindow();
-      },10000);
-    },12000);
-  });
 </script>
 
 <style lang="scss" scoped>
@@ -274,12 +294,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &.flex-right {
+      justify-content: flex-end;
+    }
   }
   .main-block {
     width: 100%;
     height: calc(100vh - 130px);
     padding: 0 40px;
-    //padding-left: 14rem;
     display: flex;
   }
   .main-block__left {
@@ -288,7 +310,6 @@
     padding-top: 100px;
   }
   .main-block__right {
-    //display: none;
     padding: 50px 0 0 15rem;
     width: calc(100% - 500px);
     max-width: 1500px;

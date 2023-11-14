@@ -4,36 +4,66 @@
   <div class="input-block">
     <p class="input-label">Name</p>
     <label for="userName">
-      <input id="userName" class="inputText" name="userName" type="text">
+      <input id="userName" ref="userName" class="inputText" name="userName" type="text">
     </label>
   </div>
 
   <div class="input-block">
     <p class="input-label">Surname</p>
     <label for="userSurname">
-      <input id="userSurname" class="inputText" name="userSurname" type="text">
+      <input id="userSurname" ref="userSurname" class="inputText" name="userSurname" type="text">
     </label>
   </div>
 
   <div class="input-block">
-    <p class="input-label">Login</p>
+    <p class="input-label">Login <span>*</span></p>
     <label for="login">
-      <input id="login" class="inputText" name="login" type="text">
+      <input id="login" ref="login" class="inputText" name="login" type="text">
     </label>
   </div>
 
   <div class="input-block">
-    <p class="input-label">Password</p>
+    <p class="input-label">Password <span>*</span></p>
     <label for="password">
-      <input id="password" class="inputText" name="password" type="password">
+      <input id="password" ref="password" class="inputText" name="password" type="password">
     </label>
   </div>
 
-  <button class="submit-log"></button>
+  <button class="submit-log" @click="signUp"></button>
 </template>
 
 <script setup>
+import api from "@/api";
+import {ref} from "vue";
 
+  const userName = ref(null);
+  const userSurname = ref(null);
+  const login = ref(null);
+  const password = ref(null);
+  const signUp = async () => {
+    removeHighlight();
+    const signUpData = {
+      login: login.value.value,
+      password: password.value.value,
+      userName: userName.value.value,
+      userSurname: userSurname.value.value,
+    }
+    if (signUpData.login !== '' && signUpData.password !== '') {
+      removeHighlight();
+      const response = await api.signUp(signUpData);
+    } else {
+      if (signUpData.login === '') {
+        login.value.parentElement.classList.add('empty');
+      }
+      if (signUpData.password === '') {
+        password.value.parentElement.classList.add('empty');
+      }
+    }
+  };
+  const removeHighlight = () => {
+    login.value.parentElement.classList.remove('empty');
+    password.value.parentElement.classList.remove('empty');
+  }
 </script>
 
 <style scoped lang="scss">
@@ -56,6 +86,9 @@
       width: 100%;
       height: 35px;
       border-bottom: 1px solid white;
+      &.empty {
+        border-bottom: 1px solid darkred;
+      }
     }
     & input {
       width: 100%;
@@ -67,6 +100,9 @@
   .input-label {
     font-size: 18px;
     color: $description;
+    span {
+      color: darkred;
+    }
   }
   .submit-log {
     width: 50px;

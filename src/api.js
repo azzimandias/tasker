@@ -38,4 +38,12 @@ export default {
             console.log(e);
         }
     },
+    async signUp(obj) {
+        try {
+            const response = await HTTP.post('http://localhost/signUp', JSON.stringify(obj));
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
 }
