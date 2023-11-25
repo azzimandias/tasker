@@ -1,18 +1,20 @@
 <template>
   <h2 class="header_big">Sign Up</h2>
 
-  <div class="input-block">
-    <p class="input-label">Name</p>
-    <label for="userName">
-      <input id="userName" ref="userName" class="inputText" name="userName" type="text">
-    </label>
-  </div>
+  <div class="input-blocks__wrapper">
+    <div class="input-block half">
+      <p class="input-label">Name</p>
+      <label for="userName">
+        <input id="userName" ref="name" class="inputText" name="userName" type="text">
+      </label>
+    </div>
 
-  <div class="input-block">
-    <p class="input-label">Surname</p>
-    <label for="userSurname">
-      <input id="userSurname" ref="userSurname" class="inputText" name="userSurname" type="text">
-    </label>
+    <div class="input-block half">
+      <p class="input-label">Surname</p>
+      <label for="userSurname">
+        <input id="userSurname" ref="surname" class="inputText" name="userSurname" type="text">
+      </label>
+    </div>
   </div>
 
   <div class="input-block">
@@ -40,26 +42,32 @@
 </template>
 
 <script setup>
-import api from "@/api";
-import {ref} from "vue";
+  import api from "@/api";
+  import {ref} from "vue";
+  import {useRouter} from "vue-router";
 
-  const userName = ref(null);
-  const userSurname = ref(null);
-  const email = ref(null);
-  const login = ref(null);
+  const router = useRouter();
+  const emits = defineEmits(['clearInterval']);
+
+  const name =     ref(null);
+  const surname =  ref(null);
+  const email =    ref(null);
+  const login =    ref(null);
   const password = ref(null);
   const signUp = async () => {
     removeHighlight();
     const signUpData = {
-      email: email.value.value,
-      login: login.value.value,
-      password: password.value.value,
-      userName: userName.value.value,
-      userSurname: userSurname.value.value,
+      email:      String(email.value.value),
+      login:      String(login.value.value),
+      password:   String(password.value.value),
+      name:       String(name.value.value),
+      surname:    String(surname.value.value),
     }
+    console.log(signUpData);
     if (signUpData.email !== '' && signUpData.login !== '' && signUpData.password !== '') {
       removeHighlight();
       const response = await api.signUp(signUpData);
+      await show(response);
     } else {
       if (signUpData.email === '') {
         email.value.parentElement.classList.add('empty');
@@ -72,6 +80,13 @@ import {ref} from "vue";
       }
     }
   };
+  const show = (res) => {
+    console.log(res);
+    if (res === 'done') {
+      emits('clearInterval');
+      router.push({ path: 'workspace' })
+    }
+  }
   const removeHighlight = () => {
     email.value.parentElement.classList.remove('empty');
     login.value.parentElement.classList.remove('empty');
@@ -87,6 +102,11 @@ import {ref} from "vue";
     color: $description;
     margin-bottom: 20px;
     text-align: center;
+  }
+  .input-blocks__wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
   .input-block {
     width: 100%;
@@ -105,9 +125,12 @@ import {ref} from "vue";
     }
     & input {
       width: 90%;
-      height: 28px;
+      height: 100%;
       font-size: 28px;
       color: $description;
+    }
+    &.half {
+      width: 45%;
     }
   }
   .input-label {

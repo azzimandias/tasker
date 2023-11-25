@@ -40,7 +40,7 @@ export default {
     },
     async signUp(obj) {
         try {
-            const response = await HTTP.post('http://localhost/signUp', JSON.stringify(obj));
+            const response = await HTTP.post('http://localhost/register', obj);
             return await response.data;
         } catch (e) {
             console.log(e);
