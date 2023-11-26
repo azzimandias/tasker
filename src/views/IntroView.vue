@@ -14,6 +14,7 @@
 
 <script setup>
   import SignButton from "@/components/UI/SignButton.vue";
+  const emits = defineEmits(['clearInterval']);
 </script>
 
 <style scoped lang="scss">

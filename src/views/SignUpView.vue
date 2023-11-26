@@ -63,7 +63,6 @@
       name:       String(name.value.value),
       surname:    String(surname.value.value),
     }
-    console.log(signUpData);
     if (signUpData.email !== '' && signUpData.login !== '' && signUpData.password !== '') {
       removeHighlight();
       const response = await api.signUp(signUpData);

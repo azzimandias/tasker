@@ -46,4 +46,12 @@ export default {
             console.log(e);
         }
     },
+    async signIn(obj) {
+        try {
+            const response = await HTTP.post('http://localhost/login', obj);
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
 }
