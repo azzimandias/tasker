@@ -33,8 +33,8 @@
   const signIn = async () => {
     removeHighlight();
     const signInData = {
-      email:      String(loginOrEmail.value.value),
-      password:   String(password.value.value),
+      email:      String(loginOrEmail.value.value).trim(),
+      password:   String(password.value.value).trim(),
     };
     if (signInData.email !== '' && signInData.password !== '') {
       removeHighlight();

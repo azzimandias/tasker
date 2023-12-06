@@ -26,7 +26,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const currentPath = ref(route.path);
     const bigMenu = useBigMenuStore();
 
-    onMounted(async () => {
+    /*onMounted(async () => {
         await getTasksOrTags();
         const interval = setInterval(() => {
             if(String(currentPath.value) !== String(route.path)) {
@@ -34,7 +34,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 getTasksOrTags();
             }
         }, 0)
-    });
+    });*/
 
     const getTasksOrTags = async () => {
         loadingSmall.value = true;

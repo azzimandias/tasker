@@ -12,7 +12,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             url: '/workspace/sortList=today'
         },
         {
-
             id: 2,
             name: 'С флажком',
             count: '',
@@ -20,7 +19,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             url: '/workspace/sortList=with_flag'
         },
         {
-
             id: 3,
             name: 'Завершено',
             count: '',
@@ -28,7 +26,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             url: '/workspace/sortList=done'
         },
         {
-
             id: 4,
             name: 'Все',
             count: '',
@@ -47,10 +44,12 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const is_load_sortLists = ref(false);
     const is_load_personalLists = ref(false);
     const is_load_personalTags = ref(false);
+
     onMounted(async () => {
         await firstRequest();
         await startIntervalUpdate();
     });
+
     const firstRequest = async () => {
         console.log('go')
         await getSortListsCount();

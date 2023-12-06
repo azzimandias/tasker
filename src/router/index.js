@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import api from "@/api";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -41,6 +42,20 @@ const router = createRouter({
     },
     { path: '/:NotFoundPage(.*)', component: () => import('../views/NotFoundPageView.vue'), },
   ]
-})
+});
+
+router.beforeEach(async (to) => {
+  const response = await api.isAuthorized();
+  console.log(response)
+  if (response !== 'yes') {
+    if (to.path.includes('workspace')) {
+      return '/';
+    }
+  } else {
+    if (!to.path.includes('workspace')) {
+      return '/workspace';
+    }
+  }
+});
 
 export default router

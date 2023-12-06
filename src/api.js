@@ -14,6 +14,15 @@ export default {
             console.log(e);
         }
     },
+    async isAuthorized() {
+        try {
+            const response = await HTTP.get('http://localhost/check');
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+            return e;
+        }
+    },
     async getInfo(path) {
         try {
             const response = await HTTP.get(path);

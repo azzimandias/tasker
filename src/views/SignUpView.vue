@@ -57,11 +57,11 @@
   const signUp = async () => {
     removeHighlight();
     const signUpData = {
-      email:      String(email.value.value),
-      login:      String(login.value.value),
-      password:   String(password.value.value),
-      name:       String(name.value.value),
-      surname:    String(surname.value.value),
+      email:      String(email.value.value).trim(),
+      login:      String(login.value.value).trim(),
+      password:   String(password.value.value).trim(),
+      name:       String(name.value.value).trim(),
+      surname:    String(surname.value.value).trim(),
     }
     if (signUpData.email !== '' && signUpData.login !== '' && signUpData.password !== '') {
       removeHighlight();
