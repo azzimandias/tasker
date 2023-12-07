@@ -10,6 +10,7 @@ export default {
         HTTP.defaults.withCredentials = true;
         try {
             await HTTP.get('http://localhost/sanctum/csrf-cookie');
+            console.log('csrf-cookie')
         } catch (e) {
             console.log(e);
         }
@@ -17,6 +18,7 @@ export default {
     async isAuthorized() {
         try {
             const response = await HTTP.get('http://localhost/check');
+            console.log('user authorized')
             return await response.data;
         } catch (e) {
             console.log(e);
@@ -26,6 +28,14 @@ export default {
     async getInfo(path) {
         try {
             const response = await HTTP.get(path);
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
+    async getInfoWithArgs(path, args) {
+        try {
+            const response = await HTTP.get(path, args);
             return await response.data;
         } catch (e) {
             console.log(e);

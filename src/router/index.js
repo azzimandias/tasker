@@ -46,7 +46,6 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const response = await api.isAuthorized();
-  console.log(response)
   if (response !== 'yes') {
     if (to.path.includes('workspace')) {
       return '/';

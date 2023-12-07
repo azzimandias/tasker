@@ -3,6 +3,11 @@ import { ref, reactive, onMounted } from "vue";
 import {useListViewStore} from "@/stores/ListViewStore";
 import api from '@/api';
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
+    const user = reactive({
+        id: 0,
+        name: '',
+        surname: '',
+    });
     const sortLists = reactive([
         {
             id: 1,
@@ -46,9 +51,17 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const is_load_personalTags = ref(false);
 
     onMounted(async () => {
+        await getUserInfo();
         await firstRequest();
         await startIntervalUpdate();
     });
+
+    const getUserInfo = async () => {
+        const userInfo = await api.getInfo('http://localhost/user');
+        user.id = userInfo.id;
+        user.name = userInfo.name;
+        user.surname = userInfo.surname;
+    }
 
     const firstRequest = async () => {
         console.log('go')
@@ -81,17 +94,23 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         }
     }
 
+    let r = [];
     const getPersonalLists = async () => {
         try {
             is_load_personalLists.value = true;
-            const response = await api.getInfo('http://localhost/lists');
-            if ((typeof response) === "object" && response.length > 0) {
+            const response = await api.getInfoWithArgs('http://localhost/lists', {
+                params: {
+                    user_id: user.id
+                }
+            });
+            /*if ((typeof response) === "object" && response.length > 0) {
                 personalLists.length = 0;
                 response.forEach(item => {
                     personalLists.push(item);
                 });
                 is_load_personalLists.value = false;
-            }
+            }*/
+            console.log(response)
         } catch (e) {
             console.log(e);
         }
