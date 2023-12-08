@@ -26,7 +26,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const currentPath = ref(route.path);
     const bigMenu = useBigMenuStore();
 
-    /*onMounted(async () => {
+    onMounted(async () => {
         await getTasksOrTags();
         const interval = setInterval(() => {
             if(String(currentPath.value) !== String(route.path)) {
@@ -34,7 +34,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 getTasksOrTags();
             }
         }, 0)
-    });*/
+    });
 
     const getTasksOrTags = async () => {
         loadingSmall.value = true;
@@ -59,7 +59,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
             request.value = `http://localhost/tag?id=${route.params.id_tag}`;
         } else { request.value = ''; }
         if (request.value) {
-            const response = await api.getInfo(request.value);
+            const response = await api.getInfoWithArgs(request.value, {
+                params: {
+                    user_id: bigMenu.user.id
+                }
+            });
             setTimeout(() => {
                 updateData(response);
             }, 300);

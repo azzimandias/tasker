@@ -73,4 +73,12 @@ export default {
             console.log(e);
         }
     },
+    async logout() {
+        try {
+            const response = await HTTP.post('http://localhost/logout');
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
 }

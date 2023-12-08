@@ -38,6 +38,10 @@ const router = createRouter({
           path: 'tag=:id_tag',
           component: () => import('../views/TagView.vue'),
         },
+        {
+          path: 'user',
+          component: () => import('../views/UserView.vue'),
+        },
       ],
     },
     { path: '/:NotFoundPage(.*)', component: () => import('../views/NotFoundPageView.vue'), },

@@ -55,13 +55,13 @@ export const useImageDBStore = defineStore('ImageDBStore', () => {
     })
 
     const getPersonalLists = async () => {
-        const response = await api.getInfo('http://localhost/lists');
+        /*const response = await api.getInfo('http://localhost/lists');
         if ((typeof response) === "object" && response.length > 0) {
             personalLists.length = 0;
             response.forEach(item => {
                 personalLists.push(item);
             });
-        }
+        }*/
     };
 
     const getTasksForLists = () => {

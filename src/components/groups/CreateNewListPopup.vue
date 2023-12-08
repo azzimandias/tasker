@@ -68,7 +68,8 @@ const saveList = async () => {
   });
   await bigMenu.saveList({
     name: name.value.trim(),
-    color: color.value
+    color: color.value,
+    user_id: bigMenu.user.id
   });
   name.value = '';
   color.value = '#e0e0e0';

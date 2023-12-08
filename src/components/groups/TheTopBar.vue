@@ -4,7 +4,7 @@
       <Transition mode="out-in" name="fade">
 
         <div class="top-bar__container" v-if="!isSearchMode">
-            <TopButton :cl="cl[0]"/>
+            <router-link :to="'/workspace/user'"><TopButton :cl="cl[0]"/></router-link>
             <TopButton :cl="cl[1]" @mouseup="listInfo.addNewTask"/>
         </div>
         <div class="top-bar__container vide" v-else>

@@ -85,7 +85,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
 
     const getSortListsCount = async () => {
         is_load_sortLists.value = true;
-        const response = await api.getInfo('http://localhost/sortLists');
+        const response = await api.getInfoWithArgs('http://localhost/sortLists', {
+            params: {
+                user_id: user.id
+            }
+        });
         if ((typeof response) === "object") {
             response.forEach(item => {
                 sortLists[item.id-1].count = item.count;
@@ -103,14 +107,13 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
                     user_id: user.id
                 }
             });
-            /*if ((typeof response) === "object" && response.length > 0) {
+            if ((typeof response) === "object" && response.length > 0) {
                 personalLists.length = 0;
                 response.forEach(item => {
                     personalLists.push(item);
                 });
                 is_load_personalLists.value = false;
-            }*/
-            console.log(response)
+            }
         } catch (e) {
             console.log(e);
         }
@@ -145,7 +148,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     return {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
-        personalTags, is_load_personalTags,
+        personalTags, is_load_personalTags, user,
         firstRequest, addNewList, saveList
     };
 });
