@@ -4,7 +4,10 @@
         <div class="personal-list__circle" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
         <div class="info-list__wrapper">
-          <InfoList/>
+          <InfoList
+              :idList="props.list.id"
+              @delete="deleteList"
+          />
         </div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
@@ -12,13 +15,23 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import InfoList from "@/components/UI/InfoList.vue";
+import {useBigMenuStore} from "@/stores/BigMenuStore";
 
+const bigMenu = useBigMenuStore();
 const props = defineProps({
     list: Object,
 });
 const route = useRoute();
+const router = useRouter();
+
+const deleteList = () => {
+  bigMenu.deleteList(props.list.id);
+  if (+props.list.id === +route.params.id_list) {
+    router.push({ name: 'intro' });
+  }
+};
 </script>
 
 <style lang="scss">

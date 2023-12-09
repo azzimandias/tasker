@@ -29,7 +29,7 @@ onMounted(() => {
     @import "../../assets/styles/global.scss";
     .searcher {
         width: 100%;
-        color: #aaadae;
+        color: #aaadae !important;
       &::placeholder {
         color: $placeholder;
       }

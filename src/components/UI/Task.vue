@@ -22,7 +22,7 @@
               @flag="saveChangesFlag"
         />
         <InfoList
-            @deleteTask="deleteTask"
+            @delete="deleteTask"
         />
       </div>
     </div>

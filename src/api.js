@@ -57,6 +57,14 @@ export default {
             console.log(e);
         }
     },
+    async deleteList(listId) {
+        try {
+            const response = await HTTP.post('http://localhost/deleteList', +listId);
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
     async signUp(obj) {
         try {
             const response = await HTTP.post('http://localhost/register', obj);

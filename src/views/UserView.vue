@@ -1,6 +1,6 @@
 <template>
   <div class="user-view">
-    <button class="btn exit" @click="exit">Выйти</button>
+    <button class="btn exit" @click="exit">Logout</button>
   </div>
 </template>
 

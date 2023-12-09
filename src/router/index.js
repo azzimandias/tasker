@@ -39,7 +39,7 @@ const router = createRouter({
           component: () => import('../views/TagView.vue'),
         },
         {
-          path: 'user',
+          path: 'user', name: 'user',
           component: () => import('../views/UserView.vue'),
         },
       ],

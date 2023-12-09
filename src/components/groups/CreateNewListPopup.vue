@@ -134,6 +134,7 @@ const saveList = async () => {
     width: 250px;
     font-size: 12px;
     text-align: justify;
+    color: $textColor;
   }
   .body__wrapper {
     display: flex;
@@ -144,6 +145,7 @@ const saveList = async () => {
     display: flex;
     grid-gap: 5px;
     align-items: center;
+    color: $textColor;
   }
   .popup__btns {
     height: 30px;

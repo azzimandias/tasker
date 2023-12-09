@@ -145,10 +145,15 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         await firstRequest();
     };
 
+    const deleteList = async (listId) => {
+        await api.deleteList(listId);
+        await firstRequest();
+    };
+
     return {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
         personalTags, is_load_personalTags, user,
-        firstRequest, addNewList, saveList
+        firstRequest, addNewList, saveList, deleteList
     };
 });
