@@ -15,6 +15,7 @@
             :color="listView.listInfo.color"
             :is_new="false"
             v-if="listView.tasks.length"
+            @done="taskSlideToBottom"
         />
         <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
       </div>
@@ -24,7 +25,8 @@
 </template>
 
 <script setup>
-import { useListViewStore } from "@/stores/ListViewStore";
+import
+{ useListViewStore } from "@/stores/ListViewStore";
 import {useImageDBStore} from "@/stores/imageDBStore";
 import ListHeader from "@/components/UI/ListHeader.vue";
 import SomethingWrong from "@/components/UI/SomethingWrong.vue";
@@ -40,7 +42,11 @@ watchEffect(() => {
   if (!route.params.id_list) {
     listView.loading = true;
   }
-})
+});
+
+const taskSlideToBottom = (obj) => {
+  listView.updateTaskDone(obj.task.id, obj.is_done);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -60,7 +66,7 @@ watchEffect(() => {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  grid-gap: 20px;
+  //grid-gap: 20px;
 }
 .empty-list__title {
   flex: 1 0 100px;

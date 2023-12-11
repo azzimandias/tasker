@@ -85,6 +85,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     tags.push(item);
                 }
             });
+            sortTasksByDone();
             if (route.params.id_list) {
                 currentListInfo.id = arr[0].id;
                 currentListInfo.name = arr[0].name;
@@ -123,6 +124,28 @@ export const useListViewStore = defineStore('listViewStore', () => {
             is_flagged: 0,
             url: null,
             priority: null,
+        });
+    };
+
+    const updateTaskDone = (id, is_done) => {
+        currentTasks.find(el => el.id === id).is_done = +is_done;
+        sortTasksById();
+        sortTasksByDone();
+    };
+
+    const sortTasksById = () => {
+        currentTasks.sort((a, b) => {
+            if (a.id > b.id) return 1;
+            if (a.id == b.id) return 0;
+            if (a.id < b.id) return -1;
+        });
+    };
+
+    const sortTasksByDone = () => {
+        currentTasks.sort((a, b) => {
+            if (a.is_done > b.is_done) return 1;
+            if (a.is_done == b.is_done) return 0;
+            if (a.is_done < b.is_done) return -1;
         });
     };
 
@@ -173,5 +196,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         removeNewTask,
         createTask,
         deleteTask,
+        updateTaskDone,
     };
 });

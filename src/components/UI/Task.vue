@@ -1,5 +1,10 @@
 <template>
-  <div class="task" @mouseover="is_visible = true" @mouseout="is_visible = false">
+  <div class="task"
+       ref="taskNode"
+       :class="{done: props.task.is_done}"
+       @mouseover="is_visible = true"
+       @mouseout="is_visible = false"
+  >
     <div class="task__top-container">
       <DotBtn
           :is_done="props.task.is_done"
@@ -59,16 +64,30 @@ const props = defineProps({
   task: Object,
   color: String,
 });
+const emits = defineEmits(['done']);
 
 const is_visible = ref(false);
 const listView = useListViewStore();
 const taskNode = ref(null);
 
+const height = ref('');
+
 const saveChangesName = (name) => {saveChanges('name', name);};
 const saveChangesDescription = (description) => {saveChanges('description', description);};
 const saveChangesDate = (date) => {saveChanges('deadline', date);};
 const saveChangesFlag = (is_flagged) => {saveChanges('is_flagged', is_flagged);};
-const saveChangesDot = (is_done) => {saveChanges('is_done', is_done);};
+const saveChangesDot = (is_done) => {
+  hideTask();
+  setTimeout(() => {
+    taskNode.value.classList.remove('hide-anim');
+    saveChanges('is_done', is_done);
+    emits('done', {task: props.task, is_done});
+  },1000);
+};
+const hideTask = () => {
+  height.value = `${taskNode.value.scrollHeight}px`;
+  taskNode.value.classList.add('hide-anim');
+};
 const saveChanges = (whatChanges, changeValue) => {
   let update = {
     id: props.task.id,
@@ -91,6 +110,29 @@ const deleteTask = () => {
     flex-direction: column;
     justify-content: center;
     padding: 5px 5px 5px 0;
+    &.hide-anim {
+      animation: hide .5s ease forwards;
+    }
+    &.done {
+      opacity: .6;
+    }
+  }
+  @keyframes hide {
+    0% {
+      opacity: 1;
+      height: v-bind(height);
+      padding: 5px 5px 5px 0;
+    }
+    50% {
+      opacity: 0;
+      height: v-bind(height);
+      padding: 5px 5px 5px 0;
+    }
+    100% {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+    }
   }
   .task__top-container {
     display: flex;

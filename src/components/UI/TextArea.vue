@@ -5,12 +5,13 @@
       :placeholder="props.placeholder"
       :name="props.name"
       @blur="saveChangesTextarea"
+      @keyup="resize"
   >{{ props.value }}</textarea>
 </template>
 
 <script setup>
-  import {ref} from "vue";
-  import {useListViewStore} from "@/stores/ListViewStore";
+import {onMounted, ref} from "vue";
+import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
   const emit = defineEmits(['saveChangesDescription'])
@@ -21,6 +22,15 @@
     value: String,
   });
   const taskTextareaNode = ref(null);
+
+  onMounted(() => {
+    resize();
+  });
+
+  const resize = () => {
+    taskTextareaNode.value.style.cssText = 'height: auto; padding: 0';
+    taskTextareaNode.value.style.cssText = `height: ${taskTextareaNode.value.scrollHeight + 15}px`;
+  };
 
   const saveChangesTextarea = () => {
     taskTextareaNode.value.blur();
