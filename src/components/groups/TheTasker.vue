@@ -27,7 +27,7 @@ import {ref} from "vue";
 const route = useRoute();
 </script>
 
-<style>
+<style lang="scss">
     @import "../../assets/styles/global.scss";
     .tasker {
         background-color: $tasker;

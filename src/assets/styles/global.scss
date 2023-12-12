@@ -1,6 +1,6 @@
 $workspace: #0f0f0f;
 $bigMenu: #26282B;
-$tasker: #1D1F22;
+$tasker: #1b1c1f;
 $gold: #af9a64;
 $personal: #494B4E;
 $textColorActive: #171515;
@@ -24,16 +24,17 @@ $macWindow: #383939;
 }
 
 [data-theme="dark"] {
-  $workspace: black;
+  $workspace: #0f0f0f;
   $bigMenu: #26282B;
-  $tasker: #1D1F22;
-  $gold: #d7bc76;
+  $tasker: #1b1c1f;
+  $gold: #af9a64;
   $personal: #494B4E;
   $textColorActive: #171515;
   $textColor: #c5c7ca;
   $description: #c4c4c4;
   $placeholder: rgba(115, 111, 111, 0.44);
   $smallTextColor: #f8f8f8;
+  $macWindow: #383939;
 }
 
 .scroll {

@@ -14,8 +14,8 @@
             :task="task"
             :color="listView.listInfo.color"
             :is_new="false"
-            v-if="listView.tasks.length"
             @done="taskSlideToBottom"
+            v-if="listView.tasks.length"
         />
         <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
       </div>

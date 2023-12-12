@@ -5,7 +5,8 @@ import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
 
 export const useListViewStore = defineStore('listViewStore', () => {
-    const currentTasks = reactive([]);
+    const currentPersonalListTasks = reactive([]);
+    const currentSortListTasks = reactive([]);
     const currentListInfo = reactive({
         id: '',
         name: '',
@@ -27,7 +28,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
-        await getTasksOrTags();
+        setTimeout(() => {
+            getTasksOrTags();
+        },300)
         const interval = setInterval(() => {
             if(String(currentPath.value) !== String(route.path)) {
                 loading.value = true;
@@ -71,40 +74,73 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateData = (arr) => {
-        if ((typeof arr[1]) === "object" && arr.length) {
-            if (route.params.id_list || route.params.name) {
-                currentTasks.length = 0;
+        if ((arr['sortList'] || arr['list'] || arr['tag']) && (arr['tasks'] || arr['tasksByList'])) {
+
+            if (route.params.id_list) {
+                currentPersonalListTasks.length = 0;
+            } else if (route.params.name) {
+                currentSortListTasks.length = 0;
             } else if (route.params.id_tag) {
                 tags.length = 0;
             }
-            arr[1].forEach(item => {
-                item.key = Math.random();
-                if (route.params.id_list || route.params.name) {
-                    currentTasks.push(item);
-                } else if (route.params.id_tag) {
-                    tags.push(item);
-                }
-            });
-            sortTasksByDone();
+
             if (route.params.id_list) {
-                currentListInfo.id = arr[0].id;
-                currentListInfo.name = arr[0].name;
-                currentListInfo.color = arr[0].color;
+                arr['tasks'].forEach(item => {
+                    item.key = Math.random();
+                    currentPersonalListTasks.push(item);
+                });
             } else if (route.params.name) {
-                currentSortListInfo.id = arr[0].id;
-                currentSortListInfo.name = arr[0].name;
+                arr['tasksByList'].forEach(item => {
+                    item.key = Math.random();
+                    item.tasks.forEach(task => {
+                        task.key = Math.random();
+                    });
+                    currentSortListTasks.push(item);
+                });
+            }
+            sortTasksByDone();
+            console.log(currentPersonalListTasks);
+            console.log(currentSortListTasks);
+
+            if (route.params.id_list) {
+                currentListInfo.id = arr['list'].id;
+                currentListInfo.name = arr['list'].name;
+                currentListInfo.color = arr['list'].color;
+            } else if (route.params.name) {
+                currentSortListInfo.id = arr['sortList'].id;
+                currentSortListInfo.name = arr['sortList'].name;
                 bigMenu.sortLists.forEach(sortList => {
                     if (sortList.id === currentSortListInfo.id) { currentSortListInfo.color = sortList.color; }
                 });
             } else if (route.params.id_tag) {
-                tag_name.value = arr[0];
+                tag_name.value = arr['tag'];
             }
+
             loading.value = false;
             loadingSmall.value = false;
+
         } else {
             is_somethingWrong.value = true;
             loading.value = false;
             loadingSmall.value = false;
+        }
+    }
+
+    const clearTasks = (id) => {
+        let i = 0;
+        currentSortListTasks.forEach((list) => {
+            list.tasks.forEach((task,idx) => {
+                if (+id === +task.id) {
+                    console.log(list.tasks[idx])
+                    list.tasks.splice(idx,1);
+                }
+            });
+            if (list.tasks.length > 0) {
+                i++;
+            }
+        });
+        if (!i) {
+            currentSortListTasks.length = 0;
         }
     }
 
@@ -114,7 +150,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const addNewTask = () => {
-        currentTasks.push({
+        currentPersonalListTasks.push({
             id: null,
             id_list: currentListInfo.id,
             name: null,
@@ -128,13 +164,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const updateTaskDone = (id, is_done) => {
-        currentTasks.find(el => el.id === id).is_done = +is_done;
+        currentPersonalListTasks.find(el => el.id === id).is_done = +is_done;
         sortTasksById();
         sortTasksByDone();
     };
 
     const sortTasksById = () => {
-        currentTasks.sort((a, b) => {
+        currentPersonalListTasks.sort((a, b) => {
             if (a.id > b.id) return 1;
             if (a.id == b.id) return 0;
             if (a.id < b.id) return -1;
@@ -142,7 +178,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const sortTasksByDone = () => {
-        currentTasks.sort((a, b) => {
+        currentPersonalListTasks.sort((a, b) => {
             if (a.is_done > b.is_done) return 1;
             if (a.is_done == b.is_done) return 0;
             if (a.is_done < b.is_done) return -1;
@@ -150,9 +186,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const removeNewTask = () => {
-        currentTasks.forEach((task, idx) => {
+        currentPersonalListTasks.forEach((task, idx) => {
             if (!task.id) {
-                currentTasks.splice(idx,1);
+                currentPersonalListTasks.splice(idx,1);
             }
         });
     };
@@ -160,7 +196,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const createTask = async (task) => {
         task.id_list = currentListInfo.id;
         const response = await api.postInfo(`http://localhost/createTask`, task);
-        currentTasks.forEach((task, idx) => {
+        currentPersonalListTasks.forEach((task, idx) => {
             if (!task.id) {
                 task.id = response.id;
             }
@@ -170,9 +206,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const deleteTask = async (obj) => {
-        currentTasks.forEach((task, idx) => {
+        currentPersonalListTasks.forEach((task, idx) => {
             if (task.id === obj.id) {
-                currentTasks.splice(idx,1);
+                currentPersonalListTasks.splice(idx,1);
             }
         });
         await api.postInfo(`http://localhost/deleteTask`, obj);
@@ -180,7 +216,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     return {
-        tasks: currentTasks,
+        tasks: currentPersonalListTasks,
+        stasks: currentSortListTasks,
         listInfo: currentListInfo,
         sortListInfo: currentSortListInfo,
         loading,
@@ -197,5 +234,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         createTask,
         deleteTask,
         updateTaskDone,
+        clearTasks,
     };
 });

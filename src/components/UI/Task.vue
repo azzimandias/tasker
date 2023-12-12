@@ -64,7 +64,7 @@ const props = defineProps({
   task: Object,
   color: String,
 });
-const emits = defineEmits(['done']);
+const emits = defineEmits(['done', 'flag', 'date']);
 
 const is_visible = ref(false);
 const listView = useListViewStore();
@@ -74,8 +74,14 @@ const height = ref('');
 
 const saveChangesName = (name) => {saveChanges('name', name);};
 const saveChangesDescription = (description) => {saveChanges('description', description);};
-const saveChangesDate = (date) => {saveChanges('deadline', date);};
-const saveChangesFlag = (is_flagged) => {saveChanges('is_flagged', is_flagged);};
+const saveChangesDate = (date) => {
+  saveChanges('deadline', date);
+  emits('date', {task: props.task, date});
+};
+const saveChangesFlag = (is_flagged) => {
+  saveChanges('is_flagged', is_flagged);
+  emits('flag', {task: props.task, is_flagged});
+};
 const saveChangesDot = (is_done) => {
   hideTask();
   setTimeout(() => {

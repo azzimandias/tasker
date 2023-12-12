@@ -5,7 +5,7 @@
 
         <div class="top-bar__container" v-if="!isSearchMode">
             <router-link :to="'/workspace/user'"><TopButton :cl="cl[0]"/></router-link>
-            <TopButton :cl="cl[1]" @mouseup="listInfo.addNewTask"/>
+            <TopButton :cl="cl[1]" @mouseup="listInfo.addNewTask" v-if="route.params.id_list"/>
         </div>
         <div class="top-bar__container vide" v-else>
             <InputText 
@@ -38,7 +38,9 @@ import TopButton from '@/components/UI/TopButton.vue';
 import InputText from '@/components/UI/InputText.vue'
 import {useImageDBStore} from "@/stores/imageDBStore";
 import {useListViewStore} from "@/stores/ListViewStore";
+import {useRoute} from "vue-router";
 
+const route = useRoute();
 const emit = defineEmits(['newTask']);
 const cl = ref(['person','plus','loup','close']);
 const isSearchMode = ref(false);
