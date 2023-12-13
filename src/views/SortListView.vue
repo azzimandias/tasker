@@ -51,9 +51,10 @@ watchEffect(() => {
 });
 
 const refreshSortLists = (obj) => {
-  if (route.params.name === 'done' || route.params.name === 'with_flag') {
+  if (route.params.name === 'done' && obj.action === 'done' ||
+      route.params.name === 'with_flag' && obj.action === 'flag') {
     listView.clearTasks(obj.task.id);
-  } else if (route.params.name === 'today') {
+  } else if (route.params.name === 'today' && obj.action === 'date') {
     if (obj.date !== getTodayDate()) {
       listView.clearTasks(obj.task.id);
     }

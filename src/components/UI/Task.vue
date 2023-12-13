@@ -76,18 +76,18 @@ const saveChangesName = (name) => {saveChanges('name', name);};
 const saveChangesDescription = (description) => {saveChanges('description', description);};
 const saveChangesDate = (date) => {
   saveChanges('deadline', date);
-  emits('date', {task: props.task, date});
+  emits('date', {task: props.task, date, action: 'date'});
 };
 const saveChangesFlag = (is_flagged) => {
   saveChanges('is_flagged', is_flagged);
-  emits('flag', {task: props.task, is_flagged});
+  emits('flag', {task: props.task, is_flagged, action: 'flag'});
 };
 const saveChangesDot = (is_done) => {
   hideTask();
   setTimeout(() => {
     taskNode.value.classList.remove('hide-anim');
     saveChanges('is_done', is_done);
-    emits('done', {task: props.task, is_done});
+    emits('done', {task: props.task, is_done, action: 'done'});
   },1000);
 };
 const hideTask = () => {
