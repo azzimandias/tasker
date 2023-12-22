@@ -10,9 +10,13 @@
     "@vuepic/vue-datepicker": "^6.0.1",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
+    "flowbite": "^2.2.1",
+    "flowbite-vue": "^0.1.2",
     "pinia": "^2.1.6",
+    "v-dropdown-menu": "^2.0.4",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vue3-dropdown-navbar": "^0.1.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",

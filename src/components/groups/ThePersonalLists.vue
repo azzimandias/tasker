@@ -1,7 +1,7 @@
 <template>
     <div class="personal-lists" v-if="bigMenuStore.personalLists.length">
         <SectionHeader :is_load="bigMenuStore.is_load_personalLists">Мои списки</SectionHeader>
-        <div class="personal-lists__container scroll">
+        <div class="personal-lists__container">
             <PersonalList 
                 v-for="list in bigMenuStore.personalLists"
                 :key="list.id"
@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-/*import { ref,reactive,onMounted } from 'vue';*/
 import { useBigMenuStore } from "@/stores/BigMenuStore";
 import SectionHeader from '../UI/SectionHeader.vue';
 import PersonalList from '@/components/UI/PersonalList.vue';

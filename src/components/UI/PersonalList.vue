@@ -1,9 +1,9 @@
 <template>
-  <router-link :to="`/workspace/list=${props.list.id}`">
-    <div class="personal-list" :class="{ active: props.list.id === +route.params.id_list }">
+<!--  <router-link :to="`/workspace/list=${props.list.id}`">-->
+    <div class="personal-list" :class="{ active: props.list.id === +route.params.id_list }" @mouseup="openList">
         <div class="personal-list__circle" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
-        <div class="info-list__wrapper">
+        <div class="info-list__wrapper" ref="infoList">
           <InfoList
               :idList="props.list.id"
               @delete="deleteList"
@@ -11,13 +11,14 @@
         </div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
-  </router-link>
+<!--  </router-link>-->
 </template>
 
 <script setup>
 import {useRoute, useRouter} from 'vue-router';
 import InfoList from "@/components/UI/InfoList.vue";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
+import {ref} from "vue";
 
 const bigMenu = useBigMenuStore();
 const props = defineProps({
@@ -25,6 +26,14 @@ const props = defineProps({
 });
 const route = useRoute();
 const router = useRouter();
+
+const infoList = ref(null);
+
+const openList = (e) => {
+  if (!infoList.value.contains(e.target)) {
+    router.push({ name: 'list', params: { id_list: props.list.id } });
+  }
+};
 
 const deleteList = () => {
   bigMenu.deleteList(props.list.id);

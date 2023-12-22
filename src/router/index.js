@@ -31,7 +31,7 @@ const router = createRouter({
           component: () => import('../views/SortListView.vue'),
         },
         {
-          path: 'list=:id_list',
+          path: 'list=:id_list', name: 'list',
           component: () => import('../views/PersonalListView.vue'),
         },
         {

@@ -1,5 +1,5 @@
 <template>
-  <div class="info-list" @mouseup="openDropDownList" :class="{ active: +props.idList === +router.params.id_list }">
+  <div class="info-list" ref="infoList" @mouseup="openCloseDropDownList" :class="{ active: +props.idList === +router.params.id_list }">
     <div class="drop-down-list" ref="dropDownList">
       <button class="drop-down-list__btn">Edit</button>
       <button class="drop-down-list__btn" @mouseup="emit('delete')">Delete</button>
@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-  import {ref} from "vue";
+  import {ref, onMounted, onBeforeUnmount} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import {useRoute} from "vue-router";
 
@@ -16,17 +16,28 @@
   const ListView = useListViewStore();
   const props = defineProps(['idList']);
   const emit = defineEmits(['delete']);
+  const infoList = ref(null);
   const dropDownList = ref(null);
-  const openDropDownList = () => {
+  const openCloseDropDownList = () => {
     if (dropDownList.value.classList.contains('active')) {
       dropDownList.value.classList.remove('active');
     } else {
       dropDownList.value.classList.add('active');
     }
   };
-  const isActiveList = () => {
-    return props.idList !== ListView.listInfo.id;
-  };
+
+  const closeDropDown = (e) => {
+    if (dropDownList.value.classList.contains('active') && !infoList.value.contains(e.target)) {
+      dropDownList.value.classList.remove('active');
+    }
+  }
+
+  onMounted(() => {
+    window.addEventListener('click', closeDropDown);
+  });
+  onBeforeUnmount(() => {
+    window.removeEventListener('click', closeDropDown);
+  });
 </script>
 
 <style lang="scss" scoped>
