@@ -8,7 +8,7 @@
             <TopButton :cl="cl[1]" @mouseup="listInfo.addNewTask" v-if="route.params.id_list"/>
         </div>
         <div class="top-bar__container vide" v-else>
-            <InputText 
+            <SearchInputText
                 :placeholder="'Поиск по задачам'"
                 :isSearchMode="isSearchMode"
             />
@@ -20,11 +20,11 @@
 
         <TopButton v-if="!isSearchMode"
             :cl="cl[2]"
-            @click="isSearchMode = true"
+            @click="showSearch"
         />
         <TopButton v-else
             :cl="cl[3]"
-            @click="isSearchMode = false"
+            @click="hideSearch"
         />
 
       </Transition>
@@ -35,18 +35,27 @@
 <script setup>
 import { ref } from 'vue';
 import TopButton from '@/components/UI/TopButton.vue';
-import InputText from '@/components/UI/InputText.vue'
+import SearchInputText from '@/components/UI/SearchInputText.vue'
 import {useImageDBStore} from "@/stores/imageDBStore";
 import {useListViewStore} from "@/stores/ListViewStore";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const emit = defineEmits(['newTask']);
 const cl = ref(['person','plus','loup','close']);
 const isSearchMode = ref(false);
 const listInfo = useListViewStore();
 const imageDB = useImageDBStore();
 
+const showSearch = () => {
+  isSearchMode.value = true;
+  router.push({ name: 'search' });
+};
+const hideSearch = () => {
+  isSearchMode.value = false;
+  router.push({ name: 'intro' });
+};
 </script>
 
 <style lang="scss">

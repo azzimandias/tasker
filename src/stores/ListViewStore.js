@@ -17,6 +17,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         name: '',
         color: '',
     });
+    const currentSearchTasks = reactive([]);
     const tags = reactive([]);
     const tag_name = ref('');
     const loading = ref(true);
@@ -215,6 +216,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await bigMenu.firstRequest();
     }
 
+    const findTasks = async (searchString) => {
+        //currentSearchTasks
+        const response = await api.globalSearch(searchString);
+    }
+
     return {
         tasks: currentPersonalListTasks,
         stasks: currentSortListTasks,
@@ -235,5 +241,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         deleteTask,
         updateTaskDone,
         clearTasks,
+        findTasks,
     };
 });
