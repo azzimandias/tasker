@@ -57,7 +57,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     });
 
     const getUserInfo = async () => {
-        const userInfo = await api.getInfo('http://localhost/user');
+        const userInfo = await api.getInfo('user');
         user.id = userInfo.id;
         user.name = userInfo.name;
         user.surname = userInfo.surname;
@@ -85,7 +85,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
 
     const getSortListsCount = async () => {
         is_load_sortLists.value = true;
-        const response = await api.getInfoWithArgs('http://localhost/sortLists', {
+        const response = await api.getInfoWithArgs('sortLists', {
             params: {
                 user_id: user.id
             }
@@ -102,7 +102,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getPersonalLists = async () => {
         try {
             is_load_personalLists.value = true;
-            const response = await api.getInfoWithArgs('http://localhost/lists', {
+            const response = await api.getInfoWithArgs('lists', {
                 params: {
                     user_id: user.id
                 }
@@ -122,7 +122,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getPersonalTags = async () => {
         try {
             is_load_personalTags.value = true;
-            const response = await api.getInfo('http://localhost/tags');
+            const response = await api.getInfo('tags');
             if ((typeof response) === "object" && response.length > 0) {
                 personalTags.length = 0;
                 personalTags.push({ id:0, name:'Все теги' });

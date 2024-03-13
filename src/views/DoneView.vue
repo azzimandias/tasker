@@ -27,7 +27,7 @@ let loading = ref(true);
 const getTestTasks = async () => {
   try {
     loading.value = true;
-    const response = await fetch('http://localhost/done');
+    const response = await fetch('done');
     const arr = await response.json();
     if ((typeof arr) === "object") {
       arr.forEach(item => {

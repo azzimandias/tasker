@@ -55,7 +55,7 @@ export const useImageDBStore = defineStore('ImageDBStore', () => {
     })
 
     const getPersonalLists = async () => {
-        /*const response = await api.getInfo('http://localhost/lists');
+        /*const response = await api.getInfo('lists');
         if ((typeof response) === "object" && response.length > 0) {
             personalLists.length = 0;
             response.forEach(item => {
@@ -67,7 +67,7 @@ export const useImageDBStore = defineStore('ImageDBStore', () => {
     const getTasksForLists = () => {
         tasksByList.length = 0;
         personalLists.forEach(async list => {
-            const response = await api.getInfo(`http://localhost/list?id=${list.id}`);
+            const response = await api.getInfo(`list?id=${list.id}`);
             if ((typeof response) === "object" && response.length > 0) {
                 tasksByList.push({
                     list: response[0],

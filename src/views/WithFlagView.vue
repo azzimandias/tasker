@@ -27,7 +27,7 @@ let loading = ref(true);
 const getTestTasks = async () => {
   try {
     loading.value = true;
-    const response = await fetch('http://localhost/with_flag');
+    const response = await fetch('with_flag');
     const arr = await response.json();
     if ((typeof arr) === "object") {
       arr.forEach(item => {

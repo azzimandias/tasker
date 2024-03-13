@@ -56,11 +56,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const  fetchToServer =  async () => {
         if (route.params.id_list) {
-            request.value = `http://localhost/list?id=${route.params.id_list}`;
+            request.value = `list?id=${route.params.id_list}`;
         } else if (route.params.name) {
-            request.value = `http://localhost/list?name=${route.params.name}`;
+            request.value = `list?name=${route.params.name}`;
         } else if (route.params.id_tag) {
-            request.value = `http://localhost/tag?id=${route.params.id_tag}`;
+            request.value = `tag?id=${route.params.id_tag}`;
         } else { request.value = ''; }
         if (request.value) {
             const response = await api.getInfoWithArgs(request.value, {
@@ -146,7 +146,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateTask = async (task) => {
-        const response = await api.postInfo(`http://localhost/updateTask`, task);
+        const response = await api.postInfo(`updateTask`, task);
         await bigMenu.firstRequest();
     }
 
@@ -196,7 +196,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const createTask = async (task) => {
         task.id_list = currentListInfo.id;
-        const response = await api.postInfo(`http://localhost/createTask`, task);
+        const response = await api.postInfo(`createTask`, task);
         currentPersonalListTasks.forEach((task, idx) => {
             if (!task.id) {
                 task.id = response.id;
@@ -212,7 +212,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 currentPersonalListTasks.splice(idx,1);
             }
         });
-        await api.postInfo(`http://localhost/deleteTask`, obj);
+        await api.postInfo(`deleteTask`, obj);
         await bigMenu.firstRequest();
     }
 
