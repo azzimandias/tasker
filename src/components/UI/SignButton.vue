@@ -30,4 +30,9 @@
     background-color: $gold;
     border: 1px solid $gold;
   }
+  @media screen and (max-width: 730px) {
+    .sign-btn {
+      height: 60px;
+    }
+  }
 </style>

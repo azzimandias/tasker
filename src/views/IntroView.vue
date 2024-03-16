@@ -30,5 +30,15 @@
     line-height: 30px;
     color: $description;
     margin-bottom: 20px;
+    text-align: justify;
+  }
+  @media screen and (max-width: 540px) {
+    .header_big {
+      font-size: 37px;
+      text-align: center;
+    }
+    .description {
+      text-align: justify;
+    }
   }
 </style>

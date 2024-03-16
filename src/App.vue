@@ -12,6 +12,9 @@ onMounted( () => {
 
 <style lang="scss">
   @import './assets/styles/global.scss';
+  html {
+    font-size: 16px;
+  }
   #app {
     width: 100vw;
     height: 100vh;

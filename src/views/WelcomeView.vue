@@ -15,8 +15,10 @@
 
 <template>
   <div class="skin">
-    <div class="top-block">Reminder: This is a test project</div>
-    <div class="header">
+    <img src="../assets/svgs/cloud.svg" alt="" class="cloud">
+    <div>
+      <div class="top-block">Reminder: This is a test project</div>
+      <div class="header">
       <div class="group-wrapper">
         <div class="logo-wrapper">
           <router-link to="/">
@@ -26,7 +28,7 @@
         <p class="logo-description">all your goals will be here</p>
       </div>
 
-      <div class="btns-wrapper" v-if="route.path === '/'">
+      <div class="btns-wrapper" v-if="route.path === '/' && docWdt >= 730">
         <router-link to="/signIn">
           <SignButton :class="'sign-in'">Sign in</SignButton>
         </router-link>
@@ -34,7 +36,8 @@
           <SignButton :class="'sign-up'">Sign up</SignButton>
         </router-link>
       </div>
-      <div class="btns-wrapper flex-right" v-else-if="route.path === '/signUp'">
+      <div class="btns-wrapper flex-right"
+           v-else-if="route.path === '/signUp' || (route.path === '/' && docWdt <= 730)">
         <router-link to="/signIn">
           <SignButton :class="'sign-in'">Sign in</SignButton>
         </router-link>
@@ -45,16 +48,25 @@
         </router-link>
       </div>
     </div>
-    <div class="main-block">
-      <div class="main-block__left">
+    </div>
+    <div class="main-block" :class="{center: (docWdt <= 830 && route.path !== '/')}">
+      <div
+          class="main-block__info"
+          :class="{
+            substrate: (docWdt <= 830 && route.path !== '/'),
+            upper: (docWdt <= 830 && route.path === '/')
+          }"
+      >
         <router-view/>
       </div>
-      <div class="main-block__right">
+      <div class="main-block__right" v-if="docWdt >= 830">
         <MacWindow v-if="docWdt >= 1128"/>
         <PhoneWindow v-else/>
       </div>
+      <div class="main-block__right" v-else>
+        <MacWindow v-if="route.path !== '/' && route.path !== '/signUp' && route.path !== '/signIn'"/>
+      </div>
     </div>
-    <img src="../assets/svgs/cloud.svg" alt="" class="cloud">
   </div>
 </template>
 
@@ -67,6 +79,9 @@
     background-color: $tasker;
     overflow: hidden;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 50px;
   }
   .top-block {
     width: 100%;
@@ -114,14 +129,28 @@
     height: calc(100vh - 130px);
     padding: 0 40px;
     display: flex;
+    position: relative;
+    z-index: 1;
   }
-  .main-block__left {
-    width: 500px;
+  .center {
+    align-items: center;
+  }
+  .main-block__info {
+    max-width: 500px;
     height: 100%;
-    padding-top: 100px;
+    padding-top: 50px;
+  }
+  .upper {
+    padding-top: 0;
+  }
+  .substrate {
+    height: auto;
+    padding: 30px;
+    border-radius: 20px;
+    background-color: $personal;
   }
   .main-block__right {
-    padding: 50px 0 0 30px;
+    padding: 0 0 0 30px;
     width: calc(100% - 500px);
     max-width: 1500px;
     display: flex;
@@ -155,7 +184,28 @@
   }
   @media screen and (max-width: 1410px) {
     .main-block__right {
-      padding: 50px 0 0 50px;
+      padding: 0 0 0 50px;
+    }
+  }
+  @media screen and (max-width: 830px) {
+    .main-block {
+      flex-direction: column;
+    }
+  }
+  @media screen and (max-width: 730px) {
+    .header {
+      padding: 15px 25px;
+    }
+    .main-block {
+      padding: 0 25px;
+    }
+    .group-wrapper {
+      height: 100%;
+      flex-direction: column;
+    }
+    .logo-description {
+      height: 20px;
+      line-height: 20px;
     }
   }
 </style>
