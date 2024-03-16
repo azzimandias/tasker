@@ -49,12 +49,16 @@
       </div>
     </div>
     </div>
-    <div class="main-block" :class="{center: (docWdt <= 830 && route.path !== '/')}">
+    <div class="main-block" :class="{
+      center: (docWdt <= 830 && route.path !== '/'),
+    }">
       <div
           class="main-block__info"
           :class="{
             substrate: (docWdt <= 830 && route.path !== '/'),
-            upper: (docWdt <= 830 && route.path === '/')
+            upper: (docWdt <= 830 && route.path === '/'),
+            small1: (docWdt <= 530 && route.path !== '/'),
+            small2: (docWdt <= 530 && route.path === '/'),
           }"
       >
         <router-view/>
@@ -140,6 +144,13 @@
     height: 100%;
     padding-top: 50px;
   }
+  .small1 {
+    width: 300px;
+  }
+  .small2 {
+    max-width: 500px;
+    width: auto;
+  }
   .upper {
     padding-top: 0;
   }
@@ -206,11 +217,6 @@
     .logo-description {
       height: 20px;
       line-height: 20px;
-    }
-  }
-  @media screen and (max-width: 540px) {
-    .main-block__info {
-      width: 300px;
     }
   }
 </style>
