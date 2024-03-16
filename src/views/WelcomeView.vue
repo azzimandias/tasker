@@ -136,7 +136,7 @@
     align-items: center;
   }
   .main-block__info {
-    max-width: 500px;
+    width: 500px;
     height: 100%;
     padding-top: 50px;
   }
@@ -206,6 +206,11 @@
     .logo-description {
       height: 20px;
       line-height: 20px;
+    }
+  }
+  @media screen and (max-width: 540px) {
+    .main-block__info {
+      width: 300px;
     }
   }
 </style>
