@@ -1,5 +1,5 @@
-import { execa } from "execa";
-import fs from "fs";
+const execa = require("execa");
+const fs = require("fs");
 
 (async () => {
     try {
