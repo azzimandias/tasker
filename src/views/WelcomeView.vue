@@ -140,7 +140,7 @@
     align-items: center;
   }
   .main-block__info {
-    width: 500px;
+    width: 520px;
     height: 100%;
     padding-top: 50px;
   }
