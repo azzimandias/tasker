@@ -59,6 +59,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getUserInfo = async () => {
         const userInfo = await api.getInfo('user');
         user.id = userInfo.id;
+        user.email = userInfo.email;
         user.name = userInfo.name;
         user.surname = userInfo.surname;
     }

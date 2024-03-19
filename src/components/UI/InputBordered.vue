@@ -1,12 +1,17 @@
 <script setup>
+  import {ref} from "vue";
 
+  const props = defineProps({
+    value: String,
+  });
+  let val = ref(props.value);
 </script>
 
 <template>
   <div class="wrapper">
     <div class="label"><slot/>:</div>
     <div class="bordered">
-      <input type="text" value=""/>
+      <input type="text" v-model="val"/>
     </div>
   </div>
 </template>
@@ -20,6 +25,7 @@
     grid-template-columns: 1fr 3fr;
     align-items: center;
     color: $textColor;
+    grid-gap: 20px;
   }
   .label {
     font-size: 20px;

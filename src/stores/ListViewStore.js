@@ -17,7 +17,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         name: '',
         color: '',
     });
-    const currentSearchTasks = reactive([]);
+    const searchResult = reactive([]);
     const tags = reactive([]);
     const tag_name = ref('');
     const loading = ref(true);
@@ -46,6 +46,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         try {
             is_somethingWrong.value = false;
             await fetchToServer();
+            loadingSmall.value = false;
         } catch (e) {
             console.log(e);
             is_somethingWrong.value = true;
@@ -219,6 +220,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const findTasks = async (searchString) => {
         //currentSearchTasks
         const response = await api.globalSearch(searchString);
+        console.log(response)
+        searchResult.length = 0;
+        response.forEach(item => {
+            searchResult.push(item);
+        });
     }
 
     return {
@@ -226,6 +232,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         stasks: currentSortListTasks,
         listInfo: currentListInfo,
         sortListInfo: currentSortListInfo,
+        searchResult,
         loading,
         loadingSmall,
         is_somethingWrong,

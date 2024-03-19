@@ -51,60 +51,60 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue';
-import {useListViewStore} from "@/stores/ListViewStore";
-import InputTaskHeader from "@/components/UI/InputTaskHeader.vue";
-import DotBtn from "@/components/UI/DotBtn.vue";
-import Flag from "@/components/UI/Flag.vue";
-import InfoList from "@/components/UI/InfoList.vue";
-import TextArea from "@/components/UI/TextArea.vue";
-import InputDate from "@/components/UI/InputDate.vue";
+  import {onMounted, ref} from 'vue';
+  import {useListViewStore} from "@/stores/ListViewStore";
+  import InputTaskHeader from "@/components/UI/InputTaskHeader.vue";
+  import DotBtn from "@/components/UI/DotBtn.vue";
+  import Flag from "@/components/UI/Flag.vue";
+  import InfoList from "@/components/UI/InfoList.vue";
+  import TextArea from "@/components/UI/TextArea.vue";
+  import InputDate from "@/components/UI/InputDate.vue";
 
-const props = defineProps({
-  task: Object,
-  color: String,
-});
-const emits = defineEmits(['done', 'flag', 'date']);
+  const props = defineProps({
+    task: Object,
+    color: String,
+  });
+  const emits = defineEmits(['done', 'flag', 'date']);
 
-const is_visible = ref(false);
-const listView = useListViewStore();
-const taskNode = ref(null);
+  const is_visible = ref(false);
+  const listView = useListViewStore();
+  const taskNode = ref(null);
 
-const height = ref('');
+  const height = ref('');
 
-const saveChangesName = (name) => {saveChanges('name', name);};
-const saveChangesDescription = (description) => {saveChanges('description', description);};
-const saveChangesDate = (date) => {
-  saveChanges('deadline', date);
-  emits('date', {task: props.task, date, action: 'date'});
-};
-const saveChangesFlag = (is_flagged) => {
-  saveChanges('is_flagged', is_flagged);
-  emits('flag', {task: props.task, is_flagged, action: 'flag'});
-};
-const saveChangesDot = (is_done) => {
-  hideTask();
-  setTimeout(() => {
-    taskNode.value.classList.remove('hide-anim');
-    saveChanges('is_done', is_done);
-    emits('done', {task: props.task, is_done, action: 'done'});
-  },1000);
-};
-const hideTask = () => {
-  height.value = `${taskNode.value.scrollHeight}px`;
-  taskNode.value.classList.add('hide-anim');
-};
-const saveChanges = (whatChanges, changeValue) => {
-  let update = {
-    id: props.task.id,
-    name: whatChanges,
-    value: changeValue,
+  const saveChangesName = (name) => {saveChanges('name', name);};
+  const saveChangesDescription = (description) => {saveChanges('description', description);};
+  const saveChangesDate = (date) => {
+    saveChanges('deadline', date);
+    emits('date', {task: props.task, date, action: 'date'});
   };
-  listView.updateTask(update);
-}
-const deleteTask = () => {
-  listView.deleteTask({id: props.task.id});
-};
+  const saveChangesFlag = (is_flagged) => {
+    saveChanges('is_flagged', is_flagged);
+    emits('flag', {task: props.task, is_flagged, action: 'flag'});
+  };
+  const saveChangesDot = (is_done) => {
+    hideTask();
+    setTimeout(() => {
+      taskNode.value.classList.remove('hide-anim');
+      saveChanges('is_done', is_done);
+      emits('done', {task: props.task, is_done, action: 'done'});
+    },1000);
+  };
+  const hideTask = () => {
+    height.value = `${taskNode.value.scrollHeight}px`;
+    taskNode.value.classList.add('hide-anim');
+  };
+  const saveChanges = (whatChanges, changeValue) => {
+    let update = {
+      id: props.task.id,
+      name: whatChanges,
+      value: changeValue,
+    };
+    listView.updateTask(update);
+  }
+  const deleteTask = () => {
+    listView.deleteTask({id: props.task.id});
+  };
 </script>
 
 <style lang="scss" scoped>

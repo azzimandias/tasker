@@ -4,7 +4,7 @@
          v-model="search"
          :placeholder="placeholder"
          :style="{width: width, borderBottom: border}"
-         @change="setChanges"
+         @keyup="setChanges"
          ref="searchInput"
   />
 </template>
