@@ -130,7 +130,7 @@
   }
   .main-block {
     width: 100%;
-    height: calc(100vh - 130px);
+    height: calc(100% - 130px);
     padding: 0 40px;
     display: flex;
     position: relative;
