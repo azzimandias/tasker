@@ -18,6 +18,7 @@ onMounted( () => {
   #app {
     width: 100vw;
     max-height: 100vh;
+    height: 100vh;
     background-color: $tasker;
     display: flex;
     justify-content: center;
