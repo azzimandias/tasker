@@ -149,4 +149,10 @@
     background-repeat: no-repeat;
     cursor: pointer;
   }
+
+  @media screen and (max-width: 730px) {
+    .inputText {
+      font-size: 18px;
+    }
+  }
 </style>
