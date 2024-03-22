@@ -122,7 +122,7 @@
         border-bottom: 1px solid darkred;
       }
     }
-    & input {
+    & .inputText {
       width: 90%;
       height: 100%;
       font-size: 28px;
@@ -151,7 +151,7 @@
   }
 
   @media screen and (max-width: 730px) {
-    .inputText {
+    .input-block .inputText {
       font-size: 18px;
     }
   }

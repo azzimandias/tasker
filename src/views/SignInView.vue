@@ -89,7 +89,7 @@
         border-bottom: 1px solid darkred;
       }
     }
-    & input {
+    & .inputText {
       width: 90%;
       height: 28px;
       font-size: 28px;
@@ -109,5 +109,11 @@
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
+  }
+
+  @media screen and (max-width: 730px) {
+    .input-block .inputText {
+      font-size: 18px;
+    }
   }
 </style>
