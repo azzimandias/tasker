@@ -153,6 +153,8 @@
   @media screen and (max-width: 730px) {
     .input-block .inputText {
       font-size: 18px;
+      width: 100%;
+      height: 100%;
     }
   }
 </style>
