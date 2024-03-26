@@ -1,6 +1,9 @@
 <script setup>
-import {inject, ref, watch} from 'vue';
+  import {inject, ref, watch} from 'vue';
+  import {useRoute} from 'vue-router'
 
+  const route = useRoute();
+  console.log(route)
   const applicationNameLabel = ref(null);
   const closeOpen = ref(null);
   const isOpenBigMenu = inject('isOpenBigMenu');
@@ -21,7 +24,12 @@ import {inject, ref, watch} from 'vue';
 <template>
     <div class="application-name__container">
         <h1 class="application-name__label" ref="applicationNameLabel">Tasker</h1>
-        <button type="button" class="closeOpen" ref="closeOpen" @click="closeOrOpen"></button>
+        <button v-if="route.path.includes('workspace')"
+                type="button"
+                class="closeOpen"
+                ref="closeOpen"
+                @click="closeOrOpen"
+        ></button>
     </div>
 </template>
 
