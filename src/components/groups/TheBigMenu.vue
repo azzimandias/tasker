@@ -1,3 +1,24 @@
+<script setup>
+  import ApplicationName from '@/components/UI/ApplicationName.vue';
+  import TheSortLists from '@/components/groups/TheSortLists.vue';
+  import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
+  import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
+  import CreateNewListPopup from "@/components/groups/CreateNewListPopup.vue";
+  import {inject, ref, watch} from "vue";
+
+  const newPersonalListBtn = ref(null);
+  const is_popup = ref(false);
+  const isOpenBigMenu = inject('isOpenBigMenu');
+
+  watch(isOpenBigMenu, (newVal) => {
+    if (!newVal) {
+      newPersonalListBtn.value.classList.add('hidden');
+    } else {
+      newPersonalListBtn.value.classList.remove('hidden');
+    }
+  });
+</script>
+
 <template>
     <div class="big-menu">
         <div class="big-menu__wrapper">
@@ -6,22 +27,12 @@
             <ThePersonalLists/>
             <ThePersonalTags/>
         </div>
-        <button class="new-personal-list-btn" @click="is_popup=true">Новый список</button>
+        <button class="new-personal-list-btn" ref="newPersonalListBtn" @click="is_popup=true">Новый список</button>
       <Teleport to="body">
         <CreateNewListPopup :is_popup="is_popup" @close="is_popup=false"/>
       </Teleport>
     </div>
 </template>
-
-<script setup>
-import ApplicationName from '@/components/UI/ApplicationName.vue';
-import TheSortLists from '@/components/groups/TheSortLists.vue';
-import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
-import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
-import CreateNewListPopup from "@/components/groups/CreateNewListPopup.vue";
-import {ref} from "vue";
-const is_popup = ref(false);
-</script>
 
 <style scoped lang="scss">
     @import "../../assets/styles/global.scss";
@@ -32,6 +43,7 @@ const is_popup = ref(false);
         padding-bottom: 10px;
         background-color: $bigMenu;
         user-select: none;
+        overflow-x: clip;
         overflow-y: auto;
       &::-webkit-scrollbar {
         width: 5px;
@@ -59,6 +71,7 @@ const is_popup = ref(false);
     .new-personal-list-btn {
         width: 155px;
         color: $textColor;
+        transition: .3s;
         cursor: pointer;
         position: relative;
         &:active { opacity: 0.8; }
@@ -75,6 +88,9 @@ const is_popup = ref(false);
             background-position: center;
             background-size: 15px 15px;
             background-repeat: no-repeat;
+        }
+        &.hidden {
+          opacity: 0;
         }
     }
 </style>

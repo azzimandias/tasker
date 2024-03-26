@@ -1,3 +1,43 @@
+<script setup>
+  import {ref} from 'vue';
+  import TopButton from "@/components/UI/TopButton.vue";
+  import InputText from "@/components/UI/InputText.vue";
+  import Coloris from "@/components/UI/Coloris.vue";
+  import api from "@/api";
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
+
+  const props = defineProps({is_popup: Boolean});
+  const emits = defineEmits(['close'])
+  const border = '2px solid #706767';
+  const width = 'auto';
+  const name = ref('');
+  const color = ref('#e0e0e0');
+  const bigMenu = useBigMenuStore();
+
+  const saveName = (val) => {
+    name.value = val;
+  }
+  const saveColor = (val) => {
+    color.value = val;
+  }
+  const saveList = async () => {
+    emits('close');
+    bigMenu.addNewList({
+      id: null,
+      name: name.value.trim(),
+      color: color.value,
+      count_of_active_tasks: 0
+    });
+    await bigMenu.saveList({
+      name: name.value.trim(),
+      color: color.value,
+      user_id: bigMenu.user.id
+    });
+    name.value = '';
+    color.value = '#e0e0e0';
+  };
+</script>
+
 <template>
   <Transition mode="out-in" name="fade">
     <div v-if="props.is_popup">
@@ -35,46 +75,6 @@
     </div>
   </Transition>
 </template>
-
-<script setup>
-import {ref} from 'vue';
-import TopButton from "@/components/UI/TopButton.vue";
-import InputText from "@/components/UI/InputText.vue";
-import Coloris from "@/components/UI/Coloris.vue";
-import api from "@/api";
-import {useBigMenuStore} from "@/stores/BigMenuStore";
-
-const props = defineProps({is_popup: Boolean});
-const emits = defineEmits(['close'])
-const border = '2px solid #706767';
-const width = 'auto';
-const name = ref('');
-const color = ref('#e0e0e0');
-const bigMenu = useBigMenuStore();
-
-const saveName = (val) => {
-  name.value = val;
-}
-const saveColor = (val) => {
-  color.value = val;
-}
-const saveList = async () => {
-  emits('close');
-  bigMenu.addNewList({
-    id: null,
-    name: name.value.trim(),
-    color: color.value,
-    count_of_active_tasks: 0
-  });
-  await bigMenu.saveList({
-    name: name.value.trim(),
-    color: color.value,
-    user_id: bigMenu.user.id
-  });
-  name.value = '';
-  color.value = '#e0e0e0';
-};
-</script>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";
