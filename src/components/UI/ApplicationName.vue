@@ -65,6 +65,7 @@
       background-repeat: no-repeat;
       background-size: 30px 30px;
       background-position: center;
+      cursor: pointer;
       transition: .3s;
       &.hidden {
         transform: scaleX(-1);

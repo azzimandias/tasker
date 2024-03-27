@@ -18,8 +18,9 @@
 import {useRoute, useRouter} from 'vue-router';
 import InfoList from "@/components/UI/InfoList.vue";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
-import {ref} from "vue";
+import {inject, ref} from "vue";
 
+const isOpenBigMenu = inject('isOpenBigMenu');
 const bigMenu = useBigMenuStore();
 const props = defineProps({
     list: Object,
@@ -31,6 +32,9 @@ const infoList = ref(null);
 
 const openList = (e) => {
   if (!infoList.value.contains(e.target)) {
+    if (document.documentElement.clientWidth <= 700) {
+      isOpenBigMenu.value = false;
+    }
     router.push({ name: 'list', params: { id_list: props.list.id } });
   }
 };

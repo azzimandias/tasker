@@ -1,6 +1,6 @@
 <template>
   <router-link :to="props.url">
-    <div class="sort-list" :class="{ active: props.url === route.path }">
+    <div class="sort-list" :class="{ active: props.url === route.path }" @click="closeOrNot">
         <div class="sort-list__container">
             <div class="circle" :style="{ backgroundColor: currentColor }"></div>
             <div class="sort-list__count"><slot name="count"></slot></div>
@@ -12,6 +12,14 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
+import {inject} from "vue";
+
+const isOpenBigMenu = inject('isOpenBigMenu');
+const closeOrNot = () => {
+  if (document.documentElement.clientWidth <= 700) {
+    isOpenBigMenu.value = false;
+  }
+}
 
 const props = defineProps({
     color: String,
