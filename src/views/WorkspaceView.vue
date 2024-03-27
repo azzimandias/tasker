@@ -43,4 +43,10 @@
       grid-template-columns: 50px 1fr;
     }
   }
+  @media screen and (max-width: 700px) {
+    .workspace {
+      grid-template-columns: 1fr 0;
+      grid-column-gap: 0;
+    }
+  }
 </style>

@@ -1,14 +1,14 @@
 import axios from "axios";
 export const HTTP = axios.create({
-    baseURL: 'https://taskerlaravelapi.ru/',
-    //baseURL: 'http://localhost/',
+    //baseURL: 'https://taskerlaravelapi.ru/',
+    baseURL: 'http://localhost/',
     headers: {
         'Accept': 'application/json'
     }
 });
 export default {
-    url: 'https://taskerlaravelapi.ru/',
-    //url: 'http://localhost/',
+    //url: 'https://taskerlaravelapi.ru/',
+    url: 'http://localhost/',
     async getCookies() {
         HTTP.defaults.withCredentials = true;
         try {
