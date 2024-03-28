@@ -4,51 +4,52 @@ import {useListViewStore} from "@/stores/ListViewStore";
 import api from '@/api';
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const user = reactive({
-        id: 0,
-        name: '',
+        id:      0,
+        email:   '',
+        name:    '',
         surname: '',
     });
     const sortLists = reactive([
         {
-            id: 1,
-            name: 'Сегодня',
+            id:    1,
+            name:  'Сегодня',
             count: '',
             color: '#4ceba7',
-            url: '/workspace/sortList=today'
+            url:   '/workspace/sortList=today'
         },
         {
-            id: 2,
-            name: 'С флажком',
+            id:    2,
+            name:  'С флажком',
             count: '',
             color: '#e76262',
-            url: '/workspace/sortList=with_flag'
+            url:   '/workspace/sortList=with_flag'
         },
         {
-            id: 3,
-            name: 'Завершено',
+            id:    3,
+            name:  'Завершено',
             count: '',
             color: '#daadad',
-            url: '/workspace/sortList=done'
+            url:   '/workspace/sortList=done'
         },
         {
-            id: 4,
-            name: 'Все',
+            id:    4,
+            name:  'Все',
             count: '',
             color: '#c4c4c4',
-            url: '/workspace/sortList=all'
+            url:   '/workspace/sortList=all'
         },
     ]);
     const personalLists = reactive([]);
     const personalTags = reactive([
         {
-            id:0,
-            name:'Все теги'
+            id:   0,
+            name: 'Все теги'
         }
     ]);
     const lv = useListViewStore();
-    const is_load_sortLists = ref(false);
+    const is_load_sortLists     = ref(false);
     const is_load_personalLists = ref(false);
-    const is_load_personalTags = ref(false);
+    const is_load_personalTags  = ref(false);
 
     onMounted(async () => {
         await getUserInfo();
@@ -58,9 +59,9 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
 
     const getUserInfo = async () => {
         const userInfo = await api.getInfo('user');
-        user.id = userInfo.id;
-        user.email = userInfo.email;
-        user.name = userInfo.name;
+        user.id      = userInfo.id;
+        user.email   = userInfo.email;
+        user.name    = userInfo.name;
         user.surname = userInfo.surname;
     }
 
@@ -155,6 +156,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
         personalTags, is_load_personalTags, user,
-        firstRequest, addNewList, saveList, deleteList
+        firstRequest, addNewList, saveList, deleteList, getUserInfo
     };
 });

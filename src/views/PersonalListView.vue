@@ -1,3 +1,27 @@
+<script setup>
+  import { useListViewStore } from "@/stores/ListViewStore";
+  import {useImageDBStore} from "@/stores/imageDBStore";
+  import ListHeader from "@/components/UI/ListHeader.vue";
+  import SomethingWrong from "@/components/UI/SomethingWrong.vue";
+  import Task from "@/components/UI/Task.vue";
+  import LoaderBig from "@/components/UI/LoaderBig.vue";
+  import {watchEffect} from "vue";
+  import {useRoute} from "vue-router";
+
+  const listView = useListViewStore();
+  const imageDB = useImageDBStore();
+  const route = useRoute();
+  watchEffect(() => {
+    if (!route.params.id_list) {
+      listView.loading = true;
+    }
+  });
+
+  const taskSlideToBottom = (obj) => {
+    listView.updateTaskDone(obj.task.id, obj.is_done);
+  };
+</script>
+
 <template>
   <Transition mode="out-in" name="fade">
 
@@ -23,31 +47,6 @@
 
   </Transition>
 </template>
-
-<script setup>
-import
-{ useListViewStore } from "@/stores/ListViewStore";
-import {useImageDBStore} from "@/stores/imageDBStore";
-import ListHeader from "@/components/UI/ListHeader.vue";
-import SomethingWrong from "@/components/UI/SomethingWrong.vue";
-import Task from "@/components/UI/Task.vue";
-import LoaderBig from "@/components/UI/LoaderBig.vue";
-import {watchEffect} from "vue";
-import {useRoute} from "vue-router";
-
-const listView = useListViewStore();
-const imageDB = useImageDBStore();
-const route = useRoute();
-watchEffect(() => {
-  if (!route.params.id_list) {
-    listView.loading = true;
-  }
-});
-
-const taskSlideToBottom = (obj) => {
-  listView.updateTaskDone(obj.task.id, obj.is_done);
-};
-</script>
 
 <style lang="scss" scoped>
 .workspace {

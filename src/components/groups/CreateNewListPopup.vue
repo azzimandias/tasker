@@ -174,4 +174,15 @@
   .fade-leave-to {
     opacity: 0;
   }
+  @media screen and (max-width: 700px) {
+    .popup {
+      width: calc(100vw - 40px);
+      height: 35%;
+      top: calc(50vh - 25%);
+      left: 20px;
+    }
+    .popup__header {
+      height: 80px;
+    }
+  }
 </style>

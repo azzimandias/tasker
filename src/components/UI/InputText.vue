@@ -1,3 +1,19 @@
+<script setup>
+  import { ref, onMounted } from 'vue';
+  const props = defineProps({
+    name: String,
+    placeholder: String,
+    width: String,
+    border: String,
+  });
+  const emit = defineEmits(['underDeroch']);
+  const name = ref(props.name);
+  const inputFocus = ref(null);
+  onMounted(() => {
+    inputFocus.value.focus()
+  });
+</script>
+
 <template>
     <input type="text"
            class="searcher"
@@ -8,22 +24,6 @@
            ref="inputFocus"
     />
 </template>
-
-<script setup>
-import { ref, onMounted } from 'vue';
-const props = defineProps({
-    name: String,
-    placeholder: String,
-    width: String,
-    border: String,
-});
-const emit = defineEmits(['underDeroch']);
-const name = ref(props.name);
-const inputFocus = ref(null);
-onMounted(() => {
-    inputFocus.value.focus()
-});
-</script>
 
 <style lang="scss">
     @import "../../assets/styles/global.scss";

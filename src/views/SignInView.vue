@@ -1,25 +1,3 @@
-<template>
-  <h2 class="header_big">Sign In</h2>
-
-  <form>
-    <div class="input-block">
-      <p class="input-label">Login or Email</p>
-      <label for="loginOrEmail">
-        <input id="loginOrEmail" ref="loginOrEmail" class="inputText" name="loginOrEmail" type="text">
-      </label>
-    </div>
-
-    <div class="input-block">
-      <p class="input-label">Password</p>
-      <label for="password">
-        <input id="password" ref="password" class="inputText" name="password" type="password">
-      </label>
-    </div>
-  </form>
-
-  <button class="submit-log" @click="signIn"></button>
-</template>
-
 <script setup>
   import {ref} from "vue";
   import api from "@/api";
@@ -62,8 +40,29 @@
     loginOrEmail.value.parentElement.classList.remove('empty');
     password.value.parentElement.classList.remove('empty');
   };
-
 </script>
+
+<template>
+  <h2 class="header_big">Sign In</h2>
+
+  <form>
+    <div class="input-block">
+      <p class="input-label">Login or Email</p>
+      <label for="loginOrEmail">
+        <input id="loginOrEmail" ref="loginOrEmail" class="inputText" name="loginOrEmail" type="text">
+      </label>
+    </div>
+
+    <div class="input-block">
+      <p class="input-label">Password</p>
+      <label for="password">
+        <input id="password" ref="password" class="inputText" name="password" type="password">
+      </label>
+    </div>
+  </form>
+
+  <button class="submit-log" @click="signIn"></button>
+</template>
 
 <style scoped lang="scss">
   @import "../assets/styles/global.scss";

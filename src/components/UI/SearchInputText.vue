@@ -1,14 +1,3 @@
-<template>
-  <input type="text"
-         class="searcher"
-         v-model="search"
-         :placeholder="placeholder"
-         :style="{width: width, borderBottom: border}"
-         @keyup="setChanges"
-         ref="searchInput"
-  />
-</template>
-
 <script setup>
   import { ref } from 'vue';
   import {useListViewStore} from "@/stores/ListViewStore";
@@ -25,6 +14,17 @@
     listView.findTasks(search.value);
   };
 </script>
+
+<template>
+  <input type="text"
+         class="searcher"
+         v-model="search"
+         :placeholder="placeholder"
+         :style="{width: width, borderBottom: border}"
+         @keyup="setChanges"
+         ref="searchInput"
+  />
+</template>
 
 <style scoped lang="scss">
   @import "../../assets/styles/global.scss";

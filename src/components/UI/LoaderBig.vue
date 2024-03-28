@@ -35,10 +35,6 @@
   </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style lang="scss" scoped>
 @use "sass:math";
 @import "../../assets/styles/global.scss";

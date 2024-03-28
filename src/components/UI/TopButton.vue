@@ -1,12 +1,12 @@
+<script>
+  export default {
+    props: ['cl']
+  }
+</script>
+
 <template>
     <button class="top-btn" :class="cl"></button>
 </template>
-
-<script>
-export default {
-    props: ['cl']
-}
-</script>
 
 <style lang="scss">
     .top-btn {

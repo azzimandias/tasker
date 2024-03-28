@@ -1,55 +1,3 @@
-<template>
-  <div class="task"
-       ref="taskNode"
-       :class="{done: props.task.is_done}"
-       @mouseover="is_visible = true"
-       @mouseout="is_visible = false"
-  >
-    <div class="task__top-container">
-      <DotBtn
-          :is_done="props.task.is_done"
-          :id="props.task.id"
-          :color="props.color"
-          @dot="saveChangesDot"
-      />
-      <div class="task__group">
-        <InputTaskHeader
-            :id="props.task.id"
-            :color="props.color"
-            :name="`name_${props.task.id}`"
-            :taskName="props.task.name"
-            :placeholder="'Задача'"
-            @saveChangesName="saveChangesName"
-        />
-        <Flag :is_flagged="props.task.is_flagged"
-              :is_visible="is_visible"
-              :id="props.task.id"
-              @flag="saveChangesFlag"
-        />
-        <InfoList
-            @delete="deleteTask"
-        />
-      </div>
-    </div>
-    <div class="task__bottom-container">
-      <TextArea
-          :id="props.task.id"
-          :placeholder="'Описание'"
-          :name="`description_${props.task.id}`"
-          :value="props.task.description"
-          @saveChangesDescription="saveChangesDescription"
-      />
-      <div class="info-btns__container">
-        <InputDate
-            :id="props.task.id"
-            :deadline="props.task.deadline"
-            @saveChangesDate="saveChangesDate"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
   import {onMounted, ref} from 'vue';
   import {useListViewStore} from "@/stores/ListViewStore";
@@ -106,6 +54,58 @@
     listView.deleteTask({id: props.task.id});
   };
 </script>
+
+<template>
+  <div class="task"
+       ref="taskNode"
+       :class="{done: props.task.is_done}"
+       @mouseover="is_visible = true"
+       @mouseout="is_visible = false"
+  >
+    <div class="task__top-container">
+      <DotBtn
+          :is_done="props.task.is_done"
+          :id="props.task.id"
+          :color="props.color"
+          @dot="saveChangesDot"
+      />
+      <div class="task__group">
+        <InputTaskHeader
+            :id="props.task.id"
+            :color="props.color"
+            :name="`name_${props.task.id}`"
+            :taskName="props.task.name"
+            :placeholder="'Задача'"
+            @saveChangesName="saveChangesName"
+        />
+        <Flag :is_flagged="props.task.is_flagged"
+              :is_visible="is_visible"
+              :id="props.task.id"
+              @flag="saveChangesFlag"
+        />
+        <InfoList
+            @delete="deleteTask"
+        />
+      </div>
+    </div>
+    <div class="task__bottom-container">
+      <TextArea
+          :id="props.task.id"
+          :placeholder="'Описание'"
+          :name="`description_${props.task.id}`"
+          :value="props.task.description"
+          @saveChangesDescription="saveChangesDescription"
+      />
+      <div class="info-btns__container">
+        <InputDate
+            :id="props.task.id"
+            :deadline="props.task.deadline"
+            @saveChangesDate="saveChangesDate"
+        />
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";

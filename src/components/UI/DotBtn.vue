@@ -1,3 +1,20 @@
+<script setup>
+  import {ref} from 'vue';
+
+  const props = defineProps({
+    is_done: Number,
+    id: Number,
+    color: String,
+  });
+  const emits = defineEmits(['dot']);
+  const is_doneModel = ref(Boolean(props.is_done));
+
+  const changeState = () => {
+    is_doneModel.value = !is_doneModel.value;
+    emits('dot', is_doneModel.value);
+  };
+</script>
+
 <template>
   <div
       class="dot-btn"
@@ -16,23 +33,6 @@
     </Transition>
   </div>
 </template>
-
-<script setup>
-import {ref} from 'vue';
-
-const props = defineProps({
-  is_done: Number,
-  id: Number,
-  color: String,
-});
-const emits = defineEmits(['dot']);
-const is_doneModel = ref(Boolean(props.is_done));
-
-const changeState = () => {
-  is_doneModel.value = !is_doneModel.value;
-  emits('dot', is_doneModel.value);
-};
-</script>
 
 <style lang="scss" scoped>
 .dot-btn {

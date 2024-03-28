@@ -1,3 +1,42 @@
+<script setup>
+  import { useListViewStore } from "@/stores/ListViewStore";
+  import ListHeader from "@/components/UI/ListHeader.vue";
+  import SomethingWrong from "@/components/UI/SomethingWrong.vue";
+  import Task from "@/components/UI/Task.vue";
+  import LoaderBig from "@/components/UI/LoaderBig.vue";
+  import {watchEffect} from "vue";
+  import {useRoute} from "vue-router";
+
+  const listView = useListViewStore();
+  const route = useRoute();
+  watchEffect(() => {
+    if (!route.params.name) {
+      listView.loading = true;
+    }
+  });
+
+  const refreshSortLists = (obj) => {
+    if (route.params.name === 'done' && obj.action === 'done' ||
+        route.params.name === 'with_flag' && obj.action === 'flag') {
+      listView.clearTasks(obj.task.id);
+    } else if (route.params.name === 'today' && obj.action === 'date') {
+      if (obj.date !== getTodayDate()) {
+        listView.clearTasks(obj.task.id);
+      }
+    }
+  };
+
+  const format = (date) => date < 10 ? `0${date}` : date.toString();
+
+  const getTodayDate = () => {
+    let date = new Date(Date.now());
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    return `${year}-${format(month)}-${format(day)}`;
+  }
+</script>
+
 <template>
   <Transition mode="out-in" name="fade">
     <LoaderBig v-if="listView.loading"/>
@@ -32,45 +71,6 @@
     </div>
   </Transition>
 </template>
-
-<script setup>
-import { useListViewStore } from "@/stores/ListViewStore";
-import ListHeader from "@/components/UI/ListHeader.vue";
-import SomethingWrong from "@/components/UI/SomethingWrong.vue";
-import Task from "@/components/UI/Task.vue";
-import LoaderBig from "@/components/UI/LoaderBig.vue";
-import {watchEffect} from "vue";
-import {useRoute} from "vue-router";
-
-const listView = useListViewStore();
-const route = useRoute();
-watchEffect(() => {
-  if (!route.params.name) {
-    listView.loading = true;
-  }
-});
-
-const refreshSortLists = (obj) => {
-  if (route.params.name === 'done' && obj.action === 'done' ||
-      route.params.name === 'with_flag' && obj.action === 'flag') {
-    listView.clearTasks(obj.task.id);
-  } else if (route.params.name === 'today' && obj.action === 'date') {
-    if (obj.date !== getTodayDate()) {
-      listView.clearTasks(obj.task.id);
-    }
-  }
-};
-
-const format = (date) => date < 10 ? `0${date}` : date.toString();
-
-const getTodayDate = () => {
-  let date = new Date(Date.now());
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
-  let year = date.getFullYear();
-  return `${year}-${format(month)}-${format(day)}`;
-}
-</script>
 
 <style lang="scss" scoped>
 .workspace {

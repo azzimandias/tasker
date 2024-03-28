@@ -1,24 +1,3 @@
-<template>
-  <div class="lb" @mousedown="openDatePicker" ref="datePicker">
-    <VueDatePicker
-        v-model="deadlineModel"
-        :dark="true"
-        :position="'center'"
-        :teleport="true"
-        :locale="'ru'"
-        :format="'yyyy-MM-dd'"
-        :close-on-scroll="true"
-        :placeholder="'Дата'"
-        :text-input="true"
-    />
-    <div class="date__wrapper">
-      <img class="date-pic" src="../../assets/svgs/calendar.svg" alt="calendar">
-      <p class="date" v-if="deadlineModel">{{ transitDate(deadlineModel) }}</p>
-      <p class="date" v-else>Дата</p>
-    </div>
-  </div>
-</template>
-
 <script setup>
   import VueDatePicker from "@vuepic/vue-datepicker";
   import '@vuepic/vue-datepicker/dist/main.css';
@@ -53,6 +32,27 @@
     emit('saveChangesDate', deadline.value);
   };
 </script>
+
+<template>
+  <div class="lb" @mousedown="openDatePicker" ref="datePicker">
+    <VueDatePicker
+        v-model="deadlineModel"
+        :dark="true"
+        :position="'center'"
+        :teleport="true"
+        :locale="'ru'"
+        :format="'yyyy-MM-dd'"
+        :close-on-scroll="true"
+        :placeholder="'Дата'"
+        :text-input="true"
+    />
+    <div class="date__wrapper">
+      <img class="date-pic" src="../../assets/svgs/calendar.svg" alt="calendar">
+      <p class="date" v-if="deadlineModel">{{ transitDate(deadlineModel) }}</p>
+      <p class="date" v-else>Дата</p>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";

@@ -1,3 +1,34 @@
+<script setup>
+  import { ref,onMounted,reactive  } from "vue";
+  import ListHeader from "@/components/UI/ListHeader.vue";
+  import Task from "@/components/UI/Task.vue";
+  import LoaderBig from "@/components/UI/LoaderBig.vue";
+
+  const testTasks = reactive([]);
+  let header = ref('');
+  let loading = ref(true);
+  const getTestTasks = async () => {
+    try {
+      loading.value = true;
+      const response = await fetch('done');
+      const arr = await response.json();
+      if ((typeof arr) === "object") {
+        arr.forEach(item => {
+          testTasks.push(item);
+        });
+        header.value = 'Завершено';
+        loading.value = false;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  onMounted(async () => {
+    await getTestTasks();
+  });
+</script>
+
 <template>
   <Transition mode="out-in" name="slide-up">
 
@@ -14,37 +45,6 @@
 
   </Transition>
 </template>
-
-<script setup>
-import { ref,onMounted,reactive  } from "vue";
-import ListHeader from "@/components/UI/ListHeader.vue";
-import Task from "@/components/UI/Task.vue";
-import LoaderBig from "@/components/UI/LoaderBig.vue";
-
-const testTasks = reactive([]);
-let header = ref('');
-let loading = ref(true);
-const getTestTasks = async () => {
-  try {
-    loading.value = true;
-    const response = await fetch('done');
-    const arr = await response.json();
-    if ((typeof arr) === "object") {
-      arr.forEach(item => {
-        testTasks.push(item);
-      });
-      header.value = 'Завершено';
-      loading.value = false;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-onMounted(async () => {
-  await getTestTasks();
-});
-</script>
 
 <style lang="scss" scoped>
 .workspace {

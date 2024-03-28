@@ -1,18 +1,18 @@
+<script setup>
+  import Loader from "@/components/UI/Loader.vue";
+  import {useListViewStore} from "@/stores/ListViewStore";
+  const listView = useListViewStore();
+  const props = defineProps({
+    color: String,
+    fontSize: String,
+  })
+</script>
+
 <template>
   <h2 class="list-header" :style="{color: props.color, fontSize: props.fontSize}">
     <slot/><Loader v-if="listView.loadingSmall"/>
   </h2>
 </template>
-
-<script setup>
-import Loader from "@/components/UI/Loader.vue";
-import {useListViewStore} from "@/stores/ListViewStore";
-const listView = useListViewStore();
-const props = defineProps({
-  color: String,
-  fontSize: String,
-})
-</script>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";

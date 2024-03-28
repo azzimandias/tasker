@@ -5,10 +5,6 @@
   </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style lang="scss" scoped>
   .not-found {
     width: 100vw;

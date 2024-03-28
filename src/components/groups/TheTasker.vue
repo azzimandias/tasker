@@ -1,3 +1,10 @@
+<script setup>
+  import { useRoute } from "vue-router";
+  import TheTopBar from '@/components/groups/TheTopBar.vue';
+  import {ref} from "vue";
+  const route = useRoute();
+</script>
+
 <template>
   <div class="tasker">
       <TheTopBar/>
@@ -19,13 +26,6 @@
       />
   </div>
 </template>
-
-<script setup>
-import { useRoute } from "vue-router";
-import TheTopBar from '@/components/groups/TheTopBar.vue';
-import {ref} from "vue";
-const route = useRoute();
-</script>
 
 <style lang="scss">
     @import "../../assets/styles/global.scss";

@@ -1,3 +1,29 @@
+<script setup>
+  import { ref } from 'vue';
+  import TopButton from '@/components/UI/TopButton.vue';
+  import SearchInputText from '@/components/UI/SearchInputText.vue'
+  import {useImageDBStore} from "@/stores/imageDBStore";
+  import {useListViewStore} from "@/stores/ListViewStore";
+  import {useRoute, useRouter} from "vue-router";
+
+  const route = useRoute();
+  const router = useRouter();
+  const emit = defineEmits(['newTask']);
+  const cl = ref(['person','plus','loup','close']);
+  const isSearchMode = ref(false);
+  const listInfo = useListViewStore();
+  const imageDB = useImageDBStore();
+
+  const showSearch = () => {
+    isSearchMode.value = true;
+    router.push({ name: 'search' });
+  };
+  const hideSearch = () => {
+    isSearchMode.value = false;
+    router.push({ name: 'intro' });
+  };
+</script>
+
 <template>
     <div class="top-bar">
 
@@ -31,32 +57,6 @@
 
     </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import TopButton from '@/components/UI/TopButton.vue';
-import SearchInputText from '@/components/UI/SearchInputText.vue'
-import {useImageDBStore} from "@/stores/imageDBStore";
-import {useListViewStore} from "@/stores/ListViewStore";
-import {useRoute, useRouter} from "vue-router";
-
-const route = useRoute();
-const router = useRouter();
-const emit = defineEmits(['newTask']);
-const cl = ref(['person','plus','loup','close']);
-const isSearchMode = ref(false);
-const listInfo = useListViewStore();
-const imageDB = useImageDBStore();
-
-const showSearch = () => {
-  isSearchMode.value = true;
-  router.push({ name: 'search' });
-};
-const hideSearch = () => {
-  isSearchMode.value = false;
-  router.push({ name: 'intro' });
-};
-</script>
 
 <style lang="scss">
     .top-bar {

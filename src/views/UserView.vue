@@ -5,12 +5,27 @@
   import ListHeader from "@/components/UI/ListHeader.vue";
   import {useBigMenuStore} from "@/stores/BigMenuStore";
   import {useListViewStore} from "@/stores/ListViewStore";
+  import {onBeforeMount, onMounted, reactive, ref} from "vue";
 
   const router = useRouter();
   const bigMenu = useBigMenuStore();
   const listView = useListViewStore();
 
-  const userInfo = bigMenu.user;
+  const userInfo = reactive({
+    id:      0,
+    email:   '',
+    name:    '',
+    surname: ''
+  });
+  const randomKey = ref(Math.random());
+  onBeforeMount(async () => {
+    await bigMenu.getUserInfo();
+    userInfo.id =      bigMenu.user.id;
+    userInfo.email =   bigMenu.user.email;
+    userInfo.name =    bigMenu.user.name;
+    userInfo.surname = bigMenu.user.surname;
+    randomKey.value = Math.random();
+  });
 
   const exit = async () => {
     const res = await api.logout();
@@ -18,8 +33,11 @@
       await router.push({ path: '/' });
     }
   };
+  const getValue = (obj) => {
+    userInfo[obj.name] = obj.value;
+  }
   const save = async () => {
-
+    await api.postInfo('updateUserInfo', userInfo);
   };
 </script>
 
@@ -28,17 +46,26 @@
     <ListHeader>Hello Andrew!</ListHeader>
     <div class="inputs-container">
       <InputBordered
+          :key="randomKey"
+          :name="'email'"
           :value="userInfo.email"
+          @returnValue="getValue"
       >
         Email
       </InputBordered>
       <InputBordered
+          :key="randomKey"
+          :name="'name'"
           :value="userInfo.name"
+          @returnValue="getValue"
       >
         Name
       </InputBordered>
       <InputBordered
+          :key="randomKey"
+          :name="'surname'"
           :value="userInfo.surname"
+          @returnValue="getValue"
       >
         Surname
       </InputBordered>
@@ -91,6 +118,14 @@
     }
     &:active {
       opacity: .5;
+    }
+  }
+  @media screen and (max-width: 700px) {
+    .inputs-container {
+      margin-left: 20px;
+    }
+    .wrapper {
+      grid-template-columns: 1fr 1.5fr;
     }
   }
 </style>

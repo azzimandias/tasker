@@ -1,17 +1,6 @@
-<template>
-  <textarea
-      class="task__description"
-      ref="taskTextareaNode"
-      :placeholder="props.placeholder"
-      :name="props.name"
-      @blur="saveChangesTextarea"
-      @keyup="resize"
-  >{{ props.value }}</textarea>
-</template>
-
 <script setup>
-import {onMounted, ref} from "vue";
-import {useListViewStore} from "@/stores/ListViewStore";
+  import {onMounted, ref} from "vue";
+  import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
   const emit = defineEmits(['saveChangesDescription'])
@@ -40,6 +29,17 @@ import {useListViewStore} from "@/stores/ListViewStore";
     }
   };
 </script>
+
+<template>
+  <textarea
+      class="task__description"
+      ref="taskTextareaNode"
+      :placeholder="props.placeholder"
+      :name="props.name"
+      @blur="saveChangesTextarea"
+      @keyup="resize"
+  >{{ props.value }}</textarea>
+</template>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";

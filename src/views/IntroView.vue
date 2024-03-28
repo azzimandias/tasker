@@ -1,3 +1,8 @@
+<script setup>
+  import SignButton from "@/components/UI/SignButton.vue";
+  const emits = defineEmits(['clearInterval']);
+</script>
+
 <template>
   <h2 class="header_big">Are you constantly planning something?</h2>
   <p class="description">
@@ -11,11 +16,6 @@
     <SignButton :class="'sign-up'">Start using</SignButton>
   </router-link>
 </template>
-
-<script setup>
-  import SignButton from "@/components/UI/SignButton.vue";
-  const emits = defineEmits(['clearInterval']);
-</script>
 
 <style scoped lang="scss">
   @import "../assets/styles/global.scss";

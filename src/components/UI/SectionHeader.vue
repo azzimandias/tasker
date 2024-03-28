@@ -1,16 +1,16 @@
+<script setup>
+  import Loader from './Loader.vue';
+  const props = defineProps({
+    'is_load': Boolean,
+  });
+</script>
+
 <template>
     <div class="section-header__container">
         <div class="section-header__label"><slot></slot></div>
         <Loader v-if="props.is_load"/>
     </div>
 </template>
-
-<script setup>
-import Loader from './Loader.vue';
-const props = defineProps({
-  'is_load': Boolean,
-});
-</script>
 
 <style lang="scss">
     .section-header__container {

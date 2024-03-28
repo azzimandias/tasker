@@ -1,3 +1,13 @@
+<script setup>
+  /*import { ref,reactive,onMounted } from 'vue';*/
+  import { useBigMenuStore } from "@/stores/BigMenuStore";
+  import SectionHeader from '../UI/SectionHeader.vue';
+  import PersonalTag from '@/components/UI/PersonalTag.vue';
+
+  const bigMenuStore = useBigMenuStore();
+
+</script>
+
 <template>
     <div class="personal-tags" v-if="bigMenuStore.personalTags.length > 1">
         <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
@@ -10,16 +20,6 @@
         </div>
     </div>
 </template>
-
-<script setup>
-/*import { ref,reactive,onMounted } from 'vue';*/
-import { useBigMenuStore } from "@/stores/BigMenuStore";
-import SectionHeader from '../UI/SectionHeader.vue';
-import PersonalTag from '@/components/UI/PersonalTag.vue';
-
-const bigMenuStore = useBigMenuStore();
-
-</script>
 
 <style lang="scss">
     .personal-tags__container {

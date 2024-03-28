@@ -1,3 +1,24 @@
+<script setup>
+  import { useRoute } from 'vue-router'
+  import {inject} from "vue";
+
+  const isOpenBigMenu = inject('isOpenBigMenu');
+  const closeOrNot = () => {
+    if (document.documentElement.clientWidth <= 700) {
+      isOpenBigMenu.value = false;
+    }
+  }
+
+  const props = defineProps({
+    color: String,
+    url: String
+  });
+
+  const route = useRoute();
+
+  let currentColor = props.color;
+</script>
+
 <template>
   <router-link :to="props.url">
     <div class="sort-list" :class="{ active: props.url === route.path }" @click="closeOrNot">
@@ -9,28 +30,6 @@
     </div>
   </router-link>
 </template>
-
-<script setup>
-import { useRoute } from 'vue-router'
-import {inject} from "vue";
-
-const isOpenBigMenu = inject('isOpenBigMenu');
-const closeOrNot = () => {
-  if (document.documentElement.clientWidth <= 700) {
-    isOpenBigMenu.value = false;
-  }
-}
-
-const props = defineProps({
-    color: String,
-    url: String
-});
-
-const route = useRoute();
-
-let currentColor = props.color;
-
-</script>
 
 <style scoped lang="scss">
     @import "../../assets/styles/global.scss";

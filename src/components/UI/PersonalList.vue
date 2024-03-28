@@ -1,3 +1,36 @@
+<script setup>
+  import {useRoute, useRouter} from 'vue-router';
+  import InfoList from "@/components/UI/InfoList.vue";
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
+  import {inject, ref} from "vue";
+
+  const isOpenBigMenu = inject('isOpenBigMenu');
+  const bigMenu = useBigMenuStore();
+  const props = defineProps({
+    list: Object,
+  });
+  const route = useRoute();
+  const router = useRouter();
+
+  const infoList = ref(null);
+
+  const openList = (e) => {
+    if (!infoList.value.contains(e.target)) {
+      if (document.documentElement.clientWidth <= 700) {
+        isOpenBigMenu.value = false;
+      }
+      router.push({ name: 'list', params: { id_list: props.list.id } });
+    }
+  };
+
+  const deleteList = () => {
+    bigMenu.deleteList(props.list.id);
+    if (+props.list.id === +route.params.id_list) {
+      router.push({ name: 'intro' });
+    }
+  };
+</script>
+
 <template>
 <!--  <router-link :to="`/workspace/list=${props.list.id}`">-->
     <div class="personal-list" :class="{ active: props.list.id === +route.params.id_list }" @mouseup="openList">
@@ -13,39 +46,6 @@
     </div>
 <!--  </router-link>-->
 </template>
-
-<script setup>
-import {useRoute, useRouter} from 'vue-router';
-import InfoList from "@/components/UI/InfoList.vue";
-import {useBigMenuStore} from "@/stores/BigMenuStore";
-import {inject, ref} from "vue";
-
-const isOpenBigMenu = inject('isOpenBigMenu');
-const bigMenu = useBigMenuStore();
-const props = defineProps({
-    list: Object,
-});
-const route = useRoute();
-const router = useRouter();
-
-const infoList = ref(null);
-
-const openList = (e) => {
-  if (!infoList.value.contains(e.target)) {
-    if (document.documentElement.clientWidth <= 700) {
-      isOpenBigMenu.value = false;
-    }
-    router.push({ name: 'list', params: { id_list: props.list.id } });
-  }
-};
-
-const deleteList = () => {
-  bigMenu.deleteList(props.list.id);
-  if (+props.list.id === +route.params.id_list) {
-    router.push({ name: 'intro' });
-  }
-};
-</script>
 
 <style lang="scss">
     @import "../../assets/styles/global.scss";

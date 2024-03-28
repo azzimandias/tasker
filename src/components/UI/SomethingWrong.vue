@@ -7,10 +7,6 @@
   </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style lang="scss" scoped>
   .something-wrong {
     width: 100%;

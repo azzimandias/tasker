@@ -222,9 +222,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
         const response = await api.globalSearch(searchString);
         console.log(response)
         searchResult.length = 0;
-        response.forEach(item => {
-            searchResult.push(item);
-        });
+        if (typeof response === 'object') {
+            response.forEach(item => {
+                searchResult.push(item);
+            });
+        }
     }
 
     return {

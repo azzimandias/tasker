@@ -1,12 +1,3 @@
-<template>
-  <div class="info-list" ref="infoList" @mouseup="openCloseDropDownList" :class="{ active: +props.idList === +router.params.id_list }">
-    <div class="drop-down-list" ref="dropDownList">
-      <button class="drop-down-list__btn">Edit</button>
-      <button class="drop-down-list__btn" @mouseup="emit('delete')">Delete</button>
-    </div>
-  </div>
-</template>
-
 <script setup>
   import {ref, onMounted, onBeforeUnmount} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
@@ -39,6 +30,15 @@
     window.removeEventListener('click', closeDropDown);
   });
 </script>
+
+<template>
+  <div class="info-list" ref="infoList" @mouseup="openCloseDropDownList" :class="{ active: +props.idList === +router.params.id_list }">
+    <div class="drop-down-list" ref="dropDownList">
+      <button class="drop-down-list__btn">Edit</button>
+      <button class="drop-down-list__btn" @mouseup="emit('delete')">Delete</button>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";

@@ -1,17 +1,23 @@
 <script setup>
-  import {ref} from "vue";
+import {ref, watch} from "vue";
 
+  const emit = defineEmits(['returnValue'])
   const props = defineProps({
+    name: String,
     value: String,
   });
-  let val = ref(props.value);
+  const value = ref(props.value);
+
+  const returnValue = () => {
+    emit('returnValue', {name: props.name, value})
+  }
 </script>
 
 <template>
   <div class="wrapper">
     <div class="label"><slot/>:</div>
     <div class="bordered">
-      <input type="text" v-model="val"/>
+      <input type="text" v-model="value" @keyup="returnValue"/>
     </div>
   </div>
 </template>

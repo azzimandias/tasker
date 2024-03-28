@@ -12,10 +12,6 @@
   </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style lang="scss" scoped>
   .explain {
     width: 100%;

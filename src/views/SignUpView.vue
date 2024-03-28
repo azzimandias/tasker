@@ -1,46 +1,3 @@
-<template>
-  <h2 class="header_big">Sign Up</h2>
-
-  <div class="input-blocks__wrapper">
-    <div class="input-block half">
-      <p class="input-label">Name</p>
-      <label for="userName">
-        <input id="userName" ref="name" class="inputText" name="userName" type="text">
-      </label>
-    </div>
-
-    <div class="input-block half">
-      <p class="input-label">Surname</p>
-      <label for="userSurname">
-        <input id="userSurname" ref="surname" class="inputText" name="userSurname" type="text">
-      </label>
-    </div>
-  </div>
-
-  <div class="input-block">
-    <p class="input-label">Email <span>*</span></p>
-    <label for="email">
-      <input id="email" ref="email" class="inputText" name="email" type="text">
-    </label>
-  </div>
-
-  <div class="input-block">
-    <p class="input-label">Login <span>*</span></p>
-    <label for="login">
-      <input id="login" ref="login" class="inputText" name="login" type="text">
-    </label>
-  </div>
-
-  <div class="input-block">
-    <p class="input-label">Password <span>*</span></p>
-    <label for="password">
-      <input id="password" ref="password" class="inputText" name="password" type="password">
-    </label>
-  </div>
-
-  <button class="submit-log" @click="signUp"></button>
-</template>
-
 <script setup>
   import api from "@/api";
   import {ref} from "vue";
@@ -92,6 +49,49 @@
     password.value.parentElement.classList.remove('empty');
   }
 </script>
+
+<template>
+  <h2 class="header_big">Sign Up</h2>
+
+  <div class="input-blocks__wrapper">
+    <div class="input-block half">
+      <p class="input-label">Name</p>
+      <label for="userName">
+        <input id="userName" ref="name" class="inputText" name="userName" type="text">
+      </label>
+    </div>
+
+    <div class="input-block half">
+      <p class="input-label">Surname</p>
+      <label for="userSurname">
+        <input id="userSurname" ref="surname" class="inputText" name="userSurname" type="text">
+      </label>
+    </div>
+  </div>
+
+  <div class="input-block">
+    <p class="input-label">Email <span>*</span></p>
+    <label for="email">
+      <input id="email" ref="email" class="inputText" name="email" type="text">
+    </label>
+  </div>
+
+  <div class="input-block">
+    <p class="input-label">Login <span>*</span></p>
+    <label for="login">
+      <input id="login" ref="login" class="inputText" name="login" type="text">
+    </label>
+  </div>
+
+  <div class="input-block">
+    <p class="input-label">Password <span>*</span></p>
+    <label for="password">
+      <input id="password" ref="password" class="inputText" name="password" type="password">
+    </label>
+  </div>
+
+  <button class="submit-log" @click="signUp"></button>
+</template>
 
 <style scoped lang="scss">
   @import "../assets/styles/global.scss";
