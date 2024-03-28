@@ -20,6 +20,12 @@
 
   const height = ref('');
 
+  onMounted(() => {
+    if (document.documentElement.clientWidth <= 700) {
+      is_visible.value = true;
+    }
+  });
+
   const saveChangesName = (name) => {saveChanges('name', name);};
   const saveChangesDescription = (description) => {saveChanges('description', description);};
   const saveChangesDate = (date) => {

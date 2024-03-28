@@ -11,7 +11,11 @@
   const search = ref('');
 
   const setChanges = () => {
-    listView.findTasks(search.value);
+    if (search.value) {
+      listView.findTasks(search.value);
+    } else {
+      listView.clearSearchTasks();
+    }
   };
 </script>
 

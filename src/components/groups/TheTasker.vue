@@ -1,8 +1,13 @@
 <script setup>
   import { useRoute } from "vue-router";
   import TheTopBar from '@/components/groups/TheTopBar.vue';
-  import {ref} from "vue";
+  import {ref, watch} from "vue";
   const route = useRoute();
+
+  /*let keyGen = Math.random();
+  watch(route, () => {
+    keyGen = Math.random();
+  })*/
 </script>
 
 <template>

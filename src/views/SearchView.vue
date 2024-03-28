@@ -10,10 +10,10 @@ const listView = useListViewStore();
 
 <template>
   <Transition mode="out-in" name="fade">
-<!--    <LoaderBig v-if="listView.loading"/>-->
+    <LoaderBig v-if="listView.loading"/>
 
-<!--    <SomethingWrong v-else-if="listView.is_somethingWrong"/>-->
-    <div class="workspace"> <!--v-else>-->
+    <SomethingWrong v-else-if="listView.is_somethingWrong"/>
+    <div class="workspace" v-else>
       <ListHeader>Поиск</ListHeader>
       <Task
           v-for="task in listView.searchResult"

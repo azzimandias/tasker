@@ -101,8 +101,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 });
             }
             sortTasksByDone();
-            console.log(currentPersonalListTasks);
-            console.log(currentSortListTasks);
+            //console.log(currentPersonalListTasks);
+            //console.log(currentSortListTasks);
 
             if (route.params.id_list) {
                 currentListInfo.id = arr['list'].id;
@@ -133,7 +133,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         currentSortListTasks.forEach((list) => {
             list.tasks.forEach((task,idx) => {
                 if (+id === +task.id) {
-                    console.log(list.tasks[idx])
+                    //console.log(list.tasks[idx])
                     list.tasks.splice(idx,1);
                 }
             });
@@ -218,15 +218,24 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const findTasks = async (searchString) => {
+        loading.value = true;
         //currentSearchTasks
         const response = await api.globalSearch(searchString);
-        console.log(response)
+        //console.log(response)
         searchResult.length = 0;
         if (typeof response === 'object') {
             response.forEach(item => {
                 searchResult.push(item);
             });
+            loading.value = false;
+        } else {
+            loading.value = false;
+            is_somethingWrong.value = true;
         }
+    }
+
+    const clearSearchTasks = () => {
+        searchResult.length = 0;
     }
 
     return {
@@ -251,5 +260,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         updateTaskDone,
         clearTasks,
         findTasks,
+        clearSearchTasks,
     };
 });

@@ -66,21 +66,21 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     }
 
     const firstRequest = async () => {
-        console.log('go')
+        //console.log('go')
         await getSortListsCount();
         await getPersonalLists();
         await getPersonalTags();
     }
     const startIntervalUpdate =  async () => {
         const startInterval = setInterval(() => {
-            console.log('request');
+            //console.log('request');
             //lv.getTasksOrTags();
             getSortListsCount();
             getPersonalLists();
             getPersonalTags();
         },60000);
         setTimeout(() => {
-            console.log('stop');
+            //console.log('stop');
             clearInterval(startInterval);
         }, 60 * 60000);
     }

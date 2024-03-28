@@ -10,8 +10,8 @@
 
 <style lang="scss">
     .top-btn {
-        width: 35px;
-        height: 35px;
+        width: 28px;
+        height: 28px;
         cursor: pointer;
         background-position: center;
         background-size: 30px 30px;

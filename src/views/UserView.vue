@@ -6,11 +6,12 @@
   import {useBigMenuStore} from "@/stores/BigMenuStore";
   import {useListViewStore} from "@/stores/ListViewStore";
   import {onBeforeMount, onMounted, reactive, ref} from "vue";
+  import LoaderBig from "@/components/UI/LoaderBig.vue";
 
   const router = useRouter();
   const bigMenu = useBigMenuStore();
   const listView = useListViewStore();
-
+  const loading = ref(true);
   const userInfo = reactive({
     id:      0,
     email:   '',
@@ -25,6 +26,7 @@
     userInfo.name =    bigMenu.user.name;
     userInfo.surname = bigMenu.user.surname;
     randomKey.value = Math.random();
+    loading.value = false;
   });
 
   const exit = async () => {
@@ -42,39 +44,45 @@
 </script>
 
 <template>
-  <div class="user-view">
-    <ListHeader>Hello Andrew!</ListHeader>
-    <div class="inputs-container">
-      <InputBordered
-          :key="randomKey"
-          :name="'email'"
-          :value="userInfo.email"
-          @returnValue="getValue"
-      >
-        Email
-      </InputBordered>
-      <InputBordered
-          :key="randomKey"
-          :name="'name'"
-          :value="userInfo.name"
-          @returnValue="getValue"
-      >
-        Name
-      </InputBordered>
-      <InputBordered
-          :key="randomKey"
-          :name="'surname'"
-          :value="userInfo.surname"
-          @returnValue="getValue"
-      >
-        Surname
-      </InputBordered>
-      <div class="btn-container">
-        <button class="btn save" @click="save">Save</button>
-        <button class="btn exit" @click="exit">Logout</button>
+  <Transition mode="out-in" name="slide-up">
+
+    <LoaderBig v-if="loading"/>
+
+    <div class="user-view" v-else>
+      <ListHeader>Hello Andrew!</ListHeader>
+      <div class="inputs-container">
+        <InputBordered
+            :key="randomKey"
+            :name="'email'"
+            :value="userInfo.email"
+            @returnValue="getValue"
+        >
+          Email
+        </InputBordered>
+        <InputBordered
+            :key="randomKey"
+            :name="'name'"
+            :value="userInfo.name"
+            @returnValue="getValue"
+        >
+          Name
+        </InputBordered>
+        <InputBordered
+            :key="randomKey"
+            :name="'surname'"
+            :value="userInfo.surname"
+            @returnValue="getValue"
+        >
+          Surname
+        </InputBordered>
+        <div class="btn-container">
+          <button class="btn save" @click="save">Save</button>
+          <button class="btn exit" @click="exit">Logout</button>
+        </div>
       </div>
     </div>
-  </div>
+
+  </Transition>
 </template>
 
 <style scoped lang="scss">
@@ -119,6 +127,20 @@
     &:active {
       opacity: .5;
     }
+  }
+  .slide-up-enter-active,
+  .slide-up-leave-active {
+    transition: all 0.25s ease-out;
+  }
+
+  .slide-up-enter-from {
+    opacity: 0;
+    //transform: translateY(30px);
+  }
+
+  .slide-up-leave-to {
+    opacity: 0;
+    //transform: translateY(-30px);
   }
   @media screen and (max-width: 700px) {
     .inputs-container {

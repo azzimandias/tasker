@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue';
+import {onMounted, ref, watch} from 'vue';
   import TopButton from '@/components/UI/TopButton.vue';
   import SearchInputText from '@/components/UI/SearchInputText.vue'
   import {useImageDBStore} from "@/stores/imageDBStore";
@@ -20,8 +20,19 @@
   };
   const hideSearch = () => {
     isSearchMode.value = false;
+  };
+  const hideAndRedirectSearch = () => {
+    isSearchMode.value = false;
     router.push({ name: 'intro' });
   };
+
+  watch(route, () => {
+    if (route.path.indexOf('search') >= 0) {
+      showSearch();
+    } else {
+      hideSearch();
+    }
+  })
 </script>
 
 <template>
@@ -44,13 +55,15 @@
 
       <Transition mode="out-in" name="fade">
 
-        <TopButton v-if="!isSearchMode"
-            :cl="cl[2]"
-            @click="showSearch"
-        />
+        <router-link class="ref" :to="'/workspace/search'" v-if="!isSearchMode">
+          <TopButton
+              :cl="cl[2]"
+              @click="showSearch"
+          />
+        </router-link>
         <TopButton v-else
             :cl="cl[3]"
-            @click="hideSearch"
+            @click="hideAndRedirectSearch"
         />
 
       </Transition>
@@ -64,15 +77,19 @@
         height: 40px;
         display: flex;
         align-items: center;
-        padding: 11px 17.5px;
+        padding: 6px 17.5px 0 17.5px;
         background-color: transparent;
     }
     .top-bar__container {
+      height: 28px;
         &.vide { height: 100%; }
         flex-grow: 1;
         display: flex;
         justify-content: space-between;
         padding-right: 11px;
+    }
+    .ref {
+      height: 28px;
     }
     .fade-enter-active,
     .fade-leave-active {

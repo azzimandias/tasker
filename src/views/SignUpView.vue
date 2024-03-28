@@ -37,7 +37,7 @@
     }
   };
   const show = (res) => {
-    console.log(res);
+    //console.log(res);
     if (res === 'done') {
       emits('clearInterval');
       router.push({ path: 'workspace' })
