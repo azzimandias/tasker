@@ -24,7 +24,7 @@
     @include theme('border-color', $gold);
   }
   .sign-up {
-    color: $textColorActive;
+    @include theme('color', $textColorActive);
     @include theme('background-color', $gold);
     border-width: 1px;
     border-style: solid;
