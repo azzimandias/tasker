@@ -158,7 +158,7 @@
     height: auto;
     padding: 30px;
     border-radius: 20px;
-    @include theme('background-color', $personal);
+    @include theme('background-color', $substrate);
   }
   .main-block__right {
     padding: 0 0 0 30px;

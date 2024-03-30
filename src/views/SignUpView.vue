@@ -117,7 +117,9 @@
     & label {
       width: 100%;
       height: 35px;
-      @include theme('border-bottom', $line);
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      @include theme('border-bottom-color', $line);
       &.empty {
         border-bottom: 1px solid darkred;
       }

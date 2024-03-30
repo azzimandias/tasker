@@ -17,7 +17,6 @@
     }
   }
   .sign-in {
-    color: $gold;
     @include theme('color', $gold);
     background-color: transparent;
     border-width: 1px;
