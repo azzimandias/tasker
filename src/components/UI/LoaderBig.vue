@@ -57,9 +57,11 @@ $time: 1;
   margin: 0 math.div(-$size , 2);
   border-left: $size solid transparent;
   border-right: $size solid transparent;
-  border-bottom: ($size * 1.8) solid $gold;
+  border-bottom-width: ($size * 1.8);
+  border-bottom-style: solid;
+  @include theme('border-bottom-color', $gold);
   animation: blink $time + s infinite;
-  filter: drop-shadow(0 0 ($size * 1.5) $gold);
+  //filter: drop-shadow(0 0 ($size * 1.5) $gold);
 
   &.down {
     transform: rotate(180deg);
