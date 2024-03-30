@@ -20,7 +20,7 @@
   .tag-header {
     width: auto;
     height: auto;
-    background-color: $gold;
+    @include theme('background-color', $gold);
     color: #171515;
     font-size: 20px;
     padding: 5px 8px;

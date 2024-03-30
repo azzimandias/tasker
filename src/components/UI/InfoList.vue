@@ -61,8 +61,10 @@
     bottom: calc(0px - 55px);
     width: 150px;
     padding: 5px;
-    background-color: #0a0a0a;
-    border: 1px solid #5F6164;
+    @include theme('background-color', $dropDownListBackground);
+    border-width: 1px;
+    border-style: solid;
+    @include theme('border-color', $dropDownListBorder);
     border-radius: 5px;
     overflow: hidden;
     display: none;

@@ -1,19 +1,18 @@
 import axios from "axios";
+
 export const HTTP = axios.create({
-    baseURL: 'https://taskerlaravelapi.ru/',
-    //baseURL: 'http://localhost/',
+    baseURL: process.env.VUE_APP_API_URL,
     headers: {
         'Accept': 'application/json'
     }
 });
 export default {
-    url: 'https://taskerlaravelapi.ru/',
-    //url: 'http://localhost/',
+    url: process.env.VUE_APP_API_URL,
     async getCookies() {
         HTTP.defaults.withCredentials = true;
         try {
             await HTTP.get(this.url + 'sanctum/csrf-cookie');
-            console.log('csrf-cookie')
+            //console.log('csrf-cookie')
         } catch (e) {
             console.log(e);
         }
@@ -21,7 +20,7 @@ export default {
     async isAuthorized() {
         try {
             const response = await HTTP.get(this.url + 'check');
-            console.log('user authorized')
+            //console.log('user authorized')
             return await response.data;
         } catch (e) {
             console.log(e);

@@ -37,7 +37,7 @@
     grid-template-columns: 300px 2fr;
     grid-template-rows: 100vh;
     grid-column-gap: 2px;
-    background-color: $workspace;
+    @include theme('background-color', $workspace);
     transition: .3s;
     &.closed {
       grid-template-columns: 50px 1fr;

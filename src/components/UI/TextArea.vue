@@ -47,6 +47,7 @@
     width: 100%;
     height: 25px;
     color: $description;
-    &::placeholder { color: $placeholder; }
+    @include theme('color', $description);
+    &::placeholder { @include theme('color', $placeholder); }
   }
 </style>

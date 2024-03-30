@@ -20,6 +20,7 @@
     max-height: 100vh;
     height: 100vh;
     background-color: $tasker;
+    @include theme('background-color', $tasker);
     display: flex;
     justify-content: center;
   }

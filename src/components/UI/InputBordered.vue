@@ -30,7 +30,7 @@ import {ref, watch} from "vue";
     display: grid;
     grid-template-columns: 1fr 3fr;
     align-items: center;
-    color: $textColor;
+    @include theme('color', $textColor);
     grid-gap: 20px;
   }
   .label {
@@ -40,7 +40,9 @@ import {ref, watch} from "vue";
     padding: 5px 10px;
     width: 100%;
     height: 100%;
-    border: 1px solid $SvgColor;
+    border-width: 1px;
+    border-style: solid;
+    @include theme('border-color', $SvgColor);
     border-radius: 5px;
     input {
       width: 100%;

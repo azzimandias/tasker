@@ -84,7 +84,7 @@
   }
   .date {
     width: 100%;
-    color: $smallTextColor;
+    @include theme('color', $smallTextColor);
     text-align: right;
     font-size: 12px;
   }

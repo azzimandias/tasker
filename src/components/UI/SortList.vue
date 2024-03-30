@@ -36,7 +36,7 @@
     .sort-list {
         width: 100%;
         height: 70px;
-        background-color: $personal;
+        @include theme('background-color', $personal);
         border-radius: 13px;
         padding: 8px 9px 5px 9px;
         display: flex;
@@ -45,16 +45,16 @@
         cursor: pointer;
         transition: .3s;
         &:active {
-            background-color: $gold;
+            @include theme('background-color', $gold);
             opacity: 0.8;
             .sort-list__count, .sort-list__label {
-                color: $textColorActive;
+                @include theme('color', $textColorActive);
             }
         }
         &.active {
-          background-color: $gold;
+          @include theme('background-color', $gold);
           .sort-list__count, .sort-list__label {
-            color: $textColorActive;
+            @include theme('color', $textColorActive);
           }
           .circle {
             box-shadow: 0 0 6px #26282B;
@@ -75,7 +75,7 @@
     }
     .sort-list__count, .sort-list__label {
         font-size: 18px;
-        color: $textColor;
+        @include theme('color', $textColor);
     }
     .sort-list__count { font-weight: 600; }
     .sort-list__label { font-weight: 400; font-size: 15px; }

@@ -21,7 +21,7 @@
     color: #c4c4c4;
     position: sticky;
     top: 0;
-    background-color: $tasker;
+    @include theme('background-color', $tasker);
     display: flex;
     justify-content: space-between;
     align-items: center;

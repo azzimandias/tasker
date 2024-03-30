@@ -61,6 +61,6 @@
     transition: .3s;
     cursor: pointer;
     font-weight: 600;
-    &::placeholder { color: $placeholder; }
+    &::placeholder { @include theme('color', $placeholder); }
   }
 </style>

@@ -244,9 +244,9 @@
 
 <style scoped lang="scss">
   @import "../../assets/styles/global.scss";
-  .mac-window{
+  .mac-window {
     border-radius: 20px;
-    background-color: $AnimatedWindow;
+    @include theme('background-color', $AnimatedWindow);
     overflow: hidden;
     outline: 1px solid $gold;
     min-width: 500px;
@@ -288,11 +288,11 @@
     width: 200px;
     height: 100%;
     padding: 20px 10px 15px 10px;
-    background-color: $bigMenu;
+    @include theme('background-color', $bigMenu);
   }
   .mac-window__tasker {
     height: 100%;
-    background-color: #0f0f0f;
+    @include theme('background-color', $tasker);
     width: calc(100% - 200px);
   }
   .sort-lists__container {
@@ -313,6 +313,7 @@
     height: 50px;
     display: flex;
     margin-left: 7px;
+    padding: 6px 15px 6px 0;
   }
   .sort-lists__line {
     width: 100%;
@@ -323,7 +324,7 @@
   .sort-list {
     width: 85px;
     height: 50px;
-    background-color: #494B4E;
+    @include theme('background-color', $personal);
     border-radius: 10px;
     position: relative;
     &:after {
@@ -360,6 +361,9 @@
     border-radius: 3px;
     &.active {
       background-color: #6b6c6d;
+      .count {
+        @include theme('color', $description);
+      }
     }
     &.deactivate {
       background-color: transparent;
@@ -380,7 +384,7 @@
       background-color: rgb(218, 173, 173);
     }
     &.fourth {
-      background-color: $gold;
+      @include theme('background-color', $gold);
     }
     &:before {
       content: '';
@@ -394,7 +398,7 @@
     }
   }
   .count {
-    color: $textColor;
+    @include theme('color', $textColor);
   }
   .tag {
     height: 25px;
@@ -420,7 +424,7 @@
     line-height: 80px;
     font-size: 30px;
     font-weight: 600;
-    color: $gold;
+    @include theme('color', $gold);
     padding-left: 30px;
     opacity: 0;
     &.active {
@@ -466,7 +470,9 @@
     width: 20px;
     height: 20px;
     transition: 0.3s;
-    border: 2px solid $gold;
+    border-width: 2px;
+    border-style: solid;
+    @include theme('border-color', $gold);
     border-radius: 50%;
     position: relative;
   }
@@ -487,10 +493,10 @@
   }
   @keyframes click-dot {
     0% { background-color: transparent; }
-    100% { background-color: $gold; }
+    100% { @include theme('background-color', $gold); }
   }
   @keyframes undo-dot {
-    0% { background-color: $gold; }
+    0% { @include theme('background-color', $gold); }
     100% { background-color: transparent; }
   }
   .task-body {
@@ -502,6 +508,6 @@
     align-items: center;
   }
   .task-name {
-    color: $gold;
+    @include theme('color', $gold);
   }
 </style>

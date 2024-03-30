@@ -223,13 +223,17 @@
 @import "../../assets/styles/global.scss";
 .phone-window {
   border-radius: 20px;
-  background-color: $AnimatedWindow;
+  background-color: $textColorActive;
+  @include theme('background-color', $textColorActive);
   overflow: hidden;
-  outline: 1px solid $gold;
+  //outline: 1px solid $gold;
+  @include theme('outline', $gold);
   max-width: 230px;
   flex: 0 0 230px;
   height: 500px;
-  border: 6px solid $AnimatedWindow;
+  border-width: 6px;
+  border-style: solid;
+  @include theme('border-color', $textColorActive);
   position: relative;
   z-index: 1;
 }
@@ -237,8 +241,10 @@
   position: absolute;
   top: 0;
   left: calc(50% - 50px);
-  border: 10px solid $AnimatedWindow;
-  background-color: $AnimatedWindow;
+  border-width: 10px;
+  border-style: solid;
+  @include theme('border-color', $textColorActive);
+  @include theme('background-color', $textColorActive);
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   height: 0;
@@ -249,7 +255,7 @@
 }
 .phone-window__tasker {
   height: 100%;
-  background-color: #0f0f0f;
+  @include theme('background-color', $AnimatedWindow);
   width: 100%;
   padding-top: 30px;
   .list-label {
@@ -272,6 +278,7 @@
   font-size: 30px;
   font-weight: 600;
   color: $gold;
+  @include theme('color', $gold);
   padding-left: 30px;
   opacity: 0;
   &.active {
@@ -317,7 +324,9 @@
   width: 20px;
   height: 20px;
   transition: 0.3s;
-  border: 2px solid $gold;
+  border-width: 2px;
+  border-style: solid;
+  @include theme('border-color', $gold);
   border-radius: 50%;
   position: relative;
 }
@@ -338,10 +347,10 @@
 }
 @keyframes click-dot {
   0% { background-color: transparent; }
-  100% { background-color: $gold; }
+  100% { @include theme('background-color', $gold); }
 }
 @keyframes undo-dot {
-  0% { background-color: $gold; }
+  0% { @include theme('background-color', $gold); }
   100% { background-color: transparent; }
 }
 .task-body {
@@ -353,6 +362,6 @@
   align-items: center;
 }
 .task-name {
-  color: $gold;
+  @include theme('color', $gold);
 }
 </style>

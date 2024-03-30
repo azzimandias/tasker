@@ -80,7 +80,7 @@
     width: 100%;
     max-width: 2000px;
     height: 100%;
-    background-color: $tasker;
+    @include theme('background-color', $tasker);
     overflow: hidden;
     position: relative;
     display: flex;
@@ -92,7 +92,7 @@
     height: 40px;
     line-height: 40px;
     text-align: center;
-    background-color: $personal;
+    @include theme('background-color', $topBlock);
   }
   .header {
     width: 100%;
@@ -116,7 +116,7 @@
   .logo-description {
     height: 47px;
     line-height: 50px;
-    color: #5C5D5F;
+    @include theme('color', $introTextColor);
   }
   .btns-wrapper {
     width: 320px;
@@ -158,7 +158,7 @@
     height: auto;
     padding: 30px;
     border-radius: 20px;
-    background-color: $personal;
+    @include theme('background-color', $personal);
   }
   .main-block__right {
     padding: 0 0 0 30px;

@@ -18,13 +18,18 @@
   }
   .sign-in {
     color: $gold;
+    @include theme('color', $gold);
     background-color: transparent;
-    border: 1px solid $gold;
+    border-width: 1px;
+    border-style: solid;
+    @include theme('border-color', $gold);
   }
   .sign-up {
     color: $textColorActive;
-    background-color: $gold;
-    border: 1px solid $gold;
+    @include theme('background-color', $gold);
+    border-width: 1px;
+    border-style: solid;
+    @include theme('border-color', $gold);
   }
   @media screen and (max-width: 730px) {
     .sign-btn {

@@ -41,7 +41,7 @@
         flex-direction: column;
         justify-content: space-between;
         padding-bottom: 10px;
-        background-color: $bigMenu;
+        @include theme('background-color', $bigMenu);
         user-select: none;
         overflow-x: clip;
         overflow-y: auto;
@@ -70,7 +70,7 @@
     }
     .new-personal-list-btn {
         width: 155px;
-        color: $textColor;
+        @include theme('color', $textColor);
         transition: .3s;
         cursor: pointer;
         position: relative;

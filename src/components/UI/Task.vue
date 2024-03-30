@@ -175,7 +175,9 @@
   .task__bottom-container {
     margin-left: 35px;
     padding-bottom: 5px;
-    border-bottom: 2px solid #494B4E;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    @include theme('border-bottom-color', $line);
   }
   .info-btns__container {
     width: 100%;

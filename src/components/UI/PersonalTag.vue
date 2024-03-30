@@ -27,8 +27,8 @@
 <style lang="scss">
   @import "../../assets/styles/global.scss";
     .personal-tag {
-        background-color: $personal;
-        color: $textColor;
+        @include theme('background-color', $personal);
+        @include theme('color', $textColor);
         font-size: 13px;
         padding: 5px 8px;
         border-radius: 5px;
@@ -38,8 +38,8 @@
         transition: .3s;
         &:active { opacity: 0.8; }
         &.active {
-          background-color: $gold;
-          color: $textColorActive;
+          @include theme('background-color', $gold);
+          @include theme('color', $textColorActive);
         }
     }
 </style>

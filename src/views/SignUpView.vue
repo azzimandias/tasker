@@ -98,7 +98,7 @@
   .header_big {
     font-size: 50px;
     line-height: 60px;
-    color: $description;
+    @include theme('color', $introTextColor);
     margin-bottom: 20px;
     text-align: center;
   }
@@ -117,7 +117,7 @@
     & label {
       width: 100%;
       height: 35px;
-      border-bottom: 1px solid white;
+      @include theme('border-bottom', $line);
       &.empty {
         border-bottom: 1px solid darkred;
       }
@@ -126,7 +126,7 @@
       width: 90%;
       height: 100%;
       font-size: 28px;
-      color: $description;
+      @include theme('color', $introTextColor);
     }
     &.half {
       width: 45%;
@@ -134,7 +134,7 @@
   }
   .input-label {
     font-size: 18px;
-    color: $description;
+    @include theme('color', $introTextColor);
     span {
       color: darkred;
     }

@@ -1,41 +1,88 @@
-$workspace: #0f0f0f;
-$bigMenu: #26282B;
-$tasker: #1b1c1f;
-$gold: #af9a64;
-$personal: #494B4E;
-$textColorActive: #171515;
-$textColor: #c5c7ca;
-$description: #c4c4c4;
-$placeholder: rgba(115, 111, 111, 0.44);
-$smallTextColor: #f8f8f8;
-$AnimatedWindow: #383939;
-$SvgColor: #aaadae;
+$workspace: 'workspace';
+$bigMenu: 'bigMenu';
+$tasker: 'tasker';
+$gold: 'gold';
+$personal: 'personal';
+$topBlock: 'topBlock';
+$textColorActive: 'textColorActive';
+$textColor: 'textColor';
+$description: 'description';
+$placeholder: 'placeholder';
+$smallTextColor: 'smallTextColor';
+$AnimatedWindow: 'AnimatedWindow';
+$SvgColor: 'SvgColor';
+$macWindow: 'macWindow';
+$introTextColor: 'introTextColor';
+$line: 'line';
+$dropDownListBackground: 'dropDownListBackground';
+$dropDownListBorder: 'dropDownListBorder';
+$goldBorder: 'goldBorder';
 
-[data-theme="light"] {
-  $workspace: white;
-  $bigMenu: #e0e0e0;
-  $tasker: #f6f6f6;
-  $gold: #ffd700ff;
-  $personal: #f9f9f9;
-  $textColorActive: #171515;
-  $textColor: #736f6f;
-  $description: #c4c4c4;
-  $placeholder: rgba(115, 111, 111, 0.44);
-  $smallTextColor: #f8f8f8;
+$dark-theme: "dark-theme";
+$light-theme: "light-theme";
+
+$themes: (
+        $light-theme: (
+                $workspace: white,
+                $bigMenu: #e0e0e0,
+                $tasker: #f6f6f6,
+                $gold: #ffd700ff,
+                $personal: #f9f9f9,
+                $topBlock: #dfdddd,
+                $textColorActive: #171515,
+                $textColor: #736f6f,
+                $description: #c4c4c4,
+                $placeholder: rgba(115, 111, 111, 0.44),
+                $smallTextColor: #f8f8f8,
+                $AnimatedWindow: #f1eeee,
+                $SvgColor: #aaadae,
+                $macWindow: #383939,
+                $introTextColor: #5C5D5F,
+                $line: #494B4E,
+                $dropDownListBackground: #b6b1b1,
+                $dropDownListBorder: #5F6164,
+                $goldBorder: 1px solid #ffd700ff,
+        ),
+        $dark-theme: (
+                $workspace: #0f0f0f,
+                $bigMenu: #26282B,
+                $tasker: #1b1c1f,
+                $gold: #af9a64,
+                $personal: #494B4E,
+                $topBlock: #494B4E,
+                $textColorActive: #171515,
+                $textColor: #c5c7ca,
+                $description: #c4c4c4,
+                $placeholder: rgba(115, 111, 111, 0.44),
+                $smallTextColor: #f8f8f8,
+                $AnimatedWindow: #383939,
+                $SvgColor: #aaadae,
+                $macWindow: #383939,
+                $introTextColor: #c4c4c4,
+                $line: #494B4E,
+                $dropDownListBackground: #0a0a0a,
+                $dropDownListBorder: #5F6164,
+                $goldBorder: 1px solid #af9a64,
+        )
+);
+
+@mixin themeProperty($theme, $property, $color, $additionalPropertiesPositionIsFront, $additionalProperties) {
+  @if $additionalPropertiesPositionIsFront {
+    #{$property}: unquote($additionalProperties + ' ' + map-get($theme, $color));
+  } @else {
+    #{$property}: unquote(map-get($theme, $color) + ' ' + $additionalProperties);
+  }
 }
 
-[data-theme="dark"] {
-  $workspace: #0f0f0f;
-  $bigMenu: #26282B;
-  $tasker: #1b1c1f;
-  $gold: #af9a64;
-  $personal: #494B4E;
-  $textColorActive: #171515;
-  $textColor: #c5c7ca;
-  $description: #c4c4c4;
-  $placeholder: rgba(115, 111, 111, 0.44);
-  $smallTextColor: #f8f8f8;
-  $macWindow: #383939;
+@mixin theme($property, $color, $additionalPropertiesPositionIsFront: false, $additionalProperties: '') {
+  $light: map-get($themes, $light-theme);
+  $dark: map-get($themes, $dark-theme);
+
+  @include themeProperty($light, $property, $color, $additionalPropertiesPositionIsFront, $additionalProperties);
+
+  @media (prefers-color-scheme: dark) {
+    @include themeProperty($dark, $property, $color, $additionalPropertiesPositionIsFront, $additionalProperties);
+  }
 }
 
 .scroll {

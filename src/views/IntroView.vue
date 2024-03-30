@@ -22,13 +22,13 @@
   .header_big {
     font-size: 50px;
     line-height: 60px;
-    color: $description;
+    @include theme('color', $introTextColor);
     margin-bottom: 20px;
   }
   .description {
     font-size: 20px;
     line-height: 30px;
-    color: $description;
+    @include theme('color', $introTextColor);
     margin-bottom: 20px;
     text-align: justify;
   }

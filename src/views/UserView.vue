@@ -101,7 +101,9 @@
     grid-gap: 20px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid $description;
+    border-width: 1px;
+    border-style: solid;
+    @include theme('border-color', $description);
     border-radius: 5px;
   }
   .btn-container {
@@ -121,7 +123,7 @@
       color: black;
     }
     &.save {
-      background-color: $gold;
+      @include theme('background-color', $gold);
       color: black;
     }
     &:active {

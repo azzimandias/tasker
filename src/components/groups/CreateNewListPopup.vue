@@ -101,7 +101,7 @@
     left: calc(50vw - 250px);
     border-radius: 10px;
     border: 2px solid grey;
-    background-color: $bigMenu;
+    @include theme('background-color', $bigMenu);
     padding: 10px 20px;
     z-index: 100;
   }
@@ -114,13 +114,13 @@
   .popup__label {
     width: auto;
     font-size: 30px;
-    color: $textColor;
+    @include theme('color', $textColor);
   }
   .popup__body {
     height: 130px;
     display: flex;
     justify-content: space-between;
-    color:$textColorActive;
+    @include theme('color', $textColorActive);
     font-size: 20px;
   }
   .big-a {
@@ -134,7 +134,7 @@
     width: 250px;
     font-size: 12px;
     text-align: justify;
-    color: $textColor;
+    @include theme('color', $textColor);
   }
   .body__wrapper {
     display: flex;
@@ -145,7 +145,7 @@
     display: flex;
     grid-gap: 5px;
     align-items: center;
-    color: $textColor;
+    @include theme('color', $textColor);
   }
   .popup__btns {
     height: 30px;
@@ -158,8 +158,8 @@
   .popup__btn {
     width: 100px;
     border-radius: 5px;
-    color: $textColorActive;
-    background-color: $personal;
+    @include theme('color', $textColorActive);
+    @include theme('background-color', $personal);
     &:active { opacity: 0.8 }
   }
   .fade-enter-active,

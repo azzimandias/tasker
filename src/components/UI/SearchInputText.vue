@@ -36,7 +36,7 @@
     width: 100%;
     color: #aaadae !important;
     &::placeholder {
-      color: $placeholder;
+      @include theme('color', $placeholder);
     }
   }
 </style>

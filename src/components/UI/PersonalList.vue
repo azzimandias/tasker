@@ -52,15 +52,14 @@
     .personal-list {
         display: flex;
         align-items: center;
-        //border: 1px solid white;
         padding: 6px 15px 6px 6px;
         border-radius: 5px;
         cursor: pointer;
         transition: .3s;
         &.active {
-          background-color: $gold;
+          @include theme('background-color', $gold);
           .personal-list__circle { box-shadow: 0 0 6px #26282B; }
-          .personal-list__count, .personal-list__label { color: $textColorActive; }
+          .personal-list__count, .personal-list__label { @include theme('color', $textColorActive); }
         }
     }
     .personal-list__circle {
@@ -73,13 +72,13 @@
     .personal-list__label {
         margin-left: 8px;
         font-size: 14px;
-        color: $textColor;
+        @include theme('color', $textColor);
         flex-grow: 1;
     }
     .personal-list__count {
         font-size: 14px;
         font-weight: 600;
-        color: $textColor;
+        @include theme('color', $textColor);
         transition: .3s;
     }
     .info-list__wrapper {
