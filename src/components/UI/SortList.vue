@@ -1,9 +1,11 @@
 <script setup>
   import { useRoute } from 'vue-router'
-  import {inject} from "vue";
+  import {inject, ref, watch} from "vue";
 
+  const sortList = ref(null);
   const isOpenBigMenu = inject('isOpenBigMenu');
-  const closeOrNot = () => {
+
+  const closeOrOpen = () => {
     if (document.documentElement.clientWidth <= 700) {
       isOpenBigMenu.value = false;
     }
@@ -21,9 +23,15 @@
 
 <template>
   <router-link :to="props.url">
-    <div class="sort-list" :class="{ active: props.url === route.path }" @click="closeOrNot">
+    <div class="sort-list"
+         ref="sortList"
+         :class="{ hidden: !isOpenBigMenu ,active: props.url === route.path }"
+         @click="closeOrOpen"
+    >
         <div class="sort-list__container">
-            <div class="circle" :style="{ backgroundColor: currentColor }"></div>
+            <div class="circle" :style="{ backgroundColor: currentColor }">
+              <div class="sort-list__count-small" v-if="!isOpenBigMenu"><slot name="count"></slot></div>
+            </div>
             <div class="sort-list__count"><slot name="count"></slot></div>
         </div>
         <div class="sort-list__label"><slot name="name"></slot></div>
@@ -60,6 +68,17 @@
             box-shadow: 0 0 6px #26282B;
           }
         }
+        &.hidden {
+          width: 40px;
+          height: 40px;
+          padding: 10px;
+          .circle {
+            width: 20px;
+            height: 20px;
+          }
+          .sort-list__label { display: none; }
+          .sort-list__count { display: none; }
+        }
     }
     .sort-list__container {
         display: flex;
@@ -71,12 +90,18 @@
         border-radius: 90px;
         width: 30px;
         height: 30px;
+        text-align: center;
         transition: .3s;
     }
     .sort-list__count, .sort-list__label {
         font-size: 18px;
         @include theme('color', $textColor);
     }
-    .sort-list__count { font-weight: 600; }
+    .sort-list__count-small {
+        font-size: 14px;
+        line-height: 20px;
+        @include theme('color', $textColor);
+    }
+    .sort-list__count, .sort-list__count-small { font-weight: 600; }
     .sort-list__label { font-weight: 400; font-size: 15px; }
 </style>

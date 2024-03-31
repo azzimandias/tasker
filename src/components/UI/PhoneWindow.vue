@@ -226,8 +226,9 @@
   background-color: $textColorActive;
   @include theme('background-color', $textColorActive);
   overflow: hidden;
-  //outline: 1px solid $gold;
-  @include theme('outline', $gold);
+  outline-width: 1px;
+  outline-style: solid;
+  @include theme('outline-color', $gold);
   max-width: 230px;
   flex: 0 0 230px;
   height: 500px;

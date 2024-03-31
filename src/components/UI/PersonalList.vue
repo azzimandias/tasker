@@ -32,8 +32,10 @@
 </script>
 
 <template>
-<!--  <router-link :to="`/workspace/list=${props.list.id}`">-->
-    <div class="personal-list" :class="{ active: props.list.id === +route.params.id_list }" @mouseup="openList">
+    <div class="personal-list"
+         :class="{ active: props.list.id === +route.params.id_list, minimized: !isOpenBigMenu }"
+         @mouseup="openList"
+    >
         <div class="personal-list__circle" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
         <div class="info-list__wrapper" ref="infoList">
@@ -44,7 +46,6 @@
         </div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
-<!--  </router-link>-->
 </template>
 
 <style lang="scss">
@@ -60,6 +61,14 @@
           @include theme('background-color', $gold);
           .personal-list__circle { box-shadow: 0 0 6px #26282B; }
           .personal-list__count, .personal-list__label { @include theme('color', $textColorActive); }
+        }
+        &.minimized {
+          width: 40px;
+          height: 40px;
+          padding: 5px;
+          .personal-list__label { display: none; }
+          .personal-list__count { display: none; }
+          .info-list__wrapper { display: none; }
         }
     }
     .personal-list__circle {

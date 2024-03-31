@@ -39,7 +39,7 @@
 </script>
 
 <template>
-  <Transition mode="out-in" name="fade">
+<!--  <Transition mode="out-in" name="fade">-->
     <div v-if="props.is_popup">
       <div class="blur" @click="emits('close')"></div>
       <div class="popup">
@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-  </Transition>
+<!--  </Transition>-->
 </template>
 
 <style lang="scss" scoped>

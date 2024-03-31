@@ -12,26 +12,32 @@
 
   watch(isOpenBigMenu, (newVal) => {
     if (!newVal) {
-      newPersonalListBtn.value.classList.add('hidden');
-    } else {
-      newPersonalListBtn.value.classList.remove('hidden');
+      setTimeout(() => {
+        newPersonalListBtn.value.classList.remove('hidden');
+      },450);
     }
   });
 </script>
 
 <template>
-    <div class="big-menu">
-        <div class="big-menu__wrapper">
-            <ApplicationName/>
-            <TheSortLists/>
-            <ThePersonalLists/>
-            <ThePersonalTags/>
-        </div>
-        <button class="new-personal-list-btn" ref="newPersonalListBtn" @click="is_popup=true">Новый список</button>
-      <Teleport to="body">
-        <CreateNewListPopup :is_popup="is_popup" @close="is_popup=false"/>
-      </Teleport>
-    </div>
+  <div class="big-menu">
+      <div class="big-menu__wrapper">
+          <ApplicationName/>
+          <TheSortLists/>
+          <ThePersonalLists/>
+          <ThePersonalTags/>
+      </div>
+      <button class="new-personal-list-btn"
+              ref="newPersonalListBtn"
+              @click="is_popup=true"
+              :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}"
+      >
+        Новый список
+      </button>
+    <Teleport to="body">
+      <CreateNewListPopup :is_popup="is_popup" @close="is_popup=false"/>
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -64,14 +70,11 @@
       flex: 1 0 100px;
       display: flex;
       flex-direction: column;
-        > div {
-            padding: 0 11px;
-        }
     }
     .new-personal-list-btn {
         width: 155px;
         @include theme('color', $textColor);
-        transition: .3s;
+        transition: all .3s, opacity 0s;
         cursor: pointer;
         position: relative;
         &:active { opacity: 0.8; }
@@ -83,7 +86,6 @@
             position: absolute;
             top: 2px;
             left: 12px;
-            //background-image: url('../../assets/svgs/plus-circle.svg');
             background-image: url('../../assets/svgs/plus-circle_invert.svg');
             background-position: center;
             background-size: 15px 15px;
@@ -92,5 +94,28 @@
         &.hidden {
           opacity: 0;
         }
+        &.minimized {
+          width: 100%;
+          height: 40px;
+          color: transparent;
+          &::before {
+            left: 5px;
+            width: 40px;
+            height: 40px;
+            background-size: 30px 30px;
+          }
+        }
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: all 0.25s ease-out;
+    }
+
+    .fade-enter-from {
+      opacity: 0;
+    }
+
+    .fade-leave-to {
+      opacity: 0;
     }
 </style>
