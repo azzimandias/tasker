@@ -21,12 +21,13 @@
 
 <template>
   <div class="big-menu">
-      <div class="big-menu__wrapper">
-          <ApplicationName/>
-          <TheSortLists/>
-          <ThePersonalLists/>
-          <ThePersonalTags/>
-      </div>
+    <div class="big-menu__wrapper">
+        <ApplicationName/>
+        <TheSortLists/>
+        <ThePersonalLists/>
+        <ThePersonalTags/>
+    </div>
+    <div class="btn-wrapper">
       <button class="new-personal-list-btn"
               ref="newPersonalListBtn"
               @click="is_popup=true"
@@ -34,6 +35,7 @@
       >
         Новый список
       </button>
+    </div>
     <Teleport to="body">
       <CreateNewListPopup :is_popup="is_popup" @close="is_popup=false"/>
     </Teleport>
@@ -70,6 +72,10 @@
       flex: 1 0 100px;
       display: flex;
       flex-direction: column;
+    }
+    .btn-wrapper {
+      width: 100%;
+      height: 100px;
     }
     .new-personal-list-btn {
         width: 155px;
