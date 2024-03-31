@@ -44,7 +44,7 @@
         opacity: 0;
       }
       &.minimized {
-        padding: 5px;
+        padding: 6px;
         &::after {
           content: '';
           width: 30px;

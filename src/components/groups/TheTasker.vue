@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div class="tasker">
+  <div class="tasker scroll">
       <TheTopBar/>
       <router-view
           v-if="route.params.name"
@@ -35,11 +35,13 @@
 <style lang="scss">
     @import "../../assets/styles/global.scss";
     .tasker {
-        @include theme('background-color', $tasker);
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 40px 1fr;
-        align-items: center;
+      @include theme('background-color', $tasker);
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 40px 1fr;
+      align-items: center;
+      overflow-y: auto;
+      position: relative;
     }
     @media screen and (max-width: 700px) {
       .tasker {

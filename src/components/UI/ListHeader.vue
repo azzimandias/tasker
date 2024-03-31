@@ -5,11 +5,12 @@
   const props = defineProps({
     color: String,
     fontSize: String,
+    top: Number,
   })
 </script>
 
 <template>
-  <h2 class="list-header" :style="{color: props.color, fontSize: props.fontSize}">
+  <h2 class="list-header" :style="{color: props.color, fontSize: props.fontSize, top: `${props.top}px`}">
     <slot/><Loader v-if="listView.loadingSmall"/>
   </h2>
 </template>

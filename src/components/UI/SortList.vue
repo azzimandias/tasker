@@ -25,7 +25,7 @@
   <router-link :to="props.url">
     <div class="sort-list"
          ref="sortList"
-         :class="{ hidden: !isOpenBigMenu ,active: props.url === route.path }"
+         :class="{ hidden: !isOpenBigMenu, active: props.url === route.path }"
          @click="closeOrOpen"
     >
         <div class="sort-list__container">
@@ -99,7 +99,7 @@
     }
     .sort-list__count-small {
         font-size: 14px;
-        line-height: 20px;
+        line-height: 21px;
         @include theme('color', $textColorActive);
     }
     .sort-list__count, .sort-list__count-small { font-weight: 600; }

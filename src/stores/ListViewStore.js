@@ -6,6 +6,7 @@ import {useBigMenuStore} from "@/stores/BigMenuStore";
 
 export const useListViewStore = defineStore('listViewStore', () => {
     const currentPersonalListTasks = reactive([]);
+    const currentPersonalListTasksDone = reactive([]);
     const currentSortListTasks = reactive([]);
     const currentListInfo = reactive({
         id: '',
@@ -80,6 +81,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
             if (route.params.id_list) {
                 currentPersonalListTasks.length = 0;
+                currentPersonalListTasksDone.length = 0;
             } else if (route.params.name) {
                 currentSortListTasks.length = 0;
             } else if (route.params.id_tag) {
@@ -91,6 +93,10 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     item.key = Math.random();
                     currentPersonalListTasks.push(item);
                 });
+                arr['tasksDone'].forEach(item => {
+                    item.key = Math.random();
+                    currentPersonalListTasksDone.push(item);
+                });
             } else if (route.params.name) {
                 arr['tasksByList'].forEach(item => {
                     item.key = Math.random();
@@ -100,9 +106,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     currentSortListTasks.push(item);
                 });
             }
-            sortTasksByDone();
-            //console.log(currentPersonalListTasks);
-            //console.log(currentSortListTasks);
+
+            //sortTasksByDone();
 
             if (route.params.id_list) {
                 currentListInfo.id = arr['list'].id;
@@ -166,15 +171,40 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const updateTaskDone = (id, is_done) => {
-        currentPersonalListTasks.find(el => el.id === id).is_done = +is_done;
+        if (is_done) {
+            currentPersonalListTasks.find(el => el.id === id).is_done = +is_done;
+            currentPersonalListTasks.forEach((task,idx) => {
+                if (task.id === id) {
+                    let taskDone = currentPersonalListTasks.splice(idx,1);
+                    taskDone.forEach(td => {
+                        currentPersonalListTasksDone.push(td);
+                    });
+                }
+            });
+        } else {
+            currentPersonalListTasksDone.find(el => el.id === id).is_done = +is_done;
+            currentPersonalListTasksDone.forEach((task,idx) => {
+                if (task.id === id) {
+                    let task = currentPersonalListTasksDone.splice(idx,1);
+                    task.forEach(t => {
+                        currentPersonalListTasks.push(t);
+                    })
+                }
+            });
+        }
         sortTasksById();
-        sortTasksByDone();
+        //sortTasksByDone();
     };
 
     const sortTasksById = () => {
         currentPersonalListTasks.sort((a, b) => {
             if (a.id > b.id) return 1;
-            if (a.id == b.id) return 0;
+            if (a.id === b.id) return 0;
+            if (a.id < b.id) return -1;
+        });
+        currentPersonalListTasksDone.sort((a, b) => {
+            if (a.id > b.id) return 1;
+            if (a.id === b.id) return 0;
             if (a.id < b.id) return -1;
         });
     };
@@ -182,7 +212,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const sortTasksByDone = () => {
         currentPersonalListTasks.sort((a, b) => {
             if (a.is_done > b.is_done) return 1;
-            if (a.is_done == b.is_done) return 0;
+            if (a.is_done === b.is_done) return 0;
             if (a.is_done < b.is_done) return -1;
         });
     };
@@ -240,6 +270,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     return {
         tasks: currentPersonalListTasks,
+        tasksDone: currentPersonalListTasksDone,
         stasks: currentSortListTasks,
         listInfo: currentListInfo,
         sortListInfo: currentSortListInfo,

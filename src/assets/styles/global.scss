@@ -97,7 +97,8 @@ $themes: (
 
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: #c4c4c4;
+    //background-color: #c4c4c4;
+    @include theme('background-color', $description);
   }
 
   &::-webkit-scrollbar-track {
