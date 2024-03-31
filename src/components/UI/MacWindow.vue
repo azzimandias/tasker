@@ -248,7 +248,9 @@
     border-radius: 20px;
     @include theme('background-color', $AnimatedWindow);
     overflow: hidden;
-    outline: 1px solid $gold;
+    outline-width: 1px;
+    outline-style: solid;
+    @include theme('outline-color', $gold);
     min-width: 500px;
     flex: 1 1 800px;
     height: 500px;

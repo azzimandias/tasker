@@ -15,7 +15,7 @@
 
 <template>
   <div class="skin">
-    <img src="../assets/svgs/cloud.svg" alt="" class="cloud">
+    <div class="cloud"></div>
     <div>
       <div class="top-block">Reminder: This is a test project</div>
       <div class="header">
@@ -173,8 +173,21 @@
     position: absolute;
     bottom: -33%;
     right: -6%;
+    background-image: url("../assets/svgs/cloud-light-theme.svg");
+    background-repeat: no-repeat;
+    background-position: center;
     z-index: 0;
     animation: image_blur 7s infinite;
+  }
+  @media (prefers-color-scheme: light) {
+    .cloud {
+      background-image: url("../assets/svgs/cloud-light-theme.svg");
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .cloud {
+      background-image: url("../assets/svgs/cloud-dark-theme.svg");
+    }
   }
   @keyframes image_blur {
     0% {
