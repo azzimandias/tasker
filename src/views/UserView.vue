@@ -49,7 +49,7 @@
     <LoaderBig v-if="loading"/>
 
     <div class="user-view" v-else>
-      <ListHeader>Hello Andrew!</ListHeader>
+      <ListHeader>Hello {{ userInfo.name }}!</ListHeader>
       <div class="inputs-container">
         <InputBordered
             :key="randomKey"

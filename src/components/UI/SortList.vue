@@ -100,7 +100,7 @@
     .sort-list__count-small {
         font-size: 14px;
         line-height: 20px;
-        @include theme('color', $textColor);
+        @include theme('color', $textColorActive);
     }
     .sort-list__count, .sort-list__count-small { font-weight: 600; }
     .sort-list__label { font-weight: 400; font-size: 15px; }
