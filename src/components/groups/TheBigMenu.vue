@@ -75,7 +75,7 @@
     }
     .btn-wrapper {
       width: 100%;
-      height: 100px;
+      margin-bottom: 150px;
     }
     .new-personal-list-btn {
         width: 155px;
