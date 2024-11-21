@@ -3,7 +3,8 @@ import axios from "axios";
 export const HTTP = axios.create({
     baseURL: process.env.VUE_APP_API_URL,
     headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
     }
 });
 
