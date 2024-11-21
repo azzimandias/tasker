@@ -4,7 +4,7 @@ module.exports = defineConfig({
   //publicPath: '/tasker/'
   devServer: {
     proxy: {
-      '/api': {
+      '/': {
         target: 'https://taskerlaravelapi.ru'
       },
     },
