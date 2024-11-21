@@ -1,8 +1,5 @@
 import axios from "axios";
 
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-
 export const HTTP = axios.create({
     baseURL: process.env.VUE_APP_API_URL,
     headers: {
@@ -12,6 +9,9 @@ export const HTTP = axios.create({
 
 HTTP.defaults.withCredentials = true;
 HTTP.defaults.withXSRFToken = true;
+
+HTTP.defaults.headers.common['Accept'] = 'application/json';
+HTTP.defaults.headers.post['Content-Type'] = 'application/json';
 
 export default {
     url: process.env.VUE_APP_API_URL,
