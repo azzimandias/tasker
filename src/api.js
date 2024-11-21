@@ -9,6 +9,10 @@ export const HTTP = axios.create({
         'Accept': 'application/json'
     }
 });
+
+HTTP.defaults.withCredentials = true;
+HTTP.defaults.withXSRFToken = true;
+
 export default {
     url: process.env.VUE_APP_API_URL,
     async getCookies() {
