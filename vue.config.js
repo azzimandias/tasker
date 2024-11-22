@@ -5,7 +5,7 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       '/': {
-        target: 'https://taskerlaravelapi.ru'
+        //target: 'https://taskerlaravelapi.ru'
       },
     },
   },

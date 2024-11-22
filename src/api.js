@@ -8,11 +8,11 @@ export const HTTP = axios.create({
     }
 });
 
-HTTP.defaults.withCredentials = true;
-HTTP.defaults.withXSRFToken = true;
+//HTTP.defaults.withCredentials = true;
+//HTTP.defaults.withXSRFToken = true;
 
-HTTP.defaults.headers.common['Accept'] = 'application/json';
-HTTP.defaults.headers.post['Content-Type'] = 'application/json';
+//HTTP.defaults.headers.common['Accept'] = 'application/json';
+//HTTP.defaults.headers.post['Content-Type'] = 'application/json';
 
 export default {
     url: process.env.VUE_APP_API_URL,
@@ -75,9 +75,9 @@ export default {
             console.log(e);
         }
     },
-    async globalSearch(searchString) {
+    async globalSearch(searchObj) {
         try {
-            const response = await HTTP.post(this.url + 'globalSearch', searchString);
+            const response = await HTTP.post(this.url + 'globalSearch', searchObj);
             return await response.data;
         } catch (e) {
             console.log(e);
