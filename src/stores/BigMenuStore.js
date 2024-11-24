@@ -124,7 +124,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getPersonalTags = async () => {
         try {
             is_load_personalTags.value = true;
-            const response = await api.getInfo('tags');
+            const response = await api.getInfoWithArgs('tags', {
+                params: {
+                    user_id: user.id
+                }
+            });
             if ((typeof response) === "object" && response.length > 0) {
                 personalTags.length = 0;
                 personalTags.push({ id:0, name:'Все теги' });

@@ -7,6 +7,7 @@
   import InfoList from "@/components/UI/InfoList.vue";
   import TextArea from "@/components/UI/TextArea.vue";
   import InputDate from "@/components/UI/InputDate.vue";
+  import PersonalTag from "@/components/UI/PersonalTag.vue";
 
   const props = defineProps({
     task: Object,
@@ -108,7 +109,23 @@
             :deadline="props.task.deadline"
             @saveChangesDate="saveChangesDate"
         />
+        <PersonalTag
+            :key="0"
+            :id_task="props.task.id"
+            :tag="{id: 0, name: '', width: '13'}"
+            :isCanCreate="true"
+            :isCanChange="false"
+        />
+        <PersonalTag
+            v-for="tag in props.task.tags"
+            :key="tag.key"
+            :id_task="props.task.id"
+            :tag="tag"
+            :isCanCreate="false"
+            :isCanChange="true"
+        />
       </div>
+
     </div>
   </div>
 </template>
@@ -181,8 +198,9 @@
   }
   .info-btns__container {
     width: 100%;
-    height: 25px;
+    min-height: 28px;
     display: flex;
     grid-gap: 5px;
+    flex-wrap: wrap;
   }
 </style>

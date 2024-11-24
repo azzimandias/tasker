@@ -58,7 +58,7 @@
   @import "../../assets/styles/global.scss";
   .lb {
     width: 100px;
-    height: 20px;
+    height: 28px;
     background-color: rgba(73, 75, 78, 0.3);
     border-radius: 5px;
     overflow: hidden;

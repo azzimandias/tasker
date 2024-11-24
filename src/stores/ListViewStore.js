@@ -91,10 +91,16 @@ export const useListViewStore = defineStore('listViewStore', () => {
             if (route.params.id_list) {
                 arr['tasks'].forEach(item => {
                     item.key = Math.random();
+                    item.tags.forEach(tag => {
+                        tag.key = Math.random();
+                    });
                     currentPersonalListTasks.push(item);
                 });
                 arr['tasksDone'].forEach(item => {
                     item.key = Math.random();
+                    item.tags.forEach(tag => {
+                        tag.key = Math.random();
+                    });
                     currentPersonalListTasksDone.push(item);
                 });
             } else if (route.params.name) {
@@ -104,6 +110,15 @@ export const useListViewStore = defineStore('listViewStore', () => {
                         task.key = Math.random();
                     });
                     currentSortListTasks.push(item);
+                });
+            } else if (route.params.id_tag) {
+                arr['tasks'].forEach(item => {
+                    item.key = Math.random();
+                    item.tags.forEach(tag => {
+                        tag.key = Math.random();
+                        if (tag.id === arr['tag']['id']) tag.active = true;
+                    });
+                    tags.push(item);
                 });
             }
 
@@ -120,7 +135,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     if (sortList.id === currentSortListInfo.id) { currentSortListInfo.color = sortList.color; }
                 });
             } else if (route.params.id_tag) {
-                tag_name.value = arr['tag'];
+                tag_name.value = arr['tag']['name'];
             }
 
             loading.value = false;
@@ -268,6 +283,26 @@ export const useListViewStore = defineStore('listViewStore', () => {
         searchResult.length = 0;
     }
 
+    const createTag = async (tag) => {
+        const response = await api.postInfo(`createTag`, tag);
+        await bigMenu.firstRequest();
+        await getTasksOrTags();
+        return response;
+    }
+
+    const updateTag = async (tag) => {
+        const response = await api.postInfo(`updateTag`, tag);
+        await bigMenu.firstRequest();
+        await getTasksOrTags();
+        return response;
+    }
+
+    const deleteTagTask = async (tag) => {
+        await api.postInfo(`deleteTagTask`, tag);
+        await bigMenu.firstRequest();
+        await getTasksOrTags();
+    }
+
     return {
         tasks: currentPersonalListTasks,
         tasksDone: currentPersonalListTasksDone,
@@ -292,5 +327,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
         clearTasks,
         findTasks,
         clearSearchTasks,
+        createTag,
+        updateTag,
+        deleteTagTask,
     };
 });

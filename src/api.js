@@ -8,12 +8,6 @@ export const HTTP = axios.create({
     }
 });
 
-//HTTP.defaults.withCredentials = true;
-//HTTP.defaults.withXSRFToken = true;
-
-//HTTP.defaults.headers.common['Accept'] = 'application/json';
-//HTTP.defaults.headers.post['Content-Type'] = 'application/json';
-
 export default {
     url: process.env.VUE_APP_API_URL,
     async getCookies() {
@@ -21,6 +15,7 @@ export default {
         try {
             await HTTP.get(this.url + 'sanctum/csrf-cookie');
             //console.log('csrf-cookie')
+
         } catch (e) {
             console.log(e);
         }
