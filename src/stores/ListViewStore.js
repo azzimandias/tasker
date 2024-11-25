@@ -112,11 +112,14 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     currentSortListTasks.push(item);
                 });
             } else if (route.params.id_tag) {
-                arr['tasks'].forEach(item => {
+                arr['tasksByList'].forEach(item => {
                     item.key = Math.random();
-                    item.tags.forEach(tag => {
-                        tag.key = Math.random();
-                        if (tag.id === arr['tag']['id']) tag.active = true;
+                    item.tasks.forEach(task => {
+                        task.key = Math.random();
+                        task.tags.forEach(tag => {
+                            tag.key = Math.random();
+                            if (tag.id === arr['tag']['id']) tag.active = true;
+                        })
                     });
                     tags.push(item);
                 });

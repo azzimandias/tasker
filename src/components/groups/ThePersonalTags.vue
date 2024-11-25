@@ -33,6 +33,6 @@
         display: flex;
         flex-wrap: wrap;
         //padding: 6px 15px 6px 6px;
-        max-height: 105px;
+        max-height: 205px;
     }
 </style>

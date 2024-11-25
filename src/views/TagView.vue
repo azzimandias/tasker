@@ -6,6 +6,7 @@
   import LoaderBig from "@/components/UI/LoaderBig.vue";
   import {useRoute} from "vue-router";
   import {watchEffect} from "vue";
+  import ListHeader from "@/components/UI/ListHeader.vue";
 
   const listView = useListViewStore();
   const route = useRoute();
@@ -13,7 +14,28 @@
     if (!route.params.id_tag) {
       listView.loading = true;
     }
-  })
+  });
+
+  const refreshSortLists = (obj) => {
+    if (route.params.name === 'done' && obj.action === 'done' ||
+        route.params.name === 'with_flag' && obj.action === 'flag') {
+      listView.clearTasks(obj.task.id);
+    } else if (route.params.name === 'today' && obj.action === 'date') {
+      if (obj.date !== getTodayDate()) {
+        listView.clearTasks(obj.task.id);
+      }
+    }
+  };
+
+  const format = (date) => date < 10 ? `0${date}` : date.toString();
+
+  const getTodayDate = () => {
+    let date = new Date(Date.now());
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    return `${year}-${format(month)}-${format(day)}`;
+  }
 </script>
 
 <template>
@@ -26,20 +48,32 @@
     <div class="workspace scroll" v-else>
       <div class="workspace__label">
         <p class="workspace__name">По тегам:</p>
-        <TagHeader>
-          {{ listView.tag_name }}
-        </TagHeader>
+        <TagHeader>{{ listView.tag_name }}</TagHeader>
       </div>
-      <Task
-          v-for="task in listView.tags"
-          :key="task.id"
-          :task="task"
-          v-if="listView.tags.length"
-      />
-      <div v-if="listView.tags.length"></div>
-      <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
+      <div class="task__container scroll">
+        <div class="list-tasks__wrapper"
+             v-for="byList in listView.tags"
+             :key="byList.key"
+             v-if="listView.tags.length"
+        >
+          <ListHeader :color="byList.personal_list.color"
+                      :fontSize="'20px'"
+                      v-if="byList.tasks.length"
+          >{{ byList.personal_list.name }}</ListHeader>
+          <Task
+              v-for="task in byList.tasks"
+              :key="task.key"
+              :task="task"
+              :color="byList.personal_list.color"
+              @done="refreshSortLists"
+              @flag="refreshSortLists"
+              @date="refreshSortLists"
+              v-if="byList.tasks.length"
+          />
+        </div>
+        <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
+      </div>
     </div>
-
   </Transition>
 </template>
 
@@ -52,6 +86,19 @@
     align-items: center;
     grid-gap: 20px;
     padding: 0 20px;
+  }
+  .task__container {
+    width: 100%;
+    padding: 0 20px;
+    flex: 1 0 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    grid-gap: 20px;
+  }
+  .list-tasks__wrapper {
+    width: 100%;
   }
   .empty-list__title {
     flex: 1 0 100px;
