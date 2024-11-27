@@ -112,6 +112,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             if ((typeof response) === "object" && response.length > 0) {
                 personalLists.length = 0;
                 response.forEach(item => {
+                    item.key = Math.random();
                     personalLists.push(item);
                 });
                 is_load_personalLists.value = false;
@@ -133,9 +134,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
                 personalTags.length = 0;
                 personalTags.push({ id:0, name:'Все теги' });
                 response.forEach(item => {
+                    item.key = Math.random();
                     personalTags.push(item);
                 });
                 is_load_personalTags.value = false;
+                //console.log(personalTags)
             }
         } catch (e) {
             console.log(e);

@@ -18,9 +18,12 @@ export const useListViewStore = defineStore('listViewStore', () => {
         name: '',
         color: '',
     });
-    const searchResult = reactive([]);
+    const currentTag = reactive({
+        id: -1,
+        name: '',
+    });
     const tags = reactive([]);
-    const tag_name = ref('');
+    const searchResult = reactive([]);
     const loading = ref(true);
     const loadingSmall = ref(true);
     const is_somethingWrong = ref(false);
@@ -138,7 +141,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     if (sortList.id === currentSortListInfo.id) { currentSortListInfo.color = sortList.color; }
                 });
             } else if (route.params.id_tag) {
-                tag_name.value = arr['tag']['name'];
+                currentTag.id = arr.tag.id;
+                currentTag.name = arr.tag.name;
             }
 
             loading.value = false;
@@ -318,7 +322,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         is_somethingWrong,
         request,
         tags,
-        tag_name,
+        currentTag,
         currentPath,
         getTasksOrTags,
         updateTask,

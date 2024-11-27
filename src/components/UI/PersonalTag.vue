@@ -68,7 +68,7 @@
   </div>
 
   <div v-else-if="props.isCanChange" class="personal-tag__wrapper">
-    <div class="personal-tag can-change" :class="{ active: +props.tag.id === +route.params.id_tag }">
+    <div class="personal-tag can-change" :class="{ active: +props.tag.id === +listView.currentTag.id }">
       <input type="text"
              v-model="name"
              @blur="changeTag"

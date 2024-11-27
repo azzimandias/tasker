@@ -5,7 +5,7 @@
   import Task from "@/components/UI/Task.vue";
   import LoaderBig from "@/components/UI/LoaderBig.vue";
   import {useRoute} from "vue-router";
-  import {watchEffect} from "vue";
+  import {onMounted, ref, watchEffect} from "vue";
   import ListHeader from "@/components/UI/ListHeader.vue";
 
   const listView = useListViewStore();
@@ -17,25 +17,8 @@
   });
 
   const refreshSortLists = (obj) => {
-    if (route.params.name === 'done' && obj.action === 'done' ||
-        route.params.name === 'with_flag' && obj.action === 'flag') {
       listView.clearTasks(obj.task.id);
-    } else if (route.params.name === 'today' && obj.action === 'date') {
-      if (obj.date !== getTodayDate()) {
-        listView.clearTasks(obj.task.id);
-      }
-    }
   };
-
-  const format = (date) => date < 10 ? `0${date}` : date.toString();
-
-  const getTodayDate = () => {
-    let date = new Date(Date.now());
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    return `${year}-${format(month)}-${format(day)}`;
-  }
 </script>
 
 <template>
@@ -48,7 +31,7 @@
     <div class="workspace scroll" v-else>
       <div class="workspace__label">
         <p class="workspace__name">По тегам:</p>
-        <TagHeader>{{ listView.tag_name }}</TagHeader>
+        <TagHeader>{{ listView.currentTag.id ? '#' : '' }}{{ listView.currentTag.name }}</TagHeader>
       </div>
       <div class="task__container scroll">
         <div class="list-tasks__wrapper"

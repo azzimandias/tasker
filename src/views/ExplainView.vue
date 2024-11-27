@@ -4,8 +4,8 @@
       <h4 class="explain__label">Let's get started !</h4>
       <ul>
         <li class="explain__label small">create personal task lists and of course tasks</li>
-        <li class="explain__label small">use calendar mode (in future)</li>
         <li class="explain__label small">share with your friends (in future)</li>
+        <li class="explain__label small">use calendar mode (in future)</li>
         <li class="explain__label small">enjoy your productivity ✨</li>
       </ul>
     </div>
@@ -36,3 +36,5 @@
     }
   }
 </style>
+<script setup lang="ts">
+</script>

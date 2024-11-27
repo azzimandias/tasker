@@ -26,7 +26,7 @@
         <div class="personal-lists__container">
             <PersonalList 
                 v-for="list in bigMenuStore.personalLists"
-                :key="list.id"
+                :key="list.key"
                 :list="list">
                 <template #name>{{ list.name }}</template>
                 <template #count>{{ list.count_of_active_tasks }}</template>

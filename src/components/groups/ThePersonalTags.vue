@@ -13,8 +13,8 @@
         <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
         <div class="personal-tags__container scroll">
             <PersonalTag
-                v-for="(tag,key) in bigMenuStore.personalTags"
-                :key="tag.id"
+                v-for="tag in bigMenuStore.personalTags"
+                :key="tag.key"
                 :tag="tag"
                 :isCanCreate="false"
                 :isCanChange="false"

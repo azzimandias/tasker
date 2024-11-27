@@ -1,17 +1,8 @@
-<script setup>
-  import { ref,onMounted } from "vue";
-  import { useRoute } from 'vue-router'
-  const route = useRoute();
-  const hash = ref('');
-  onMounted(() => {
-    if (route.params.id_tag > 0)
-      hash.value = '#';
-  });
-</script>
+<script setup></script>
 
 <template>
   <div class="tag-header">
-    {{ hash }}<slot/>
+    <slot/>
   </div>
 </template>
 
