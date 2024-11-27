@@ -143,6 +143,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             } else if (route.params.id_tag) {
                 currentTag.id = arr.tag.id;
                 currentTag.name = arr.tag.name;
+                currentTag.key = Math.random();
             }
 
             loading.value = false;

@@ -11,6 +11,7 @@
     isCanCreate: Boolean,
     isCanChange: Boolean,
     isRoute: Boolean,
+    isHeader: Boolean,
   });
   const emit = defineEmits(['addTag', 'changeTag']);
   const route = useRoute();
@@ -18,15 +19,16 @@
   const name = ref(props.tag.name);
   const newName = ref('');
   const tag = ref(null);
+  const openTagList = ref(false);
   const listView = useListViewStore();
   const bigMenu = useBigMenuStore();
-  const isTag = () => {
-    if(props.tag.id !== 0 && !props.isCanChange) {
+  const needHash = () => {
+    if(props.tag.id !== 0 && !props.isCanChange && !props.isHeader) {
       name.value = `#${props.tag.name}`;
     }
   };
   onMounted(() => {
-    isTag();
+    needHash();
   });
   const width = ref(props.tag.name ? String(Number(props.tag.name.length) + 2) + 'ch' : 15 + 'ch');
   const resize = () => {
@@ -42,6 +44,7 @@
     if (tag.value) tag.value.blur();
   };
   const createTag = async () => {
+    openTagList.value = false;
     if (tag.value.value.trim()) {
       const newTag = await listView.createTag({name: tag.value.value.trim(), task_id: props.id_task});
     }
@@ -68,35 +71,58 @@
            class="personal-tag"
            v-model="newName"
            :placeholder="'Добавить тег?'"
+           @focus="openTagList = true;"
            @blur="createTag"
            @keyup.enter="blurTag"
            @keyup="resize"
            :style="{width: width}"
            ref="tag"
     />
-    <div class="personal-tag__list">
+    <div class="personal-tag__list"
+         :class="{ active: openTagList }"
+    >
       <PersonalTag
           v-for="tag in bigMenu.personalTags"
           :key="tag.key"
           :tag="tag"
-          :isCanCreate="false"
-          :isCanChange="false"
-          :isRoute="false"
       />
     </div>
   </div>
 
-  <div v-else-if="props.isCanChange" class="personal-tag__wrapper">
-    <div class="personal-tag can-change" :class="{ active: +props.tag.id === +listView.currentTag.id }">
+  <div v-else-if="props.isCanChange"
+       class="personal-tag__wrapper"
+       @dblclick="sortByTag"
+  >
+    <div class="personal-tag hash" :class="{ active: +props.tag.id === +listView.currentTag.id }">
       <input type="text"
              v-model="name"
-             @dblclick="sortByTag"
              @blur="changeTag"
              @keyup.enter="blurTag"
              @keyup="resize"
              :style="{width: width}"
              ref="tag"
       />
+    </div>
+  </div>
+
+  <div v-else-if="props.isHeader"
+       class="tag-header"
+  >
+    <div class="personal-tag hash" :class="{
+                                      active: +props.tag.id === +listView.currentTag.id,
+                                      blank: !props.tag.id,
+                                   }"
+    >
+      <input v-if="props.tag.id"
+             type="text"
+             v-model="name"
+             @blur="changeTag"
+             @keyup.enter="blurTag"
+             @keyup="resize"
+             :style="{width: width}"
+             ref="tag"
+      />
+      <div v-else>{{ name }}</div>
     </div>
   </div>
 
@@ -107,7 +133,7 @@
   </div>
 
   <div v-else class="personal-tag__wrapper">
-    <div class="personal-tag">{{ name }}</div>
+    <div class="personal-tag-average">{{ name }}</div>
   </div>
 </template>
 
@@ -129,8 +155,39 @@
         &:active {
           opacity: 0.8;
         }
-        &.can-change::before { content: '#'; }
         input { padding: 0; }
+    }
+
+    .personal-tag-average {
+      width: auto;
+      height: auto;
+      font-size: 13px;
+      padding: 5px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      transition: .3s;
+      &:active {
+        opacity: 0.8;
+      }
+      input { padding: 0; }
+    }
+
+    .hash::before { content: '#'; }
+
+    .blank::before { content: ''; }
+
+    .tag-header {
+      width: auto;
+      height: auto;
+      color: #171515;
+      font-size: 20px;
+      padding: 5px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 8.5px;
     }
 
     .personal-tag__list {
@@ -165,8 +222,21 @@
       }
     }
 
+    .personal-tag-average {
+      @include theme('background-color', $personal);
+      @include theme('color', $textColor);
+      &.active {
+        @include theme('background-color', $gold);
+        @include theme('color', $textColorActive);
+      }
+    }
+
     .personal-tag__list {
       @include theme('background-color', $dropDownListBackground);
       @include theme('border-color', $dropDownListBorder);
+    }
+
+    .tag-header {
+      @include theme('background-color', $gold);
     }
 </style>

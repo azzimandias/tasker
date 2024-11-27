@@ -114,17 +114,13 @@
             :id_task="props.task.id"
             :tag="{id: 0, name: '', width: '13'}"
             :isCanCreate="true"
-            :isCanChange="false"
-            :isRoute="false"
         />
         <PersonalTag
             v-for="tag in props.task.tags"
             :key="tag.key"
             :id_task="props.task.id"
             :tag="tag"
-            :isCanCreate="false"
             :isCanChange="true"
-            :isRoute="false"
         />
       </div>
 

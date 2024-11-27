@@ -16,8 +16,6 @@
                 v-for="tag in bigMenuStore.personalTags"
                 :key="tag.key"
                 :tag="tag"
-                :isCanCreate="false"
-                :isCanChange="false"
                 :isRoute="true"
             />
         </div>

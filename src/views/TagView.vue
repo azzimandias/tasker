@@ -32,7 +32,12 @@
     <div class="workspace scroll" v-else>
       <div class="workspace__label">
         <p class="workspace__name">По тегам:</p>
-        <TagHeader>{{ listView.currentTag.id ? '#' : '' }}{{ listView.currentTag.name }}</TagHeader>
+<!--        <TagHeader>{{ listView.currentTag.id ? '#' : '' }}{{ listView.currentTag.name }}</TagHeader>-->
+        <PersonalTag
+            :key="listView.currentTag.key"
+            :tag="listView.currentTag"
+            :isHeader="true"
+        />
       </div>
       <div class="task__container scroll">
         <div class="list-tasks__wrapper"
