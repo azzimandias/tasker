@@ -7,6 +7,7 @@
   import {useRoute} from "vue-router";
   import {onMounted, ref, watchEffect} from "vue";
   import ListHeader from "@/components/UI/ListHeader.vue";
+  import PersonalTag from "@/components/UI/PersonalTag.vue";
 
   const listView = useListViewStore();
   const route = useRoute();

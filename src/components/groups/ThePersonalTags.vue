@@ -18,6 +18,7 @@
                 :tag="tag"
                 :isCanCreate="false"
                 :isCanChange="false"
+                :isRoute="true"
             />
         </div>
     </div>

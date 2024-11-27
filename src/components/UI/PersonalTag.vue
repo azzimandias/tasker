@@ -2,12 +2,15 @@
   import {onMounted, ref} from 'vue';
   import { useRoute } from 'vue-router';
   import {useListViewStore} from "@/stores/ListViewStore";
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
+  import router from "@/router";
 
   const props = defineProps({
     id_task: Number,
     tag: Object,
     isCanCreate: Boolean,
     isCanChange: Boolean,
+    isRoute: Boolean,
   });
   const emit = defineEmits(['addTag', 'changeTag']);
   const route = useRoute();
@@ -16,6 +19,7 @@
   const newName = ref('');
   const tag = ref(null);
   const listView = useListViewStore();
+  const bigMenu = useBigMenuStore();
   const isTag = () => {
     if(props.tag.id !== 0 && !props.isCanChange) {
       name.value = `#${props.tag.name}`;
@@ -45,11 +49,16 @@
     resize();
   };
   const changeTag = async () => {
-    if (tag.value.value.trim()) {
-      const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: tag.value.value.trim()});
-    } else {
-      await listView.deleteTagTask({tag_id: props.tag.id, task_id: props.id_task});
+    if (tag.value) { // needed for dblclick
+      if (tag.value.value.trim()) {
+        const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: tag.value.value.trim()});
+      } else {
+        await listView.deleteTagTask({tag_id: props.tag.id, task_id: props.id_task});
+      }
     }
+  };
+  const sortByTag = () => {
+    router.push({ name: 'tag', params: { id_tag: props.tag.id } });
   };
 </script>
 
@@ -58,19 +67,30 @@
     <input type="text"
            class="personal-tag"
            v-model="newName"
-           :placeholder="'Добавить тэг?'"
+           :placeholder="'Добавить тег?'"
            @blur="createTag"
            @keyup.enter="blurTag"
            @keyup="resize"
            :style="{width: width}"
            ref="tag"
     />
+    <div class="personal-tag__list">
+      <PersonalTag
+          v-for="tag in bigMenu.personalTags"
+          :key="tag.key"
+          :tag="tag"
+          :isCanCreate="false"
+          :isCanChange="false"
+          :isRoute="false"
+      />
+    </div>
   </div>
 
   <div v-else-if="props.isCanChange" class="personal-tag__wrapper">
     <div class="personal-tag can-change" :class="{ active: +props.tag.id === +listView.currentTag.id }">
       <input type="text"
              v-model="name"
+             @dblclick="sortByTag"
              @blur="changeTag"
              @keyup.enter="blurTag"
              @keyup="resize"
@@ -80,14 +100,22 @@
     </div>
   </div>
 
-  <div v-else class="personal-tag__wrapper">
+  <div v-else-if="props.isRoute" class="personal-tag__wrapper">
     <router-link :to="`/workspace/tag=${props.tag.id}`">
       <div class="personal-tag" :class="{ active: +props.tag.id === +route.params.id_tag }">{{ name }}</div>
     </router-link>
   </div>
+
+  <div v-else class="personal-tag__wrapper">
+    <div class="personal-tag">{{ name }}</div>
+  </div>
 </template>
 
 <style lang="scss">
+    .personal-tag__wrapper {
+      position: relative;
+    }
+
     .personal-tag__wrapper .personal-tag {
         width: auto;
         height: 28px;
@@ -105,6 +133,27 @@
         input { padding: 0; }
     }
 
+    .personal-tag__list {
+      position: absolute;
+      left: 0;
+      bottom: -151px;
+      width: 150px;
+      max-height: 145px;
+      padding: 5px;
+      border-width: 1px;
+      border-style: solid;
+      border-radius: 5px;
+      overflow: auto;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 10;
+      &.active {
+        display: flex;
+      }
+    }
+
     @import "../../assets/styles/global.scss";
 
     .personal-tag {
@@ -114,5 +163,10 @@
         @include theme('background-color', $gold);
         @include theme('color', $textColorActive);
       }
+    }
+
+    .personal-tag__list {
+      @include theme('background-color', $dropDownListBackground);
+      @include theme('border-color', $dropDownListBorder);
     }
 </style>

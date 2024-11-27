@@ -35,7 +35,7 @@ const router = createRouter({
           component: () => import('../views/PersonalListView.vue'),
         },
         {
-          path: 'tag=:id_tag',
+          path: 'tag=:id_tag', name: 'tag',
           component: () => import('../views/TagView.vue'),
         },
         {

@@ -115,6 +115,7 @@
             :tag="{id: 0, name: '', width: '13'}"
             :isCanCreate="true"
             :isCanChange="false"
+            :isRoute="false"
         />
         <PersonalTag
             v-for="tag in props.task.tags"
@@ -123,6 +124,7 @@
             :tag="tag"
             :isCanCreate="false"
             :isCanChange="true"
+            :isRoute="false"
         />
       </div>
 
