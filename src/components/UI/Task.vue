@@ -8,12 +8,14 @@
   import TextArea from "@/components/UI/TextArea.vue";
   import InputDate from "@/components/UI/InputDate.vue";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
+  import {useRoute} from "vue-router";
 
   const props = defineProps({
     task: Object,
     color: String,
   });
   const emits = defineEmits(['done', 'flag', 'date']);
+  const route = useRoute();
 
   const is_visible = ref(false);
   const listView = useListViewStore();
@@ -28,27 +30,52 @@
   });
 
   const saveChangesName = (name) => {saveChanges('name', name);};
+
   const saveChangesDescription = (description) => {saveChanges('description', description);};
+
   const saveChangesDate = (date) => {
     saveChanges('deadline', date);
     emits('date', {task: props.task, date, action: 'date'});
   };
+
   const saveChangesFlag = (is_flagged) => {
+    stylesForFlagChanges(is_flagged);
     saveChanges('is_flagged', is_flagged);
-    emits('flag', {task: props.task, is_flagged, action: 'flag'});
-  };
-  const saveChangesDot = (is_done) => {
-    hideTask();
     setTimeout(() => {
-      taskNode.value.classList.remove('hide-anim');
-      saveChanges('is_done', is_done);
+      emits('flag', {task: props.task, is_flagged, action: 'flag'});
+    }, 1000);
+  };
+
+  const saveChangesDot = (is_done) => {
+    stylesForDotChanges(is_done);
+    saveChanges('is_done', is_done);
+    setTimeout(() => {
       emits('done', {task: props.task, is_done, action: 'done'});
     },1000);
   };
+
+  const stylesForFlagChanges = (is_flagged) => {
+    if (!is_flagged && route.params.name === 'with_flag') hideTask();
+  };
+
+  const stylesForDotChanges = (is_done) => {
+    if (route.params.id_list || route.params.name === 'done') {
+      hideTask();
+    } else {
+      disableEnableTask(is_done);
+    }
+  };
+
   const hideTask = () => {
     height.value = `${taskNode.value.scrollHeight}px`;
     taskNode.value.classList.add('hide-anim');
   };
+
+  const disableEnableTask = (is_done) => {
+    if (is_done) taskNode.value.classList.add('done');
+    else taskNode.value.classList.remove('done');
+  };
+
   const saveChanges = (whatChanges, changeValue) => {
     let update = {
       id: props.task.id,

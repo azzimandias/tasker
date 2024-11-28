@@ -18,7 +18,8 @@
   });
 
   const refreshSortLists = (obj) => {
-      listView.clearTasks(obj.task.id);
+    /*listView.clearTasks(obj.task.id);*/
+    listView.updateSortListTasks();
   };
 </script>
 
@@ -45,10 +46,11 @@
              :key="byList.key"
              v-if="listView.tags.length"
         >
-          <ListHeader :color="byList.personal_list.color"
+          <ListHeader :list="byList.personal_list"
+                      :isRouter="true"
                       :fontSize="'20px'"
                       v-if="byList.tasks.length"
-          >{{ byList.personal_list.name }}</ListHeader>
+          />
           <Task
               v-for="task in byList.tasks"
               :key="task.key"

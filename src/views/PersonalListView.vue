@@ -36,9 +36,9 @@
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
     <div class="workspace" v-else>
-      <ListHeader :color="listView.listInfo.color" :top="40">
-        {{ listView.listInfo.name }}
-      </ListHeader>
+      <ListHeader :list="listView.listInfo"
+                  :top="40"
+      />
       <div class="task__container scroll">
         <Task
             v-for="task in listView.tasks"

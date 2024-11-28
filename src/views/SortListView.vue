@@ -15,6 +15,7 @@
     }
   });
 
+  // под вопросом, мб уже и не нужно оставить только listView.updateSortListTasks();
   const refreshSortLists = (obj) => {
     if (route.params.name === 'done' && obj.action === 'done' ||
         route.params.name === 'with_flag' && obj.action === 'flag') {
@@ -23,6 +24,8 @@
       if (obj.date !== getTodayDate()) {
         listView.clearTasks(obj.task.id);
       }
+    } else {
+      listView.updateSortListTasks();
     }
   };
 
@@ -44,17 +47,18 @@
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
     <div class="workspace" v-else>
-      <ListHeader :color="listView.sortListInfo.color">{{ listView.sortListInfo.name }}</ListHeader>
+      <ListHeader :list="listView.sortListInfo"/>
       <div class="task__container scroll">
         <div class="list-tasks__wrapper"
              v-for="stask in listView.stasks"
              :key="stask.key"
              v-if="listView.stasks.length"
         >
-          <ListHeader :color="stask.personal_list.color"
+          <ListHeader :list="stask.personal_list"
+                      :isRouter="true"
                       :fontSize="'20px'"
                       v-if="stask.tasks.length"
-          >{{ stask.personal_list.name }}</ListHeader>
+          />
           <Task
             v-for="task in stask.tasks"
             :key="task.key"
