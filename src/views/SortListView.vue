@@ -17,16 +17,7 @@
 
   // под вопросом, мб уже и не нужно оставить только listView.updateSortListTasks();
   const refreshSortLists = (obj) => {
-    if (route.params.name === 'done' && obj.action === 'done' ||
-        route.params.name === 'with_flag' && obj.action === 'flag') {
-      listView.clearTasks(obj.task.id);
-    } else if (route.params.name === 'today' && obj.action === 'date') {
-      if (obj.date !== getTodayDate()) {
-        listView.clearTasks(obj.task.id);
-      }
-    } else {
-      listView.updateSortListTasks();
-    }
+    listView.updateSortListTasks();
   };
 
   const format = (date) => date < 10 ? `0${date}` : date.toString();

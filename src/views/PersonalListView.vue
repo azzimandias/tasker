@@ -36,9 +36,12 @@
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
     <div class="workspace" v-else>
-      <ListHeader :list="listView.listInfo"
-                  :top="40"
-      />
+      <div class="top-header">
+        <ListHeader :list="listView.listInfo"
+                    :isCanChange="true"
+                    :top="40"
+        />
+      </div>
       <div class="task__container scroll">
         <Task
             v-for="task in listView.tasks"
@@ -83,6 +86,14 @@
   align-items: center;
   grid-gap: 20px;
   padding-bottom: 150px;
+}
+.top-header {
+  width: 100%;
+  padding-right: 18px;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 28px 28px;
+  grid-gap: 11px;
 }
 .task__container {
   width: 100%;
