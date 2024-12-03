@@ -12,6 +12,7 @@
     top: Number,
   })
   const router = useRouter();
+  const emit = defineEmits(['saveChangedName']);
   const listName = ref(props.list.name);
   const listHeaderInput = ref(null);
 
@@ -21,7 +22,7 @@
 
   const saveChangedName = () => {
     if (listName.value) {
-      listView.updateListName({id: props.list.id, name: listName.value});
+      emit('saveChangedName', listName.value);
     }
   };
 

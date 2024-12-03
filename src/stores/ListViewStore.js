@@ -315,8 +315,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await getTasksOrTags();
     }
 
-    const updateListName = async (list) => {
-        await api.postInfo(`updateListName`, list);
+    const updateList = async (list) => {
+        await api.postInfo(`updateList`, list);
         await bigMenu.firstRequest();
         await getTasksOrTags();
     }
@@ -349,6 +349,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         createTag,
         updateTag,
         deleteTagTask,
-        updateListName,
+        updateList,
     };
 });

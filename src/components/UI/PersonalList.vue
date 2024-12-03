@@ -85,8 +85,11 @@
         flex-grow: 1;
     }
     .personal-list__count {
+        width: 26px;
+        max-width: 26px;
         font-size: 14px;
         font-weight: 600;
+        text-align: right;
         @include theme('color', $textColor);
         transition: .3s;
     }

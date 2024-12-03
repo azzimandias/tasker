@@ -94,7 +94,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         });
         if ((typeof response) === "object") {
             response.forEach(item => {
-                sortLists[item.id-1].count = item.count;
+                if (item.count >= 100) {
+                    sortLists[item.id-1].count = '+99';
+                } else {
+                    sortLists[item.id-1].count = item.count;
+                }
             });
             is_load_sortLists.value = false;
         }

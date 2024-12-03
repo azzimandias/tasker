@@ -6,8 +6,11 @@
   import SomethingWrong from "@/components/UI/SomethingWrong.vue";
   import Task from "@/components/UI/Task.vue";
   import LoaderBig from "@/components/UI/LoaderBig.vue";
+  import DeleteBtn from "@/components/UI/DeleteBtn.vue";
   import {ref, watchEffect} from "vue";
   import {useRoute} from "vue-router";
+  import Coloris from "@/components/UI/Coloris.vue";
+
 
   const listView = useListViewStore();
   const imageDB = useImageDBStore();
@@ -26,6 +29,14 @@
   const openTasksDone = () => {
     isDoneTasksOpen.value = !isDoneTasksOpen.value;
   };
+
+  const saveChangedName = (newName) => {
+    listView.updateList({id: listView.listInfo.id, name: newName});
+  }
+
+  const saveChangedColor = (newColor) => {
+    listView.updateList({id: listView.listInfo.id, color: newColor});
+  };
 </script>
 
 <template>
@@ -37,10 +48,21 @@
 
     <div class="workspace" v-else>
       <div class="top-header">
-        <ListHeader :list="listView.listInfo"
-                    :isCanChange="true"
-                    :top="40"
+        <ListHeader
+            :list="listView.listInfo"
+            :isCanChange="true"
+            :top="40"
+            @saveChangedName="saveChangedName"
         />
+        <div class="list-redact-wrapper">
+          <Coloris
+              :color="listView.listInfo.color"
+              @onDroch="saveChangedColor"
+          />
+        </div>
+        <div class="list-redact-wrapper">
+          <DeleteBtn/>
+        </div>
       </div>
       <div class="task__container scroll">
         <Task
@@ -94,6 +116,13 @@
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 28px 28px;
   grid-gap: 11px;
+  align-items: center;
+}
+.list-redact-wrapper {
+  display: flex;
+  align-items: center;
+  padding-top: 15px;
+  height: 100%;
 }
 .task__container {
   width: 100%;
