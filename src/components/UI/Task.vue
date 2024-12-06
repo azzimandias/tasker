@@ -9,6 +9,7 @@
   import InputDate from "@/components/UI/InputDate.vue";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
   import {useRoute} from "vue-router";
+  import TagCreator from "@/components/UI/TagCreator.vue";
 
   const props = defineProps({
     task: Object,
@@ -136,11 +137,17 @@
             :deadline="props.task.deadline"
             @saveChangesDate="saveChangesDate"
         />
-        <PersonalTag
+<!--        <PersonalTag
             :key="0"
             :id_task="props.task.id"
             :tag="{id: 0, name: '', width: '13'}"
+            :possibleTags="props.task.possibleTags"
             :isCanCreate="true"
+        />-->
+        <TagCreator
+            :key="0"
+            :id_task="props.task.id"
+            :possibleTags="props.task.possibleTags"
         />
         <PersonalTag
             v-for="tag in props.task.tags"

@@ -33,14 +33,13 @@
     <div class="workspace scroll" v-else>
       <div class="workspace__label">
         <p class="workspace__name">По тегам:</p>
-<!--        <TagHeader>{{ listView.currentTag.id ? '#' : '' }}{{ listView.currentTag.name }}</TagHeader>-->
         <PersonalTag
             :key="listView.currentTag.key"
             :tag="listView.currentTag"
             :isHeader="true"
         />
       </div>
-      <div class="task__container scroll">
+      <div class="task__container">
         <div class="list-tasks__wrapper"
              v-for="byList in listView.tags"
              :key="byList.key"
@@ -80,13 +79,14 @@
   }
   .task__container {
     width: 100%;
-    padding: 0 20px;
+    padding: 0 18px;
     flex: 1 0 100px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     grid-gap: 20px;
+    overflow: revert;
   }
   .list-tasks__wrapper {
     width: 100%;

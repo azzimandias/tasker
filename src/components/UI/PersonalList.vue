@@ -83,6 +83,10 @@
         font-size: 14px;
         @include theme('color', $textColor);
         flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 176px;
     }
     .personal-list__count {
         width: 26px;
@@ -94,6 +98,6 @@
         transition: .3s;
     }
     .info-list__wrapper {
-      margin: 0 10px;
+      //margin: 0 10px;
     }
 </style>

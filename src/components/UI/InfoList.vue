@@ -5,7 +5,9 @@
 
   const router = useRoute();
   const ListView = useListViewStore();
-  const props = defineProps(['idList']);
+  const props = defineProps({
+    idList: Number,
+  });
   const emit = defineEmits(['delete']);
   const infoList = ref(null);
   const dropDownList = ref(null);
@@ -16,6 +18,11 @@
       dropDownList.value.classList.add('active');
     }
   };
+
+  const deleteAction = () => {
+    openCloseDropDownList();
+    emit('delete');
+  }
 
   const closeDropDown = (e) => {
     if (dropDownList.value.classList.contains('active') && !infoList.value.contains(e.target)) {
@@ -32,16 +39,26 @@
 </script>
 
 <template>
-  <div class="info-list" ref="infoList" @mouseup="openCloseDropDownList" :class="{ active: +props.idList === +router.params.id_list }">
+  <div class="info-list__wrapper">
+    <div
+        class="info-list"
+        ref="infoList"
+        @mouseup="openCloseDropDownList"
+        :class="{ active: +props.idList === +router.params.id_list }"
+    >
+    </div>
     <div class="drop-down-list" ref="dropDownList">
       <button class="drop-down-list__btn">Edit</button>
-      <button class="drop-down-list__btn" @mouseup="emit('delete')">Delete</button>
+      <button class="drop-down-list__btn" @mouseup="deleteAction">Delete</button>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";
+  .info-list__wrapper {
+    position: relative;
+  }
   .info-list {
     flex: 0 0 20px;
     width: 20px;
@@ -53,7 +70,6 @@
     &.active { background-image: url("@/assets/svgs/info_invert.svg"); }
     cursor: pointer;
     transition: 0.3s;
-    position: relative;
   }
   .drop-down-list {
     position: absolute;
@@ -75,14 +91,14 @@
     &.active {
       display: flex;
     }
-    button {
+    button.drop-down-list__btn {
       width: 100%;
       height: 20px;
       color: #5F6164;
       cursor: pointer;
       transition: .3s;
       &:hover {
-        color: $gold;
+        @include theme('color', $gold);
       }
     }
   }

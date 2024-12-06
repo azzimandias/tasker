@@ -40,8 +40,10 @@
 @import "../../assets/styles/coloris.css";
 .inp {
   width: 30px;
+  height: 30px;
   color: #c4c4c4;
   border: 2px solid #706767;
-  border-radius: 5px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 </style>

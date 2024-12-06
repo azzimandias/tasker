@@ -33,15 +33,25 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
+        // первоначальная загрузка, таймаут для анимации?
         setTimeout(() => {
             getTasksOrTags();
         },300)
+        // интервал для смены списка или сортировки по спискам?
         const interval = setInterval(() => {
             if(String(currentPath.value) !== String(route.path)) {
                 loading.value = true;
                 getTasksOrTags();
             }
         }, 0)
+        // интервал для обновления информации по спискам и сортировкам
+        const refreshInterval = setInterval(() => {
+            getTasksOrTags();
+        }, 30000);
+        setTimeout(() => {
+            //console.log('stop');
+            clearInterval(refreshInterval);
+        }, 60 * 60000);
     });
 
     const getTasksOrTags = async () => {
@@ -97,6 +107,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     item.tags.forEach(tag => {
                         tag.key = Math.random();
                     });
+                    item.possibleTags.forEach(tag => {
+                        tag.key = Math.random();
+                    });
                     currentPersonalListTasks.push(item);
                 });
                 arr['tasksDone'].forEach(item => {
@@ -104,13 +117,23 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     item.tags.forEach(tag => {
                         tag.key = Math.random();
                     });
+                    item.possibleTags.forEach(tag => {
+                        tag.key = Math.random();
+                    });
                     currentPersonalListTasksDone.push(item);
                 });
             } else if (route.params.name) {
                 arr['tasksByList'].forEach(item => {
+                    console.log(item)
                     item.key = Math.random();
                     item.tasks.forEach(task => {
                         task.key = Math.random();
+                        task.tags.forEach(tag => {
+                            tag.key = Math.random();
+                        })
+                        task.possibleTags.forEach(tag => {
+                            tag.key = Math.random();
+                        });
                     });
                     currentSortListTasks.push(item);
                 });
@@ -123,6 +146,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
                             tag.key = Math.random();
                             if (tag.id === arr['tag']['id']) tag.active = true;
                         })
+                        task.possibleTags.forEach(tag => {
+                            tag.key = Math.random();
+                        });
                     });
                     tags.push(item);
                 });
@@ -272,6 +298,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         });
         await api.postInfo(`deleteTask`, obj);
         await bigMenu.firstRequest();
+        await getTasksOrTags();
     }
 
     const findTasks = async (searchObj) => {
@@ -293,6 +320,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const clearSearchTasks = () => {
         searchResult.length = 0;
+    }
+
+    const addTagToTask = async (tagToTask) => {
+        const response = await api.postInfo(`addTagToTask`, tagToTask);
+        await bigMenu.firstRequest();
+        await getTasksOrTags();
+        return response;
     }
 
     const createTag = async (tag) => {
@@ -346,6 +380,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         updateSortListTasks,
         findTasks,
         clearSearchTasks,
+        addTagToTask,
         createTag,
         updateTag,
         deleteTagTask,

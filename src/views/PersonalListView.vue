@@ -7,9 +7,9 @@
   import Task from "@/components/UI/Task.vue";
   import LoaderBig from "@/components/UI/LoaderBig.vue";
   import DeleteBtn from "@/components/UI/DeleteBtn.vue";
+  import Coloris from "@/components/UI/Coloris.vue";
   import {ref, watchEffect} from "vue";
   import {useRoute} from "vue-router";
-  import Coloris from "@/components/UI/Coloris.vue";
 
 
   const listView = useListViewStore();
@@ -60,11 +60,8 @@
               @onDroch="saveChangedColor"
           />
         </div>
-        <div class="list-redact-wrapper">
-          <DeleteBtn/>
-        </div>
       </div>
-      <div class="task__container scroll">
+      <div class="task__container">
         <Task
             v-for="task in listView.tasks"
             :key="task.key"
@@ -82,7 +79,7 @@
       >
         Выполненные
       </ListDone>
-      <div class="task__container scroll" v-if="listView.tasksDone.length && isDoneTasksOpen">
+      <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
         <Task
             v-for="task in listView.tasksDone"
             :key="task.key"
@@ -114,7 +111,7 @@
   padding-right: 18px;
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr 28px 28px;
+  grid-template-columns: 1fr 30px;
   grid-gap: 11px;
   align-items: center;
 }
@@ -126,11 +123,12 @@
 }
 .task__container {
   width: 100%;
-  padding: 0 20px;
+  padding: 0 18px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow: revert;
 }
 .empty-list__title {
   flex: 1 0 100px;

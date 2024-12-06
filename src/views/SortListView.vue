@@ -39,7 +39,7 @@
 
     <div class="workspace" v-else>
       <ListHeader :list="listView.sortListInfo"/>
-      <div class="task__container scroll">
+      <div class="task__container">
         <div class="list-tasks__wrapper"
              v-for="stask in listView.stasks"
              :key="stask.key"
@@ -78,13 +78,14 @@
 }
 .task__container {
   width: 100%;
-  padding: 0 20px;
+  padding: 0 18px;
   flex: 1 0 100px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   grid-gap: 20px;
+  overflow: revert;
 }
 .list-tasks__wrapper {
   width: 100%;
