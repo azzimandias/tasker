@@ -12,17 +12,24 @@
   const tag = ref(null);
   const listView = useListViewStore();
 
-  const width = ref('13ch');
+  const width = ref('15ch');
+  const newName = ref('');
   const resize = () => {
-    /*if (props.isCanCreate && tag.value.value.length < 13) {
-      width.value = 13 + 'ch';
-    } else if (props.isCanCreate) {
-      width.value = String(Number(tag.value.value.length) + 4) + 'ch';
-    }*/
+    const hiddenSpan = document.createElement('span');
+    hiddenSpan.style.visibility = 'hidden';
+    hiddenSpan.style.position = 'absolute';
+    hiddenSpan.style.whiteSpace = 'pre';
+    hiddenSpan.style.fontSize = '13px';
+    hiddenSpan.style.padding = '5px 8px';
+    hiddenSpan.style.fontFamily = 'Avenir, Helvetica, Arial, sans-serif';
+    hiddenSpan.textContent = newName.value || ' ';
+
+    document.body.appendChild(hiddenSpan);
+    width.value = `${Math.max(hiddenSpan.scrollWidth, 10)}px`;
+    document.body.removeChild(hiddenSpan);
   };
 
   const openTagList = ref(false);
-  const newName = ref('');
   const possibleTags = ref(props.possibleTags);
 
   const canBlur = () => {
@@ -91,7 +98,7 @@
 
 <style scoped lang="scss">
   .personal-tag__wrapper .personal-tag {
-    width: auto;
+    min-width: 15ch;
     height: 28px;
     font-size: 13px;
     padding: 5px 8px;
@@ -125,6 +132,15 @@
     &.active {
       display: flex;
     }
+  }
+
+  .hidden-span {
+    visibility: hidden;
+    position: absolute;
+    white-space: pre;
+    font-size: 13px;
+    padding: 5px 8px;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
   }
 
   @import "../../assets/styles/global.scss";

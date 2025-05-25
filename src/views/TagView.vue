@@ -68,6 +68,7 @@
 </template>
 
 <style lang="scss" scoped>
+@import "../assets/styles/global.scss";
   .workspace {
     height: 100%;
     display: flex;
@@ -100,6 +101,8 @@
   }
   .workspace__label {
     width: 100%;
+    position: sticky;
+    top: 0;
     min-height: 60px;
     display: flex;
     align-items: flex-end;
@@ -108,9 +111,11 @@
     color: #aaadae;
     font-size: 35px;
     font-weight: 600;
+    z-index: 2;
+    @include theme('background-color', $tasker);
   }
   .workspace__name {
-    padding: 5px 0;
+    //padding: 5px 0;
   }
   .fade-enter-active,
   .fade-leave-active {

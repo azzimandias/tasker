@@ -47,7 +47,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         // интервал для обновления информации по спискам и сортировкам
         const refreshInterval = setInterval(() => {
             getTasksOrTags();
-        }, 30000);
+        }, 60000);
         setTimeout(() => {
             //console.log('stop');
             clearInterval(refreshInterval);

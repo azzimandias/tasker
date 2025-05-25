@@ -46,7 +46,7 @@
 
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
-    <div class="workspace" v-else>
+    <div class="workspace scroll" v-else>
       <div class="top-header">
         <ListHeader
             :list="listView.listInfo"
@@ -97,6 +97,7 @@
 </template>
 
 <style lang="scss" scoped>
+@import "../assets/styles/global.scss";
 .workspace {
   height: 100%;
   display: flex;
@@ -114,6 +115,10 @@
   grid-template-columns: 1fr 30px;
   grid-gap: 11px;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  @include theme('background-color', $tasker);
 }
 .list-redact-wrapper {
   display: flex;

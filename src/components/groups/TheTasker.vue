@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div class="tasker scroll">
+  <div class="tasker">
       <TheTopBar/>
       <router-view
           v-if="route.params.name"
@@ -40,7 +40,7 @@
       grid-template-columns: 1fr;
       grid-template-rows: 40px 1fr;
       align-items: center;
-      overflow-y: auto;
+      overflow: hidden;
       position: relative;
     }
     @media screen and (max-width: 700px) {

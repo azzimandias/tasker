@@ -37,8 +37,11 @@
 
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
-    <div class="workspace" v-else>
-      <ListHeader :list="listView.sortListInfo"/>
+    <div class="workspace scroll" v-else>
+      <ListHeader :list="listView.sortListInfo"
+                  :top="0"
+                  :zIndex="2"
+      />
       <div class="task__container">
         <div class="list-tasks__wrapper"
              v-for="stask in listView.stasks"
@@ -48,6 +51,8 @@
           <ListHeader :list="stask.personal_list"
                       :isRouter="true"
                       :fontSize="'20px'"
+                      :top="60"
+                      :zIndex="1"
                       v-if="stask.tasks.length"
           />
           <Task

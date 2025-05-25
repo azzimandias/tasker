@@ -10,6 +10,7 @@
     isCanChange: Boolean,
     fontSize: String,
     top: Number,
+    zIndex: Number,
   })
   const router = useRouter();
   const emit = defineEmits(['saveChangedName']);
@@ -34,7 +35,7 @@
 <template>
   <h2 v-if="!props.isCanChange"
       class="list-header"
-      :style="{color: props.list.color, fontSize: props.fontSize, top: `${props.top}px`}"
+      :style="{color: props.list.color, fontSize: props.fontSize, top: `${props.top}px`, zIndex: props.zIndex}"
       @dblclick="goToPersonalList"
   >
     {{ props.list.name }}
@@ -43,7 +44,7 @@
   <input v-else
          type="text"
          class="list-header"
-         :style="{color: props.list.color, fontSize: props.fontSize, top: `${props.top}px`}"
+         :style="{color: props.list.color, fontSize: props.fontSize, top: `${props.top}px`, zIndex: props.zIndex}"
          v-model="listName"
          @blur="saveChangedName"
          @keyup.enter="blurListHeader"
@@ -58,7 +59,7 @@
     font-weight: 600;
     color: #c4c4c4;
     position: sticky;
-    top: 0;
+    top: 60px;
     @include theme('background-color', $tasker);
     display: flex;
     justify-content: space-between;

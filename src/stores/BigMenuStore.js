@@ -78,7 +78,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             getSortListsCount();
             getPersonalLists();
             getPersonalTags();
-        },30000);
+        },60000);
         setTimeout(() => {
             //console.log('stop');
             clearInterval(startInterval);

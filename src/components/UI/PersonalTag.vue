@@ -3,13 +3,10 @@ import {onMounted, reactive, ref, watch} from 'vue';
   import { useRoute } from 'vue-router';
   import {useListViewStore} from "@/stores/ListViewStore";
   import router from "@/router";
-import TagCreator from "@/components/UI/TagCreator.vue";
 
   const props = defineProps({
     id_task: Number,
     tag: Object,
-    possibleTags: Array,
-    isCanCreate: Boolean,
     isCanChange: Boolean,
     isRoute: Boolean,
     isHeader: Boolean,
@@ -32,13 +29,18 @@ import TagCreator from "@/components/UI/TagCreator.vue";
 /* + can change */
   const width = ref(props.tag.name ? String(Number(props.tag.name.length) + 2) + 'ch' : 15 + 'ch');
   const resize = () => {
-    if (props.isCanCreate && tag.value.value.length < 13) {
-      width.value = 13 + 'ch';
-    } else if (props.isCanCreate) {
-      width.value = String(Number(tag.value.value.length) + 4) + 'ch';
-    } else {
-      width.value = String(Number(tag.value.value.length) + 2) + 'ch';
-    }
+    const hiddenSpan = document.createElement('span');
+    hiddenSpan.style.visibility = 'hidden';
+    hiddenSpan.style.position = 'absolute';
+    hiddenSpan.style.whiteSpace = 'pre';
+    hiddenSpan.style.fontSize = '13px';
+    hiddenSpan.style.padding = '5px 8px';
+    hiddenSpan.style.fontFamily = 'Avenir, Helvetica, Arial, sans-serif';
+    hiddenSpan.textContent = tag.value.value || ' ';
+
+    document.body.appendChild(hiddenSpan);
+    width.value = `${Math.max(hiddenSpan.scrollWidth, 10)}px`;
+    document.body.removeChild(hiddenSpan);
   };
   const changeTag = async () => {
     if (tag.value) { // needed for dblclick
@@ -54,76 +56,9 @@ import TagCreator from "@/components/UI/TagCreator.vue";
   const sortByTag = () => {
     router.push({ name: 'tag', params: { id_tag: props.tag.id } });
   };
-
-/* + can create */
-  const openTagList = ref(false);
-  const newName = ref('');
-  const possibleTags = ref(props.possibleTags);
-
-  const canBlur = () => {
-    setTimeout(() => {
-      openTagList.value = false;
-    }, 500)
-  };
-
-  const maybeCanAddTag = () => {
-    const foundTag = props.possibleTags.filter(tag => tag.name === newName.value)
-    if (foundTag.length) {
-      addTagToTask(foundTag[0]);
-    } else {
-      createTag();
-    }
-  };
-  const createTag = async () => {
-    openTagList.value = false;
-    if (tag.value && tag.value.value.trim()) {
-      const newTag = await listView.createTag({name: tag.value.value.trim(), task_id: props.id_task});
-      tag.value.value = '';
-      resize();
-    }
-  };
-  const addTagToTask = async (tagToAdd) => {
-    const addTag = await listView.addTagToTask({tag_id: tagToAdd.id, task_id: props.id_task});
-    tag.value.value = '';
-    resize();
-  };
-  watch(newName, (newValue) => {
-    filterTags(newValue);
-  });
-  const filterTags = (newName) => {
-    possibleTags.value = props.possibleTags.filter(tag => tag.name.toLowerCase().includes(newName.toLowerCase()))
-        .sort((a, b) => a.name.localeCompare(b.name));
-  };
-/* - can create */
 </script>
 
 <template>
-<!--  <div v-if="props.isCanCreate" class="personal-tag__wrapper">
-    <input type="text"
-           class="personal-tag"
-           v-model="newName"
-           :placeholder="'Добавить тег?'"
-           @focus="openTagList = true;"
-           @blur="canBlur"
-           @keyup.enter="maybeCanAddTag"
-           @keyup="resize"
-           :style="{width: width}"
-           ref="tag"
-    />
-    <div class="personal-tag__list"
-         :class="{ active: openTagList }"
-    >
-      <div v-for="tag in possibleTags">
-        <PersonalTag
-            v-if="tag.key"
-            :key="tag.key"
-            :tag="tag"
-            @click="addTagToTask(tag)"
-        />
-      </div>
-    </div>
-  </div>-->
-
   <div v-if="props.isCanChange"
        class="personal-tag__wrapper"
        @dblclick="sortByTag"

@@ -17,7 +17,7 @@
     font-size: 20px;
     @include theme('color', $description);
     position: sticky;
-    top: 103px;
+    top: 60px;
     @include theme('background-color', $tasker);
     display: flex;
     justify-content: space-between;
