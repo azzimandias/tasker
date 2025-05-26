@@ -54,7 +54,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     onMounted(async () => {
         await getUserInfo();
         await firstRequest();
-        await startIntervalUpdate();
+        //await startIntervalUpdate();
     });
 
     const getUserInfo = async () => {
@@ -66,23 +66,23 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     }
 
     const firstRequest = async () => {
-        //console.log('go')
         await getSortListsCount();
         await getPersonalLists();
         await getPersonalTags();
     }
     const startIntervalUpdate =  async () => {
-        const startInterval = setInterval(() => {
-            //console.log('request');
-            //lv.getTasksOrTags();
+        /*const startInterval = setInterval(() => {
             getSortListsCount();
             getPersonalLists();
             getPersonalTags();
-        },60000);
-        setTimeout(() => {
-            //console.log('stop');
+        },60000);*/
+        /*setTimeout(() => {
             clearInterval(startInterval);
-        }, 60 * 60000);
+        }, 60 * 60000);*/
+
+        //await getSortListsCount();
+        //await getPersonalLists();
+        //await getPersonalTags();
     }
 
     const getSortListsCount = async () => {

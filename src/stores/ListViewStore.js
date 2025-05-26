@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
-import {ref, reactive, onMounted, watchEffect} from "vue";
+import {ref, reactive, onMounted, watchEffect, onUnmounted} from "vue";
 import {useRoute} from "vue-router";
 import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
+import socket from "@/plugins/socket";
 
 export const useListViewStore = defineStore('listViewStore', () => {
     const currentPersonalListTasks = reactive([]);
@@ -33,25 +34,43 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
+
+        // Подключение к WebSocket
+        socket.connect();
+
+        // Подписка на комнату "chat"
+        socket.emit('subscribe', 'chat');
+
+        // Слушаем события
+        socket.on('newMessage', (message) => {
+            console.log('New message:', message);
+        });
+
         // первоначальная загрузка, таймаут для анимации?
         setTimeout(() => {
             getTasksOrTags();
-        },300)
+        },300);
+
+
         // интервал для смены списка или сортировки по спискам?
-        const interval = setInterval(() => {
+        /*const interval = setInterval(() => {
             if(String(currentPath.value) !== String(route.path)) {
                 loading.value = true;
                 getTasksOrTags();
             }
-        }, 0)
+        }, 0)*/
         // интервал для обновления информации по спискам и сортировкам
-        const refreshInterval = setInterval(() => {
+        /*const refreshInterval = setInterval(() => {
             getTasksOrTags();
         }, 60000);
         setTimeout(() => {
-            //console.log('stop');
             clearInterval(refreshInterval);
-        }, 60 * 60000);
+        }, 60 * 60000);*/
+    });
+
+    // Отключение при размонтировании
+    onUnmounted(() => {
+        socket.disconnect();
     });
 
     const getTasksOrTags = async () => {
