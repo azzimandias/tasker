@@ -36,7 +36,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     onMounted(async () => {
 
         // Подключение к WebSocket
-        socket.connect();
+        /*socket.connect();
 
         // Подписка на комнату "chat"
         socket.emit('subscribe', 'chat');
@@ -44,7 +44,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         // Слушаем события
         socket.on('newMessage', (message) => {
             console.log('New message:', message);
-        });
+        });*/
 
         // первоначальная загрузка, таймаут для анимации?
         setTimeout(() => {
