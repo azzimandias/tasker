@@ -64,12 +64,8 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     });
 
     const connectSocket = async () => {
-        // Подключение к WebSocket
         socket.connect();
-        // Подписка на комнаты
-        socket.emit('subscribe', 'sort_lists_count');
-        socket.emit('subscribe', 'personal_lists_count');
-        // Слушаем события
+        socket.emit('subscribe', 'bigMenuStore');
         socket.on('new_sort_lists_count', (new_sort_lists_count) => {
             console.log('New sort_lists_count:', new_sort_lists_count);
             updSortListsCount(new_sort_lists_count);
@@ -77,6 +73,10 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         socket.on('new_personal_lists_count', (new_personal_lists) => {
             console.log('New personal_lists:', new_personal_lists);
             updSocketPersonalLists(new_personal_lists);
+        });
+        socket.on('new_personal_tags', (new_personal_tags) => {
+            console.log('New personal_tags:', new_personal_tags);
+            updSocketPersonalTags(new_personal_tags);
         });
     }
 
@@ -149,7 +149,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     }
 
     const updSocketPersonalLists = (newPersonalLists) => {
-        console.log('pre start');
         if ((typeof newPersonalLists) === "object" && newPersonalLists.length > 0) {
             console.log('start');
             is_load_personalLists.value = true;
@@ -182,6 +181,18 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             }
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    const updSocketPersonalTags = (newPersonalTags) => {
+        if ((typeof newPersonalTags) === "object" && newPersonalTags.length > 0) {
+            personalTags.length = 0;
+            personalTags.push({ id:0, name:'Все теги' });
+            newPersonalTags.forEach(item => {
+                item.key = Math.random();
+                personalTags.push(item);
+            });
+            is_load_personalTags.value = false;
         }
     }
 

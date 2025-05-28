@@ -34,44 +34,75 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
-
-        // Подключение к WebSocket
-        /*socket.connect();
-
-        // Подписка на комнату "chat"
-        socket.emit('subscribe', 'chat');
-
-        // Слушаем события
-        socket.on('newMessage', (message) => {
-            console.log('New message:', message);
-        });*/
-
         // первоначальная загрузка, таймаут для анимации?
         setTimeout(() => {
+            connectSocket();
             getTasksOrTags();
         },300);
-
-
-        // интервал для смены списка или сортировки по спискам?
-        /*const interval = setInterval(() => {
-            if(String(currentPath.value) !== String(route.path)) {
-                loading.value = true;
-                getTasksOrTags();
-            }
-        }, 0)*/
-        // интервал для обновления информации по спискам и сортировкам
-        /*const refreshInterval = setInterval(() => {
-            getTasksOrTags();
-        }, 60000);
-        setTimeout(() => {
-            clearInterval(refreshInterval);
-        }, 60 * 60000);*/
     });
 
-    // Отключение при размонтировании
     onUnmounted(() => {
+        socket.off('taskUpdated');
+        socket.off('taskDeleted');
+        socket.off('taskCreated');
         socket.disconnect();
     });
+
+    const connectSocket = async () => {
+        if (!socket.connected) {
+            socket.connect();
+        }
+        // Подписываемся на обновления для текущего списка
+        if (route.params.id_list) {
+            socket.emit('subscribeToList', route.params.id_list);
+        }
+        // Обработчик обновления задачи
+        socket.on('taskUpdated', (updatedTask) => {
+            handlePersonalListTaskUpdate(updatedTask);
+        });
+        // Обработчик удаления задачи
+        socket.on('taskDeleted', (taskId) => {
+            //handlePersonalListTaskDelete(taskId);
+        });
+        // Обработчик создания новой задачи
+        socket.on('taskCreated', (newTask) => {
+            //handlePersonalListTaskCreate(newTask);
+        });
+    }
+
+    const handlePersonalListTaskUpdate = (updatedTask) => {
+        console.log('Updating task:', updatedTask);
+        updatedTask.key = Math.random();
+        updatedTask.tags.forEach(tag => {
+            tag.key = Math.random();
+        });
+        updatedTask.possibleTags.forEach(tag => {
+            tag.key = Math.random();
+        });
+        if (!updatedTask.is_done) {
+            const index = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
+            if (index !== -1) {
+                currentPersonalListTasks.splice(index, 1, { ...currentPersonalListTasks[index], ...updatedTask });
+            } else {
+                const doneIndex = currentPersonalListTasksDone.findIndex(task => task.id === updatedTask.id);
+                if (doneIndex !== -1) {
+                    currentPersonalListTasksDone.splice(doneIndex, 1);
+                    currentPersonalListTasks.push(updatedTask);
+                }
+            }
+        } else {
+            const index = currentPersonalListTasksDone.findIndex(task => task.id === updatedTask.id);
+            if (index !== -1) {
+                currentPersonalListTasksDone.splice(index, 1, { ...currentPersonalListTasksDone[index], ...updatedTask });
+            } else {
+                const todoIndex = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
+                if (todoIndex !== -1) {
+                    currentPersonalListTasks.splice(todoIndex, 1);
+                    currentPersonalListTasksDone.push(updatedTask);
+                }
+            }
+        }
+    };
 
     const getTasksOrTags = async () => {
         loadingSmall.value = true;
@@ -109,6 +140,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateData = (arr) => {
+        console.log(arr);
         if ((arr['sortList'] || arr['list'] || arr['tag']) && (arr['tasks'] || arr['tasksByList'])) {
 
             if (route.params.id_list) {
@@ -172,8 +204,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     tags.push(item);
                 });
             }
-
-            //sortTasksByDone();
 
             if (route.params.id_list) {
                 currentListInfo.id = arr['list'].id;
