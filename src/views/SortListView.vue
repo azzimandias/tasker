@@ -4,11 +4,16 @@
   import SomethingWrong from "@/components/UI/SomethingWrong.vue";
   import Task from "@/components/UI/Task.vue";
   import LoaderBig from "@/components/UI/LoaderBig.vue";
-  import {watchEffect} from "vue";
+  import {onMounted, watchEffect} from "vue";
   import {useRoute} from "vue-router";
 
   const listView = useListViewStore();
   const route = useRoute();
+
+  onMounted(async () => {
+    await listView.getTasksOrTags();
+  });
+
   watchEffect(() => {
     if (!route.params.name) {
       listView.loading = true;

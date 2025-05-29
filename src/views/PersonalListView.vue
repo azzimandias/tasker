@@ -8,7 +8,7 @@
   import LoaderBig from "@/components/UI/LoaderBig.vue";
   import DeleteBtn from "@/components/UI/DeleteBtn.vue";
   import Coloris from "@/components/UI/Coloris.vue";
-  import {ref, watchEffect} from "vue";
+  import {onMounted, ref, watchEffect} from "vue";
   import {useRoute} from "vue-router";
 
 
@@ -16,6 +16,11 @@
   const imageDB = useImageDBStore();
   const route = useRoute();
   const isDoneTasksOpen = ref(false);
+
+  onMounted(async () => {
+    await listView.getTasksOrTags();
+  });
+
   watchEffect(() => {
     if (!route.params.id_list) {
       listView.loading = true;

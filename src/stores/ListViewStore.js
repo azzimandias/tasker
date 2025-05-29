@@ -34,18 +34,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
-        // первоначальная загрузка, таймаут для анимации?
-        setTimeout(() => {
-            connectSocket();
-            getTasksOrTags();
-        },300);
+        await getTasksOrTags();
     });
 
     onUnmounted(() => {
-        socket.off('taskUpdated');
-        socket.off('taskDeleted');
-        socket.off('taskCreated');
-        socket.disconnect();
+        disconnectSocket();
     });
 
     const connectSocket = async () => {
@@ -62,23 +55,23 @@ export const useListViewStore = defineStore('listViewStore', () => {
         });
         // Обработчик удаления задачи
         socket.on('taskDeleted', (taskId) => {
-            //handlePersonalListTaskDelete(taskId);
+            handlePersonalListTaskDelete(taskId);
         });
         // Обработчик создания новой задачи
         socket.on('taskCreated', (newTask) => {
-            //handlePersonalListTaskCreate(newTask);
+            handlePersonalListTaskCreate(newTask);
         });
-    }
+    };
+
+    const disconnectSocket = () => {
+        socket.off('taskUpdated');
+        socket.off('taskDeleted');
+        socket.off('taskCreated');
+        socket.disconnect();
+    };
 
     const handlePersonalListTaskUpdate = (updatedTask) => {
         console.log('Updating task:', updatedTask);
-        updatedTask.key = Math.random();
-        updatedTask.tags.forEach(tag => {
-            tag.key = Math.random();
-        });
-        updatedTask.possibleTags.forEach(tag => {
-            tag.key = Math.random();
-        });
         if (!updatedTask.is_done) {
             const index = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
             if (index !== -1) {
@@ -104,7 +97,37 @@ export const useListViewStore = defineStore('listViewStore', () => {
         }
     };
 
+    const handlePersonalListTaskDelete = (taskId) => {
+        setTimeout(() => {
+            console.log(taskId)
+            if (taskId) {
+                currentPersonalListTasks.forEach((task, idx) => {
+                    if (task.id === taskId) {
+                        currentPersonalListTasks.splice(idx,1);
+                    }
+                });
+            }
+        }, 500);
+    };
+
+    const handlePersonalListTaskCreate = (newTask) => {
+        setTimeout(() => {
+            if (newTask) {
+                const index = currentPersonalListTasks.findIndex(task => task.id === newTask.id);
+                console.log(index)
+                if (index === -1) {
+                    currentPersonalListTasks.push(newTask);
+                }
+            }
+        },500)
+    };
+
     const getTasksOrTags = async () => {
+        if (socket.connected) {
+            disconnectSocket();
+        }
+        await connectSocket();
+        loading.value = true;
         loadingSmall.value = true;
         currentPath.value = route.path;
         try {
@@ -254,7 +277,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateTask = async (task) => {
-        const response = await api.postInfo(`updateTask`, task);
+        const response = await api.postInfo(`updateTask/${task.id}`, task);
         await bigMenu.firstRequest();
     }
 

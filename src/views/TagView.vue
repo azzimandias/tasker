@@ -11,6 +11,11 @@
 
   const listView = useListViewStore();
   const route = useRoute();
+
+  onMounted(async () => {
+    await listView.getTasksOrTags();
+  });
+
   watchEffect(() => {
     if (!route.params.id_tag) {
       listView.loading = true;
