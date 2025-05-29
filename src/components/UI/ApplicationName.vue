@@ -42,11 +42,11 @@
         background-color: transparent;
     }
     .application-name__label {
-        width: auto;
+        width: 70%;
+        margin: 0 auto;
         line-height: 47px;
         font-size: 25px;
         font-weight: 600;
-        letter-spacing: 10px;
         text-transform: uppercase;
         text-align: center;
         color: #5C5D5F;
