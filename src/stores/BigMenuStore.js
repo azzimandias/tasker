@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
-import { ref, reactive, onMounted } from "vue";
+import {ref, reactive, onMounted, onUnmounted} from "vue";
 import {useListViewStore} from "@/stores/ListViewStore";
 import api from '@/api';
+import socket from "@/plugins/socket";
+
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const user = reactive({
         id:      0,
@@ -52,10 +54,31 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const is_load_personalTags  = ref(false);
 
     onMounted(async () => {
+        await connectSocket();
         await getUserInfo();
         await firstRequest();
-        await startIntervalUpdate();
     });
+
+    onUnmounted(() => {
+        socket.disconnect();
+    });
+
+    const connectSocket = async () => {
+        socket.connect();
+        socket.emit('subscribe', 'bigMenuStore');
+        socket.on('new_sort_lists_count', (new_sort_lists_count) => {
+            //console.log('New sort_lists_count:', new_sort_lists_count);
+            updSortListsCount(new_sort_lists_count);
+        });
+        socket.on('new_personal_lists_count', (new_personal_lists) => {
+            //console.log('New personal_lists:', new_personal_lists);
+            updSocketPersonalLists(new_personal_lists);
+        });
+        socket.on('new_personal_tags', (new_personal_tags) => {
+            //console.log('New personal_tags:', new_personal_tags);
+            updSocketPersonalTags(new_personal_tags);
+        });
+    }
 
     const getUserInfo = async () => {
         const userInfo = await api.getInfo('user');
@@ -66,23 +89,9 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     }
 
     const firstRequest = async () => {
-        //console.log('go')
         await getSortListsCount();
         await getPersonalLists();
         await getPersonalTags();
-    }
-    const startIntervalUpdate =  async () => {
-        const startInterval = setInterval(() => {
-            //console.log('request');
-            //lv.getTasksOrTags();
-            getSortListsCount();
-            getPersonalLists();
-            getPersonalTags();
-        },60000);
-        setTimeout(() => {
-            //console.log('stop');
-            clearInterval(startInterval);
-        }, 60 * 60000);
     }
 
     const getSortListsCount = async () => {
@@ -104,7 +113,20 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         }
     }
 
-    let r = [];
+    const updSortListsCount = (newSortListsCount) => {
+        if ((typeof newSortListsCount) === "object") {
+            is_load_sortLists.value = true;
+            newSortListsCount.forEach(item => {
+                if (item.count >= 100) {
+                    sortLists[item.id-1].count = '+99';
+                } else {
+                    sortLists[item.id-1].count = item.count;
+                }
+            });
+            is_load_sortLists.value = false;
+        }
+    }
+
     const getPersonalLists = async () => {
         try {
             is_load_personalLists.value = true;
@@ -123,6 +145,19 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             }
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    const updSocketPersonalLists = (newPersonalLists) => {
+        if ((typeof newPersonalLists) === "object" && newPersonalLists.length > 0) {
+            //console.log('start');
+            is_load_personalLists.value = true;
+            personalLists.length = 0;
+            newPersonalLists.forEach(item => {
+                item.key = Math.random();
+                personalLists.push(item);
+            });
+            is_load_personalLists.value = false;
         }
     }
 
@@ -146,6 +181,18 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             }
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    const updSocketPersonalTags = (newPersonalTags) => {
+        if ((typeof newPersonalTags) === "object" && newPersonalTags.length > 0) {
+            personalTags.length = 0;
+            personalTags.push({ id:0, name:'Все теги' });
+            newPersonalTags.forEach(item => {
+                item.key = Math.random();
+                personalTags.push(item);
+            });
+            is_load_personalTags.value = false;
         }
     }
 

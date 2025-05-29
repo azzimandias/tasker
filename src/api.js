@@ -10,6 +10,7 @@ export const HTTP = axios.create({
 
 export default {
     url: process.env.VUE_APP_API_URL,
+    prefix: 'api/',
     async getCookies() {
         HTTP.defaults.withCredentials = true;
         try {
@@ -32,7 +33,7 @@ export default {
     },
     async getInfo(path) {
         try {
-            const response = await HTTP.get(this.url + path);
+            const response = await HTTP.get(this.url + this.prefix + path);
             return await response.data;
         } catch (e) {
             console.log(e);
@@ -40,7 +41,7 @@ export default {
     },
     async getInfoWithArgs(path, args) {
         try {
-            const response = await HTTP.get(this.url + path, args);
+            const response = await HTTP.get(this.url + this.prefix + path, args);
             return await response.data;
         } catch (e) {
             console.log(e);
@@ -48,7 +49,7 @@ export default {
     },
     async postInfo(path, body) {
         try {
-            const response = await HTTP.post(this.url + path, JSON.stringify(body));
+            const response = await HTTP.post(this.url + this.prefix + path, JSON.stringify(body));
             return await response.data;
         } catch (e) {
             console.log(e);
@@ -56,7 +57,7 @@ export default {
     },
     async saveList(obj) {
         try {
-            const response = await HTTP.post(this.url + 'saveList', JSON.stringify(obj));
+            const response = await HTTP.post(this.url + this.prefix + 'saveList', JSON.stringify(obj));
             return await response.data;
         } catch (e) {
             console.log(e);
@@ -64,7 +65,7 @@ export default {
     },
     async deleteList(listId) {
         try {
-            const response = await HTTP.post(this.url + 'deleteList', +listId);
+            const response = await HTTP.post(this.url + this.prefix + 'deleteList', +listId);
             return await response.data;
         } catch (e) {
             console.log(e);
@@ -72,7 +73,7 @@ export default {
     },
     async globalSearch(searchObj) {
         try {
-            const response = await HTTP.post(this.url + 'globalSearch', searchObj);
+            const response = await HTTP.post(this.url + this.prefix + 'globalSearch', searchObj);
             return await response.data;
         } catch (e) {
             console.log(e);
