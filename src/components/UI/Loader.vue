@@ -45,8 +45,8 @@
             opacity: 1;
         }
         100% {
-            top: 0px;
-            left: 0px;
+            top: 0;
+            left: 0;
             width: 26px;
             height: 26px;
             opacity: 0;

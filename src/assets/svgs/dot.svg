@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg width="800px" height="800px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
+
+    <g fill="#C5C7CA">
+
+        <path fill-rule="evenodd" d="M0 8a8 8 0 1116 0A8 8 0 010 8zm8-6.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13z" clip-rule="evenodd"/>
+
+    </g>
+
+</svg>

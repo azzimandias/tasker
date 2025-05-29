@@ -1,17 +1,17 @@
+<script>
+  export default {
+    props: ['cl']
+  }
+</script>
+
 <template>
     <button class="top-btn" :class="cl"></button>
 </template>
 
-<script>
-export default {
-    props: ['cl']
-}
-</script>
-
 <style lang="scss">
     .top-btn {
-        width: 35px;
-        height: 35px;
+        width: 28px;
+        height: 28px;
         cursor: pointer;
         background-position: center;
         background-size: 30px 30px;
@@ -21,4 +21,5 @@ export default {
     .person { background-image: url('../../assets/svgs/person.svg'); }
     .plus { background-image: url('../../assets/svgs/plus.svg'); }
     .loup { background-image: url('../../assets/svgs/magnifying-glass.svg'); }
+    .close { background-image: url('../../assets/svgs/close.svg'); }
 </style>
