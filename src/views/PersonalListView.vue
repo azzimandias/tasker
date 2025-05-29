@@ -54,6 +54,7 @@
     <div class="workspace scroll" v-else>
       <div class="top-header">
         <ListHeader
+            :key="listView.listInfo.key"
             :list="listView.listInfo"
             :isCanChange="true"
             :top="40"
@@ -61,6 +62,7 @@
         />
         <div class="list-redact-wrapper">
           <Coloris
+              :key="listView.listInfo.key"
               :color="listView.listInfo.color"
               @onDroch="saveChangedColor"
           />

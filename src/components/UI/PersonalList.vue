@@ -36,7 +36,7 @@
          :class="{ active: props.list.id === +route.params.id_list, minimized: !isOpenBigMenu }"
          @mouseup="openList"
     >
-        <div class="personal-list__circle" :style="{ backgroundColor: props.list.color }"></div>
+        <div class="personal-list__circle" :key="Math.random()" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
         <div class="info-list__wrapper" ref="infoList">
           <InfoList

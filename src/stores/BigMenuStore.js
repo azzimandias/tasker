@@ -67,15 +67,15 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         socket.connect();
         socket.emit('subscribe', 'bigMenuStore');
         socket.on('new_sort_lists_count', (new_sort_lists_count) => {
-            console.log('New sort_lists_count:', new_sort_lists_count);
+            //console.log('New sort_lists_count:', new_sort_lists_count);
             updSortListsCount(new_sort_lists_count);
         });
         socket.on('new_personal_lists_count', (new_personal_lists) => {
-            console.log('New personal_lists:', new_personal_lists);
+            //console.log('New personal_lists:', new_personal_lists);
             updSocketPersonalLists(new_personal_lists);
         });
         socket.on('new_personal_tags', (new_personal_tags) => {
-            console.log('New personal_tags:', new_personal_tags);
+            //console.log('New personal_tags:', new_personal_tags);
             updSocketPersonalTags(new_personal_tags);
         });
     }
@@ -150,7 +150,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
 
     const updSocketPersonalLists = (newPersonalLists) => {
         if ((typeof newPersonalLists) === "object" && newPersonalLists.length > 0) {
-            console.log('start');
+            //console.log('start');
             is_load_personalLists.value = true;
             personalLists.length = 0;
             newPersonalLists.forEach(item => {

@@ -10,6 +10,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const currentPersonalListTasksDone = reactive([]);
     const currentSortListTasks = reactive([]);
     const currentListInfo = reactive({
+        key: Math.random(),
         id: '',
         name: '',
         color: '',
@@ -45,21 +46,20 @@ export const useListViewStore = defineStore('listViewStore', () => {
         if (!socket.connected) {
             socket.connect();
         }
-        // Подписываемся на обновления для текущего списка
         if (route.params.id_list) {
             socket.emit('subscribeToList', route.params.id_list);
         }
-        // Обработчик обновления задачи
         socket.on('taskUpdated', (updatedTask) => {
             handlePersonalListTaskUpdate(updatedTask);
         });
-        // Обработчик удаления задачи
         socket.on('taskDeleted', (taskId) => {
             handlePersonalListTaskDelete(taskId);
         });
-        // Обработчик создания новой задачи
         socket.on('taskCreated', (newTask) => {
             handlePersonalListTaskCreate(newTask);
+        });
+        socket.on('listUpdated', (updatedList) => {
+            handlePersonalListUpdate(updatedList);
         });
     };
 
@@ -122,6 +122,14 @@ export const useListViewStore = defineStore('listViewStore', () => {
         },500)
     };
 
+    const handlePersonalListUpdate = (updatedList) => {
+        currentListInfo.key = updatedList.key;
+        currentListInfo.id = updatedList.id;
+        currentListInfo.name = updatedList.name;
+        currentListInfo.color = updatedList.color;
+        bigMenu.firstRequest().then();
+    };
+
     const getTasksOrTags = async () => {
         if (socket.connected) {
             disconnectSocket();
@@ -163,7 +171,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateData = (arr) => {
-        console.log(arr);
+        //console.log(arr);
         if ((arr['sortList'] || arr['list'] || arr['tag']) && (arr['tasks'] || arr['tasksByList'])) {
 
             if (route.params.id_list) {
@@ -422,7 +430,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateList = async (list) => {
-        await api.postInfo(`updateList`, list);
+        await api.postInfo(`updateList/${list.id}`, list);
         await bigMenu.firstRequest();
         await getTasksOrTags();
     }
