@@ -36,6 +36,7 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: 25px 25px;
+      transition: .3s;
     }
     &.active {
       &::after {

@@ -18,6 +18,7 @@
     "flowbite-vue": "^0.1.2",
     "pinia": "^2.1.6",
     "socket.io-client": "^4.8.1",
+    "uuid": "^11.1.0",
     "v-dropdown-menu": "^2.0.4",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",

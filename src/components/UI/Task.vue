@@ -68,6 +68,7 @@
   };
 
   const hideTask = () => {
+    console.log(taskNode.value.scrollHeight)
     height.value = `${taskNode.value.scrollHeight}px`;
     taskNode.value.classList.add('hide-anim');
   };
@@ -137,13 +138,6 @@
             :deadline="props.task.deadline"
             @saveChangesDate="saveChangesDate"
         />
-<!--        <PersonalTag
-            :key="0"
-            :id_task="props.task.id"
-            :tag="{id: 0, name: '', width: '13'}"
-            :possibleTags="props.task.possibleTags"
-            :isCanCreate="true"
-        />-->
         <TagCreator
             :key="0"
             :id_task="props.task.id"

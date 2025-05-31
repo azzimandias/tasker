@@ -4,6 +4,7 @@ import {useRoute} from "vue-router";
 import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
 import socket from "@/plugins/socket";
+import { v4 as uuidv4 } from 'uuid';
 
 export const useListViewStore = defineStore('listViewStore', () => {
     const currentPersonalListTasks = reactive([]);
@@ -32,6 +33,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const request = ref('');
     const route = useRoute();
     const currentPath = ref(route.path);
+    const socketUUID = uuidv4();
     const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
@@ -49,18 +51,30 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
             if (route.params.id_list) {
                 socket.emit('subscribeToList', route.params.id_list);
+                /*socket.emit('subscribeToList', {
+                    list_id: route.params.id_list,
+                    token: socketUUID,
+                });*/
             }
             socket.on('taskUpdated', (updatedTask) => {
-                handlePersonalListTaskUpdate(updatedTask);
+                if (updatedTask.uuid !== socketUUID) {
+                    handlePersonalListTaskUpdate(updatedTask.task);
+                }
             });
-            socket.on('taskDeleted', (taskId) => {
-                handlePersonalListTaskDelete(taskId);
+            socket.on('taskDeleted', (task) => {
+                if (task.uuid !== socketUUID) {
+                    handlePersonalListTaskDelete(task.taskId);
+                }
             });
             socket.on('taskCreated', (newTask) => {
-                handlePersonalListTaskCreate(newTask);
+                if (newTask.uuid !== socketUUID) {
+                    handlePersonalListTaskCreate(newTask.task);
+                }
             });
             socket.on('listUpdated', (updatedList) => {
-                handlePersonalListUpdate(updatedList);
+                if (updatedList.uuid !== socketUUID) {
+                    handlePersonalListUpdate(updatedList.list);
+                }
             });
         } catch (e) {
             console.log(е);
@@ -78,7 +92,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const handlePersonalListTaskUpdate = (updatedTask) => {
-        console.log(`Updating task id=${updatedTask.id} on current list:`, updatedTask);
+        console.log(`Updating task id=${updatedTask.id} on current list from socket:`, updatedTask);
         if (!updatedTask.is_done) {
             const index = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
             if (index !== -1) {
@@ -105,6 +119,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const handlePersonalListTaskDelete = (taskId) => {
+        console.log('\\Delete task from websocket...')
         setTimeout(() => {
             console.log(taskId)
             if (taskId) {
@@ -118,6 +133,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const handlePersonalListTaskCreate = (newTask) => {
+        console.log('Create task from websocket...')
         setTimeout(() => {
             if (newTask) {
                 const index = currentPersonalListTasks.findIndex(task => task.id === newTask.id);
@@ -130,6 +146,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const handlePersonalListUpdate = (updatedList) => {
+        console.log('Updating list info from websocket...')
         currentListInfo.key = updatedList.key;
         currentListInfo.id = updatedList.id;
         currentListInfo.name = updatedList.name;
@@ -157,7 +174,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         }
     }
 
-    const  fetchToServer =  async () => {
+    const fetchToServer =  async () => {
         if (route.params.id_list) {
             request.value = `list?id=${route.params.id_list}`;
         } else if (route.params.name) {
@@ -292,7 +309,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateTask = async (task) => {
-        const response = await api.postInfo(`updateTask/${task.id}`, task);
+        const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
         await bigMenu.firstRequest();
     }
 
@@ -367,7 +384,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const createTask = async (task) => {
         task.id_list = currentListInfo.id;
-        const response = await api.postInfo(`createTask`, task);
+        const response = await api.postInfo(`createTask`, {task, uuid: socketUUID});
         currentPersonalListTasks.forEach((task, idx) => {
             if (!task.id) {
                 task.id = response.id;
@@ -383,6 +400,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 currentPersonalListTasks.splice(idx,1);
             }
         });
+        obj['uuid'] = socketUUID;
         await api.postInfo(`deleteTask`, obj);
         await bigMenu.firstRequest();
         await getTasksOrTags();
@@ -437,9 +455,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
 
     const updateList = async (list) => {
-        await api.postInfo(`updateList/${list.id}`, list);
+        await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
         await bigMenu.firstRequest();
-        await getTasksOrTags();
     }
 
     return {

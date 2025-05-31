@@ -3,6 +3,7 @@ import {ref, reactive, onMounted, onUnmounted} from "vue";
 import {useListViewStore} from "@/stores/ListViewStore";
 import api from '@/api';
 import socket from "@/plugins/socket";
+import {v4 as uuidv4} from "uuid";
 
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const user = reactive({
@@ -52,6 +53,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const is_load_sortLists     = ref(false);
     const is_load_personalLists = ref(false);
     const is_load_personalTags  = ref(false);
+    const socketUUID = uuidv4();
 
     onMounted(async () => {
         await connectSocket();
@@ -68,16 +70,22 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             socket.connect();
             socket.emit('subscribe', 'bigMenuStore');
             socket.on('send_new_sort_lists_count', (new_sort_lists_count) => {
-                console.log(`Updating sort lists counts:`, new_sort_lists_count);
-                updSortListsCount(new_sort_lists_count);
+                if (new_sort_lists_count.uuid !== socketUUID) {
+                    console.log(`Updating sort lists counts:`, new_sort_lists_count.message);
+                    updSortListsCount(new_sort_lists_count.message);
+                }
             });
             socket.on('send_new_personal_lists_count', (new_personal_lists) => {
-                console.log(`Updating personal lists:`, new_personal_lists);
-                updSocketPersonalLists(new_personal_lists);
+                if (new_personal_lists.uuid !== socketUUID) {
+                    console.log(`Updating personal lists:`, new_personal_lists.message);
+                    updSocketPersonalLists(new_personal_lists.message);
+                }
             });
             socket.on('send_new_personal_tags', (new_personal_tags) => {
-                console.log(`Updating personal tags:`, new_personal_tags);
-                updSocketPersonalTags(new_personal_tags);
+                if (new_personal_tags.uuid !== socketUUID) {
+                    console.log(`Updating personal tags:`, new_personal_tags.message);
+                    updSocketPersonalTags(new_personal_tags.message);
+                }
             });
 /*        } catch (e) {
             console.log(е);
@@ -105,7 +113,8 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         is_load_sortLists.value = true;
         const response = await api.getInfoWithArgs('sortLists', {
             params: {
-                user_id: user.id
+                user_id: user.id,
+                uuid: socketUUID
             }
         });
         if ((typeof response) === "object") {
@@ -139,7 +148,8 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             is_load_personalLists.value = true;
             const response = await api.getInfoWithArgs('lists', {
                 params: {
-                    user_id: user.id
+                    user_id: user.id,
+                    uuid: socketUUID
                 }
             });
             if ((typeof response) === "object" && response.length > 0) {
@@ -172,7 +182,8 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             is_load_personalTags.value = true;
             const response = await api.getInfoWithArgs('tags', {
                 params: {
-                    user_id: user.id
+                    user_id: user.id,
+                    uuid: socketUUID
                 }
             });
             if ((typeof response) === "object" && response.length > 0) {

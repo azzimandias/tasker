@@ -86,17 +86,19 @@
       >
         Выполненные
       </ListDone>
-      <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
-        <Task
-            v-for="task in listView.tasksDone"
-            :key="task.key"
-            :task="task"
-            :color="listView.listInfo.color"
-            :is_new="false"
-            @done="taskSlideToBottom"
-            v-if="listView.tasksDone.length"
-        />
-      </div>
+      <Transition name="expand">
+        <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
+          <Task
+              v-for="task in listView.tasksDone"
+              :key="task.key"
+              :task="task"
+              :color="listView.listInfo.color"
+              :is_new="false"
+              @done="taskSlideToBottom"
+              v-if="listView.tasksDone.length"
+          />
+        </div>
+      </Transition>
       <div class="empty-list__title" v-if="!listView.tasks.length && !listView.tasksDone.length"><p>Здесь пусто.</p></div>
     </div>
 
@@ -160,5 +162,18 @@
 
 .fade-leave-to {
   opacity: 0;
+}
+
+.expand-enter-active, .expand-leave-active {
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.expand-enter-from, .expand-leave-to {
+  max-height: 0;
+}
+
+.expand-enter-to, .expand-leave-from {
+  max-height: 500px;
 }
 </style>
