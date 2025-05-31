@@ -6,7 +6,8 @@ const socket = io( process.env.VUE_APP_SOCKET_URL, {
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
     transports: ['websocket'],
-    withCredentials: true
+    withCredentials: true,
+    rejectUnauthorized: false
 });
 
 export default socket;
