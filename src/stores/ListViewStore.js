@@ -43,24 +43,31 @@ export const useListViewStore = defineStore('listViewStore', () => {
     });
 
     const connectSocket = async () => {
-        if (!socket.connected) {
-            socket.connect();
+        try {
+            if (!socket.connected) {
+                socket.connect();
+            }
+            if (route.params.id_list) {
+                socket.emit('subscribeToList', route.params.id_list);
+            }
+            socket.on('taskUpdated', (updatedTask) => {
+                handlePersonalListTaskUpdate(updatedTask);
+            });
+            socket.on('taskDeleted', (taskId) => {
+                handlePersonalListTaskDelete(taskId);
+            });
+            socket.on('taskCreated', (newTask) => {
+                handlePersonalListTaskCreate(newTask);
+            });
+            socket.on('listUpdated', (updatedList) => {
+                handlePersonalListUpdate(updatedList);
+            });
+        } catch (e) {
+            console.log(е);
+            setTimeout(() => {
+                connectSocket();
+            }, 1000);
         }
-        if (route.params.id_list) {
-            socket.emit('subscribeToList', route.params.id_list);
-        }
-        socket.on('taskUpdated', (updatedTask) => {
-            handlePersonalListTaskUpdate(updatedTask);
-        });
-        socket.on('taskDeleted', (taskId) => {
-            handlePersonalListTaskDelete(taskId);
-        });
-        socket.on('taskCreated', (newTask) => {
-            handlePersonalListTaskCreate(newTask);
-        });
-        socket.on('listUpdated', (updatedList) => {
-            handlePersonalListUpdate(updatedList);
-        });
     };
 
     const disconnectSocket = () => {
