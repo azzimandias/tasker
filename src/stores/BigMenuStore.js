@@ -67,13 +67,16 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         try {
             socket.connect();
             socket.emit('subscribe', 'bigMenuStore');
-            socket.on('new_sort_lists_count', (new_sort_lists_count) => {
+            socket.on('send_new_sort_lists_count', (new_sort_lists_count) => {
+                console.log(`Updating sort lists counts:`, new_sort_lists_count);
                 updSortListsCount(new_sort_lists_count);
             });
-            socket.on('new_personal_lists_count', (new_personal_lists) => {
+            socket.on('send_new_personal_lists_count', (new_personal_lists) => {
+                console.log(`Updating personal lists:`, new_personal_lists);
                 updSocketPersonalLists(new_personal_lists);
             });
-            socket.on('new_personal_tags', (new_personal_tags) => {
+            socket.on('send_new_personal_tags', (new_personal_tags) => {
+                console.log(`Updating personal tags:`, new_personal_tags);
                 updSocketPersonalTags(new_personal_tags);
             });
         } catch (e) {

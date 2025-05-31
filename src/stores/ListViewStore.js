@@ -78,7 +78,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const handlePersonalListTaskUpdate = (updatedTask) => {
-        console.log('Updating task:', updatedTask);
+        console.log(`Updating task id=${updatedTask.id} on current list:`, updatedTask);
         if (!updatedTask.is_done) {
             const index = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
             if (index !== -1) {
