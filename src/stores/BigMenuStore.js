@@ -64,7 +64,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     });
 
     const connectSocket = async () => {
-        try {
+        /*try {*/
             socket.connect();
             socket.emit('subscribe', 'bigMenuStore');
             socket.on('send_new_sort_lists_count', (new_sort_lists_count) => {
@@ -79,12 +79,12 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
                 console.log(`Updating personal tags:`, new_personal_tags);
                 updSocketPersonalTags(new_personal_tags);
             });
-        } catch (e) {
+/*        } catch (e) {
             console.log(е);
             setTimeout(() => {
                 connectSocket();
             }, 1000);
-        }
+        }*/
     }
 
     const getUserInfo = async () => {
