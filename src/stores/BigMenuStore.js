@@ -56,8 +56,8 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const socketUUID = uuidv4();
 
     onMounted(async () => {
-        await connectSocket();
         await getUserInfo();
+        await connectSocket();
         await firstRequest();
     });
 
@@ -66,7 +66,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     });
 
     const connectSocket = async () => {
-        /*try {*/
+        try {
             socket.connect();
             socket.emit('subscribe', 'bigMenuStore');
             socket.on('send_new_sort_lists_count', (new_sort_lists_count) => {
@@ -87,12 +87,12 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
                     updSocketPersonalTags(new_personal_tags.message);
                 }
             });
-/*        } catch (e) {
+        } catch (e) {
             console.log(е);
             setTimeout(() => {
                 connectSocket();
             }, 1000);
-        }*/
+        }
     }
 
     const getUserInfo = async () => {

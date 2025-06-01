@@ -25,12 +25,14 @@
   const height = ref('');
 
   onMounted(() => {
+    height.value = `${taskNode.value.scrollHeight}px`;
+    taskNode.value.classList.add('show-anim');
     if (document.documentElement.clientWidth <= 700) {
       is_visible.value = true;
     }
   });
 
-  const saveChangesName = (name) => {saveChanges('name', name);};
+  const saveChangesName = (newName) => {saveChanges('name', name);};
 
   const saveChangesDescription = (description) => {saveChanges('description', description);};
 
@@ -86,8 +88,21 @@
     };
     listView.updateTask(update);
   }
+  const createTask = async (newName) => {
+    if (newName) {
+      const newTask = await listView.createTask({name: newName});
+    } else {
+      hideTask();
+      setTimeout(() => {
+        listView.removeNewTask();
+      }, 1000);
+    }
+  }
   const deleteTask = () => {
-    listView.deleteTask({id: props.task.id});
+    hideTask();
+    setTimeout(() => {
+      listView.deleteTask({id: props.task.id});
+    }, 1000);
   };
 </script>
 
@@ -113,6 +128,7 @@
             :taskName="props.task.name"
             :placeholder="'Задача'"
             @saveChangesName="saveChangesName"
+            @createTask="createTask"
         />
         <Flag :is_flagged="props.task.is_flagged"
               :is_visible="is_visible"
@@ -165,11 +181,32 @@
     flex-direction: column;
     justify-content: center;
     padding: 5px 5px 5px 0;
+    transition: .3s;
+    &.show-anim {
+      animation: show .5s ease;
+    }
     &.hide-anim {
       animation: hide .5s ease forwards;
     }
     &.done {
       opacity: .6;
+    }
+  }
+  @keyframes show {
+    0% {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+    }
+    50% {
+      opacity: 0;
+      height: v-bind(height);
+      padding: 5px 5px 5px 0;
+    }
+    100% {
+      opacity: 1;
+      height: v-bind(height);
+      padding: 5px 5px 5px 0;
     }
   }
   @keyframes hide {

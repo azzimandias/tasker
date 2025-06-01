@@ -34,15 +34,30 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const route = useRoute();
     const currentPath = ref(route.path);
     const socketUUID = uuidv4();
+    const user = reactive({
+        id:      0,
+        email:   '',
+        name:    '',
+        surname: '',
+    });
     const bigMenu = useBigMenuStore();
 
     onMounted(async () => {
+        await getUserInfo();
         await getTasksOrTags();
     });
 
     onUnmounted(() => {
         disconnectSocket();
     });
+
+    const getUserInfo = async () => {
+        const userInfo = await api.getInfo('user');
+        user.id      = userInfo.id;
+        user.email   = userInfo.email;
+        user.name    = userInfo.name;
+        user.surname = userInfo.surname;
+    }
 
     const connectSocket = async () => {
         try {
@@ -51,10 +66,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
             if (route.params.id_list) {
                 socket.emit('subscribeToList', route.params.id_list);
-                /*socket.emit('subscribeToList', {
-                    list_id: route.params.id_list,
-                    token: socketUUID,
-                });*/
             }
             socket.on('taskUpdated', (updatedTask) => {
                 if (updatedTask.uuid !== socketUUID) {
@@ -155,17 +166,14 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const getTasksOrTags = async () => {
-        if (socket.connected) {
-            disconnectSocket();
-        }
         await connectSocket();
         loading.value = true;
         loadingSmall.value = true;
         currentPath.value = route.path;
         try {
-            is_somethingWrong.value = false;
             await fetchToServer();
             loadingSmall.value = false;
+            is_somethingWrong.value = false;
         } catch (e) {
             console.log(e);
             is_somethingWrong.value = true;
@@ -185,7 +193,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         if (request.value) {
             const response = await api.getInfoWithArgs(request.value, {
                 params: {
-                    user_id: bigMenu.user.id
+                    user_id: user.id
                 }
             });
             setTimeout(() => {
@@ -350,7 +358,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
             });
         }
         sortTasksById();
-        //sortTasksByDone();
     };
 
     const sortTasksById = () => {
@@ -363,14 +370,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
             if (a.id > b.id) return 1;
             if (a.id === b.id) return 0;
             if (a.id < b.id) return -1;
-        });
-    };
-
-    const sortTasksByDone = () => {
-        currentPersonalListTasks.sort((a, b) => {
-            if (a.is_done > b.is_done) return 1;
-            if (a.is_done === b.is_done) return 0;
-            if (a.is_done < b.is_done) return -1;
         });
     };
 
@@ -403,7 +402,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         obj['uuid'] = socketUUID;
         await api.postInfo(`deleteTask`, obj);
         await bigMenu.firstRequest();
-        await getTasksOrTags();
     }
 
     const findTasks = async (searchObj) => {
@@ -456,13 +454,19 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const updateList = async (list) => {
         await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
+        if (list.name) {
+            currentListInfo.name = list.name;
+        } else {
+            currentListInfo.color = list.color;
+        }
+        currentListInfo.key = Math.random();
         await bigMenu.firstRequest();
     }
 
     return {
         tasks: currentPersonalListTasks,
         tasksDone: currentPersonalListTasksDone,
-        stasks: currentSortListTasks,
+        sortTasks: currentSortListTasks,
         listInfo: currentListInfo,
         sortListInfo: currentSortListInfo,
         searchResult,

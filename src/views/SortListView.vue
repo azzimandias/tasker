@@ -22,7 +22,7 @@
 
   // под вопросом, мб уже и не нужно оставить только listView.updateSortListTasks();
   const refreshSortLists = (obj) => {
-    listView.updateSortListTasks();
+    //listView.updateSortListTasks();
   };
 
   const format = (date) => date < 10 ? `0${date}` : date.toString();
@@ -49,9 +49,9 @@
       />
       <div class="task__container">
         <div class="list-tasks__wrapper"
-             v-for="stask in listView.stasks"
+             v-for="stask in listView.sortTasks"
              :key="stask.key"
-             v-if="listView.stasks.length"
+             v-if="listView.sortTasks.length"
         >
           <ListHeader :list="stask.personal_list"
                       :isRouter="true"

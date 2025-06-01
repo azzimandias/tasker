@@ -4,7 +4,7 @@
 
   const listView = useListViewStore();
   const taskNode = ref(null);
-  const emit = defineEmits(['saveChangesName']);
+  const emit = defineEmits(['saveChangesName', 'createTask']);
   const props = defineProps({
     id: Number,
     color: String,
@@ -28,11 +28,7 @@
     else saveChanges();
   };
   const createTask = async () => {
-    if (taskName) {
-      const newTask = await listView.createTask({name: taskName});
-    } else {
-      listView.removeNewTask();
-    }
+    emit('createTask',taskName);
   }
   const saveChanges = () => {
     if (props.taskName !== taskName) {
