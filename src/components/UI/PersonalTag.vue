@@ -65,7 +65,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
         tagWrapper.value.classList.remove('show');
         tagWrapper.value.classList.add('hide');
         setTimeout(() => {
-          listView.deleteTagTask({tag_id: props.tag.id, task_id: props.id_task});
+          listView.deleteTagTask({tag_id: props.tag.id, tag_name: props.tag.name, task_id: props.id_task});
         }, 300);
       }
     }

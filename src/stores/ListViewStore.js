@@ -447,15 +447,26 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     const handleAddTagToTask = (tagToAdd, task_id) => {
-        const taskIdx = currentPersonalListTasks.findIndex(task => task.id === task_id);
-        if (taskIdx >= 0) {
-            currentPersonalListTasks[taskIdx].tags.push(tagToAdd);
-        } else {
-            const taskIdx = currentPersonalListTasksDone.findIndex(task => task.id === task_id);
-            if (taskIdx >= 0) {
-                currentPersonalListTasksDone[taskIdx].tags.push(tagToAdd);
+        const taskLists = [currentPersonalListTasks, currentPersonalListTasksDone];
+
+        for (const taskList of taskLists) {
+            const taskIdx = taskList.findIndex(task => task.id === task_id);
+            if (taskIdx === -1) continue;
+            const task = taskList[taskIdx];
+            if (!task.tags.some(tag => tag.id === tagToAdd.id)) {
+                task.tags = [...task.tags, tagToAdd];
+                task.possibleTags = task.possibleTags.filter(tag => tag.id !== tagToAdd.id);
+                /*task.possibleTags = task.possibleTags.map(tag => ({
+                    ...tag,
+                    key: Math.random()
+                }));*/
+                console.log('Updated possibleTags with new keys:', task.possibleTags);
+            } else {
+                console.warn('Tag already exists in task tags');
             }
+            return;
         }
+        console.error(`Task with id ${task_id} not found`);
     };
 
     const updateTag = async (tag) => {
@@ -474,10 +485,20 @@ export const useListViewStore = defineStore('listViewStore', () => {
         const taskIndex = currentPersonalListTasks.findIndex(task => task.id === tagDelInfo.task_id);
         if (taskIndex !== -1) {
             currentPersonalListTasks[taskIndex].tags = currentPersonalListTasks[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.tag_id);
+            currentPersonalListTasks[taskIndex].possibleTags.push({
+                key: Math.random(),
+                id: tagDelInfo.tag_id,
+                name: tagDelInfo.tag_name
+            });
         } else {
             const taskIndex = currentPersonalListTasksDone.findIndex(task => task.id === tagDelInfo.task_id);
             if (taskIndex !== -1) {
                 currentPersonalListTasksDone[taskIndex].tags = currentPersonalListTasksDone[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.tag_id);
+                currentPersonalListTasks[taskIndex].possibleTags.push({
+                    key: Math.random(),
+                    id: tagDelInfo.tag_id,
+                    name: tagDelInfo.tag_name
+                });
             }
         }
     };
