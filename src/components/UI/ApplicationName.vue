@@ -13,10 +13,10 @@
   watch(isOpenBigMenu, (newVal) => {
     if (!newVal) {
       applicationNameLabel.value.classList.add('hidden');
-      closeOpen.value.classList.add('hidden');
+      closeOpen.value.classList.add('minimized');
     } else {
       applicationNameLabel.value.classList.remove('hidden');
-      closeOpen.value.classList.remove('hidden');
+      closeOpen.value.classList.remove('minimized');
     }
   });
 </script>
@@ -67,7 +67,7 @@
       background-position: center;
       cursor: pointer;
       transition: .3s;
-      &.hidden {
+      &.minimized {
         transform: scaleX(-1);
       }
     }

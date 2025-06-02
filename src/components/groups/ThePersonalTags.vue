@@ -3,13 +3,14 @@
   import { useBigMenuStore } from "@/stores/BigMenuStore";
   import SectionHeader from '../UI/SectionHeader.vue';
   import PersonalTag from '@/components/UI/PersonalTag.vue';
+  import {inject, watch} from "vue";
 
   const bigMenuStore = useBigMenuStore();
-
+  const isOpenBigMenu = inject('isOpenBigMenu');
 </script>
 
 <template>
-    <div class="personal-tags" v-if="bigMenuStore.personalTags.length > 1">
+    <div class="personal-tags" :class="{hidden: !isOpenBigMenu}" v-if="bigMenuStore.personalTags.length > 1">
         <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
         <div class="personal-tags__container scroll">
             <PersonalTag
@@ -33,5 +34,8 @@
         flex-wrap: wrap;
         //padding: 6px 15px 6px 6px;
         max-height: 205px;
+    }
+    .hidden {
+      display: none;
     }
 </style>

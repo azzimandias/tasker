@@ -15,18 +15,29 @@
   const width = ref('15ch');
   const newName = ref('');
   const resize = () => {
-    const hiddenSpan = document.createElement('span');
-    hiddenSpan.style.visibility = 'hidden';
-    hiddenSpan.style.position = 'absolute';
-    hiddenSpan.style.whiteSpace = 'pre';
-    hiddenSpan.style.fontSize = '13px';
-    hiddenSpan.style.padding = '5px 8px';
-    hiddenSpan.style.fontFamily = 'Avenir, Helvetica, Arial, sans-serif';
-    hiddenSpan.textContent = newName.value || ' ';
-
-    document.body.appendChild(hiddenSpan);
-    width.value = `${Math.max(hiddenSpan.scrollWidth, 10)}px`;
-    document.body.removeChild(hiddenSpan);
+    console.log('resize')
+    if (!tag.value.value) return;
+    requestAnimationFrame(() => {
+      let hiddenSpan = document.getElementById('hidden-span-helper');
+      if (!hiddenSpan) {
+        hiddenSpan = document.createElement('span');
+        hiddenSpan.id = 'hidden-span-helper';
+        hiddenSpan.style.cssText = `
+          visibility: hidden;
+          position: absolute;
+          white-space: pre;
+          font-size: 13px;
+          padding: 5px 8px;
+          font-family: Avenir, Helvetica, Arial, sans-serif;
+          top: -9999px;
+          left: -9999px;
+        `;
+        document.body.appendChild(hiddenSpan);
+      }
+      hiddenSpan.textContent = tag.value.value || ' ';
+      const calculatedWidth = Math.max(hiddenSpan.scrollWidth + 2, 15);
+      width.value = `${calculatedWidth}px`;
+    });
   };
 
   const openTagList = ref(false);
@@ -55,7 +66,7 @@
     }
   };
   const addTagToTask = async (tagToAdd) => {
-    const addTag = await listView.addTagToTask({tag_id: tagToAdd.id, task_id: props.id_task});
+    const addTag = await listView.addTagToTask({tag_id: tagToAdd.id, tag_name: tagToAdd.name, task_id: props.id_task});
     tag.value.value = '';
     resize();
   };
@@ -69,9 +80,9 @@
 </script>
 
 <template>
-  <div class="personal-tag__wrapper">
+  <div class="personal-tag__wrapper visible">
     <input type="text"
-           class="personal-tag"
+           class="personal-tag visible"
            v-model="newName"
            :placeholder="'Добавить тег?'"
            @focus="openTagList = true;"
@@ -97,21 +108,49 @@
 </template>
 
 <style scoped lang="scss">
-  .personal-tag__wrapper .personal-tag {
-    min-width: 15ch;
-    height: 28px;
-    font-size: 13px;
-    padding: 5px 8px;
-    border-radius: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    transition: .3s;
-    &:active {
-      opacity: 0.8;
-    }
-    input { padding: 0; }
+.personal-tag__wrapper .personal-tag {
+  width: auto;
+  height: 28px;
+  font-size: 13px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: .3s;
+  &:active {
+    opacity: 0.8;
   }
+  &.visible {
+    opacity: 1;
+  }
+  &.show {
+    animation: show .3s forwards;
+  }
+  &.hide {
+    animation: hide .3s forwards;
+  }
+  input { padding: 0; }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
   .personal-tag__list {
     position: absolute;

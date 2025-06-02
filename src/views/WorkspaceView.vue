@@ -2,12 +2,28 @@
   import TheBigMenu from '@/components/groups/TheBigMenu.vue';
   import TheTasker from '@/components/groups/TheTasker.vue';
   import {useImageDBStore} from "@/stores/imageDBStore";
-  import {provide, ref, watch} from "vue";
+  import {onMounted, provide, ref, watch} from "vue";
+  import api from "@/api";
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
+  import {useListViewStore} from "@/stores/ListViewStore";
   const imageDB = useImageDBStore();
 
   const workspace = ref(null);
   const isOpenBigMenu = ref(true);
   provide('isOpenBigMenu', isOpenBigMenu);
+
+  const bigMenuStore = useBigMenuStore();
+  const listViewStore = useListViewStore();
+
+  onMounted(() => {
+    getUserInfo();
+  });
+
+  const getUserInfo = async () => {
+    const userInfo =  await api.getInfo('user');
+    bigMenuStore.setUserInfo(userInfo);
+    listViewStore.setUserInfo(userInfo);
+  }
 
   watch(isOpenBigMenu, (newVal) => {
     if (!newVal) {

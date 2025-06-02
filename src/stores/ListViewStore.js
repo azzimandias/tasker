@@ -7,6 +7,12 @@ import socket from "@/plugins/socket";
 import { v4 as uuidv4 } from 'uuid';
 
 export const useListViewStore = defineStore('listViewStore', () => {
+    const user = reactive({
+        id:      0,
+        email:   '',
+        name:    '',
+        surname: '',
+    });
     const currentPersonalListTasks = reactive([]);
     const currentPersonalListTasksDone = reactive([]);
     const currentSortListTasks = reactive([]);
@@ -34,30 +40,23 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const route = useRoute();
     const currentPath = ref(route.path);
     const socketUUID = uuidv4();
-    const user = reactive({
-        id:      0,
-        email:   '',
-        name:    '',
-        surname: '',
-    });
     const bigMenu = useBigMenuStore();
-
-    onMounted(async () => {
-        await getUserInfo();
-        await getTasksOrTags();
-    });
 
     onUnmounted(() => {
         disconnectSocket();
     });
 
-    const getUserInfo = async () => {
-        const userInfo = await api.getInfo('user');
+    const setUserInfo = (userInfo) => {
         user.id      = userInfo.id;
         user.email   = userInfo.email;
         user.name    = userInfo.name;
         user.surname = userInfo.surname;
-    }
+        initialize().then();
+    };
+
+    const initialize = async () => {
+        await getTasksOrTags();
+    };
 
     const connectSocket = async () => {
         try {
@@ -180,7 +179,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             loading.value = false;
             loadingSmall.value = false;
         }
-    }
+    };
 
     const fetchToServer =  async () => {
         if (route.params.id_list) {
@@ -200,7 +199,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 updateData(response);
             }, 300);
         }
-    }
+    };
 
     const updateData = (arr) => {
         //console.log(arr);
@@ -292,7 +291,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             loading.value = false;
             loadingSmall.value = false;
         }
-    }
+    };
 
     const clearTasks = (id) => {
         let i = 0;
@@ -310,16 +309,16 @@ export const useListViewStore = defineStore('listViewStore', () => {
         if (!i) {
             currentSortListTasks.length = 0;
         }
-    }
+    };
 
     const updateSortListTasks = async () => {
         await getTasksOrTags();
-    }
+    };
 
     const updateTask = async (task) => {
         const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
         await bigMenu.firstRequest();
-    }
+    };
 
     const addNewTask = () => {
         currentPersonalListTasks.push({
@@ -402,7 +401,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         obj['uuid'] = socketUUID;
         await api.postInfo(`deleteTask`, obj);
         await bigMenu.firstRequest();
-    }
+    };
 
     const findTasks = async (searchObj) => {
         loading.value = true;
@@ -419,38 +418,69 @@ export const useListViewStore = defineStore('listViewStore', () => {
             loading.value = false;
             is_somethingWrong.value = true;
         }
-    }
+    };
 
     const clearSearchTasks = () => {
         searchResult.length = 0;
-    }
+    };
 
     const addTagToTask = async (tagToTask) => {
         const response = await api.postInfo(`addTagToTask`, tagToTask);
+        handleAddTagToTask({
+            key: Math.random(),
+            id: tagToTask.tag_id,
+            name: tagToTask.tag_name,
+        }, tagToTask.task_id);
         await bigMenu.firstRequest();
-        await getTasksOrTags();
         return response;
-    }
+    };
 
     const createTag = async (tag) => {
         const response = await api.postInfo(`createTag`, tag);
+        handleAddTagToTask({
+            key: Math.random(),
+            id: response.id,
+            name: response.name,
+        }, tag.task_id);
         await bigMenu.firstRequest();
-        await getTasksOrTags();
         return response;
-    }
+    };
+
+    const handleAddTagToTask = (tagToAdd, task_id) => {
+        const taskIdx = currentPersonalListTasks.findIndex(task => task.id === task_id);
+        if (taskIdx) {
+            currentPersonalListTasks[taskIdx].tags.push(tagToAdd);
+        } else {
+            const taskIdx = currentPersonalListTasksDone.findIndex(task => task.id === task_id);
+            if (taskIdx) {
+                currentPersonalListTasksDone[taskIdx].tags.push(tagToAdd);
+            }
+        }
+    };
 
     const updateTag = async (tag) => {
         const response = await api.postInfo(`updateTag`, tag);
         await bigMenu.firstRequest();
-        await getTasksOrTags();
         return response;
-    }
+    };
 
     const deleteTagTask = async (tag) => {
         await api.postInfo(`deleteTagTask`, tag);
+        handleDeleteTagTask(tag);
         await bigMenu.firstRequest();
-        await getTasksOrTags();
-    }
+    };
+
+    const handleDeleteTagTask = (tagDelInfo) => {
+        const taskIndex = currentPersonalListTasks.findIndex(task => task.id === tagDelInfo.task_id);
+        if (taskIndex !== -1) {
+            currentPersonalListTasks[taskIndex].tags = currentPersonalListTasks[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.tag_id);
+        } else {
+            const taskIndex = currentPersonalListTasksDone.findIndex(task => task.id === tagDelInfo.task_id);
+            if (taskIndex !== -1) {
+                currentPersonalListTasksDone[taskIndex].tags = currentPersonalListTasksDone[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.tag_id);
+            }
+        }
+    };
 
     const updateList = async (list) => {
         await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
@@ -461,7 +491,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         }
         currentListInfo.key = Math.random();
         await bigMenu.firstRequest();
-    }
+    };
 
     return {
         tasks: currentPersonalListTasks,
@@ -477,6 +507,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         tags,
         currentTag,
         currentPath,
+        setUserInfo,
         getTasksOrTags,
         updateTask,
         addNewTask,

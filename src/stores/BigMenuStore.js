@@ -55,15 +55,22 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const is_load_personalTags  = ref(false);
     const socketUUID = uuidv4();
 
-    onMounted(async () => {
-        await getUserInfo();
-        await connectSocket();
-        await firstRequest();
-    });
-
     onUnmounted(() => {
         socket.disconnect();
     });
+
+    const setUserInfo = (userInfo) => {
+        user.id      = userInfo.id;
+        user.email   = userInfo.email;
+        user.name    = userInfo.name;
+        user.surname = userInfo.surname;
+        initialize().then();
+    }
+
+    const initialize = async () => {
+        await connectSocket();
+        await firstRequest();
+    };
 
     const connectSocket = async () => {
         try {
@@ -93,15 +100,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
                 connectSocket();
             }, 1000);
         }
-    }
-
-    const getUserInfo = async () => {
-        const userInfo = await api.getInfo('user');
-        user.id      = userInfo.id;
-        user.email   = userInfo.email;
-        user.name    = userInfo.name;
-        user.surname = userInfo.surname;
-    }
+    };
 
     const firstRequest = async () => {
         await getSortListsCount();
@@ -230,6 +229,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
         personalTags, is_load_personalTags, user,
-        firstRequest, addNewList, saveList, deleteList, getUserInfo
+        setUserInfo, firstRequest, addNewList, saveList, deleteList,
     };
 });

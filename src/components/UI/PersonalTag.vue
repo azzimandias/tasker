@@ -14,7 +14,9 @@ import {onMounted, reactive, ref, watch} from 'vue';
 
   const route = useRoute();
   const name = ref(props.tag.name);
+  const tagWrapper = ref(null);
   const tag = ref(null);
+  const height = ref('');
   const listView = useListViewStore();
 
   const needHash = () => {
@@ -29,25 +31,42 @@ import {onMounted, reactive, ref, watch} from 'vue';
 /* + can change */
   const width = ref(props.tag.name ? String(Number(props.tag.name.length) + 2) + 'ch' : 15 + 'ch');
   const resize = () => {
-    const hiddenSpan = document.createElement('span');
-    hiddenSpan.style.visibility = 'hidden';
-    hiddenSpan.style.position = 'absolute';
-    hiddenSpan.style.whiteSpace = 'pre';
-    hiddenSpan.style.fontSize = '13px';
-    hiddenSpan.style.padding = '5px 8px';
-    hiddenSpan.style.fontFamily = 'Avenir, Helvetica, Arial, sans-serif';
-    hiddenSpan.textContent = tag.value.value || ' ';
-
-    document.body.appendChild(hiddenSpan);
-    width.value = `${Math.max(hiddenSpan.scrollWidth, 10)}px`;
-    document.body.removeChild(hiddenSpan);
+    console.log('resize')
+    if (!tag.value.value) return;
+    requestAnimationFrame(() => {
+      let hiddenSpan = document.getElementById('hidden-span-helper');
+      if (!hiddenSpan) {
+        hiddenSpan = document.createElement('span');
+        hiddenSpan.id = 'hidden-span-helper';
+        hiddenSpan.style.cssText = `
+          visibility: hidden;
+          position: absolute;
+          white-space: pre;
+          font-size: 13px;
+          padding: 5px 8px;
+          font-family: Avenir, Helvetica, Arial, sans-serif;
+          top: -9999px;
+          left: -9999px;
+        `;
+        document.body.appendChild(hiddenSpan);
+      }
+      hiddenSpan.textContent = tag.value.value || ' ';
+      const calculatedWidth = Math.max(hiddenSpan.scrollWidth + 2, 15);
+      width.value = `${calculatedWidth}px`;
+    });
   };
   const changeTag = async () => {
     if (tag.value) { // needed for dblclick
       if (tag.value.value.trim()) {
         const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: tag.value.value.trim()});
       } else {
-        await listView.deleteTagTask({tag_id: props.tag.id, task_id: props.id_task});
+        height.value = `${tagWrapper.value.scrollHeight}px`;
+        console.log(height.value)
+        tagWrapper.value.classList.remove('show');
+        tagWrapper.value.classList.add('hide');
+        setTimeout(() => {
+          listView.deleteTagTask({tag_id: props.tag.id, task_id: props.id_task});
+        }, 300);
       }
     }
   };
@@ -60,10 +79,13 @@ import {onMounted, reactive, ref, watch} from 'vue';
 
 <template>
   <div v-if="props.isCanChange"
-       class="personal-tag__wrapper"
+       class="personal-tag__wrapper show"
        @dblclick="sortByTag"
   >
-    <div class="personal-tag hash" :class="{ active: +props.tag.id === +listView.currentTag.id }">
+    <div class="personal-tag show hash"
+         :class="{ active: +props.tag.id === +listView.currentTag.id }"
+         ref="tagWrapper"
+    >
       <input type="text"
              v-model="name"
              @blur="changeTag"
@@ -78,7 +100,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
   <div v-else-if="props.isHeader"
        class="tag-header"
   >
-    <div class="personal-tag hash" :class="{
+    <div class="personal-tag visible hash" :class="{
                                       active: +props.tag.id === +listView.currentTag.id,
                                       blank: !props.tag.id,
                                    }"
@@ -96,13 +118,13 @@ import {onMounted, reactive, ref, watch} from 'vue';
     </div>
   </div>
 
-  <div v-else-if="props.isRoute" class="personal-tag__wrapper">
+  <div v-else-if="props.isRoute" class="personal-tag__wrapper visible">
     <router-link :to="`/workspace/tag=${props.tag.id}`">
-      <div class="personal-tag" :class="{ active: +props.tag.id === +route.params.id_tag }">{{ name }}</div>
+      <div class="personal-tag visible" :class="{ active: +props.tag.id === +route.params.id_tag }">{{ name }}</div>
     </router-link>
   </div>
 
-  <div v-else class="personal-tag__wrapper">
+  <div v-else class="personal-tag__wrapper visible">
     <div class="personal-tag-average">{{ name }}</div>
   </div>
 </template>
@@ -121,11 +143,45 @@ import {onMounted, reactive, ref, watch} from 'vue';
         margin-right: 5px;
         margin-bottom: 5px;
         cursor: pointer;
+        opacity: 0;
         transition: .3s;
         &:active {
           opacity: 0.8;
         }
+        &.visible {
+          opacity: 1;
+        }
+        &.show {
+          animation: show .3s forwards;
+        }
+        &.hide {
+          animation: hide .3s forwards;
+        }
         input { padding: 0; }
+    }
+
+    @keyframes show {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes hide {
+      0% {
+        opacity: 1;
+        height: v-bind(height);
+      }
+      50% {
+        opacity: 0;
+        height: v-bind(height);
+      }
+      100% {
+        opacity: 0;
+        height: 0;
+      }
     }
 
     .personal-tag-average {
