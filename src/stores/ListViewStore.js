@@ -448,11 +448,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const handleAddTagToTask = (tagToAdd, task_id) => {
         const taskIdx = currentPersonalListTasks.findIndex(task => task.id === task_id);
-        if (taskIdx) {
+        if (taskIdx >= 0) {
             currentPersonalListTasks[taskIdx].tags.push(tagToAdd);
         } else {
             const taskIdx = currentPersonalListTasksDone.findIndex(task => task.id === task_id);
-            if (taskIdx) {
+            if (taskIdx >= 0) {
                 currentPersonalListTasksDone[taskIdx].tags.push(tagToAdd);
             }
         }
