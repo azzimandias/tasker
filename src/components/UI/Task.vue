@@ -32,7 +32,7 @@
     }
   });
 
-  const saveChangesName = (newName) => {saveChanges('name', name);};
+  const saveChangesName = (newName) => {saveChanges('name', newName);};
 
   const saveChangesDescription = (description) => {saveChanges('description', description);};
 
