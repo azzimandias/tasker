@@ -11,35 +11,7 @@
 
   const tag = ref(null);
   const listView = useListViewStore();
-
-  const width = ref('15ch');
   const newName = ref('');
-  const resize = () => {
-    console.log('resize')
-    if (!tag.value.value) return;
-    requestAnimationFrame(() => {
-      let hiddenSpan = document.getElementById('hidden-span-helper');
-      if (!hiddenSpan) {
-        hiddenSpan = document.createElement('span');
-        hiddenSpan.id = 'hidden-span-helper';
-        hiddenSpan.style.cssText = `
-          visibility: hidden;
-          position: absolute;
-          white-space: pre;
-          font-size: 13px;
-          padding: 5px 8px;
-          font-family: Avenir, Helvetica, Arial, sans-serif;
-          top: -9999px;
-          left: -9999px;
-        `;
-        document.body.appendChild(hiddenSpan);
-      }
-      hiddenSpan.textContent = tag.value.value || ' ';
-      const calculatedWidth = Math.max(hiddenSpan.scrollWidth + 2, 15);
-      width.value = `${calculatedWidth}px`;
-    });
-  };
-
   const openTagList = ref(false);
   const possibleTags = ref(props.possibleTags);
 
@@ -57,13 +29,9 @@
       createTag();
     }
   };
-  const createTag = async () => {
+  const createTag = async (newName) => {
     openTagList.value = false;
-    if (tag.value && tag.value.value.trim()) {
-      const newTag = await listView.createTag({name: tag.value.value.trim(), task_id: props.id_task});
-      tag.value.value = '';
-      resize();
-    }
+    const newTag = await listView.createTag({name: newName, task_id: props.id_task});
   };
   const addTagToTask = async (tagToAdd) => {
     const addTag = await listView.addTagToTask({tag_id: tagToAdd.id, tag_name: tagToAdd.name, task_id: props.id_task});
@@ -81,16 +49,17 @@
 
 <template>
   <div class="personal-tag__wrapper visible">
-    <input type="text"
-           class="personal-tag visible"
-           v-model="newName"
-           :placeholder="'Добавить тег?'"
-           @focus="openTagList = true;"
-           @blur="canBlur"
-           @keyup.enter="maybeCanAddTag"
-           @keyup="resize"
-           :style="{width: width}"
-           ref="tag"
+    <PersonalTag
+        :key="Math.random()"
+        :id_task="props.id_task"
+        :tag="{
+          id: 0,
+          name: newName,
+        }"
+        :isCanCreate="true"
+        :width="'15ch'"
+        :placeholder="'Добавить тег?'"
+        @create="createTag"
     />
     <div class="personal-tag__list"
          :class="{ active: openTagList }"
@@ -100,8 +69,8 @@
             v-if="tag.key"
             :key="tag.key"
             :tag="tag"
-            @click="addTagToTask(tag)"
-        />
+
+        /><!--            @click="addTagToTask(tag)"-->
       </div>
     </div>
   </div>

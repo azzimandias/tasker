@@ -345,22 +345,32 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* - TAG */
     /* + TAG replacement */
     const handleAddTagToTask = (tagToAdd, task_id) => {
-        const taskLists = [currentPersonalListTasks, currentPersonalListTasksDone];
+        [currentPersonalListTasks, currentPersonalListTasksDone].forEach(taskList => {
+            taskList.forEach(task => {
+                if (task.id !== task_id &&
+                    !task.possibleTags.some(tag => tag.id === tagToAdd.id)) {
+                    // Для реактивности создаем новый массив
+                    task.possibleTags = [...task.possibleTags, tagToAdd];
+                }
+            });
+        });
 
-        for (const taskList of taskLists) {
-            const taskIdx = taskList.findIndex(task => task.id === task_id);
-            if (taskIdx === -1) continue;
-            const task = taskList[taskIdx];
-            if (!task.tags.some(tag => tag.id === tagToAdd.id)) {
-                task.tags = [...task.tags, tagToAdd];
-                task.possibleTags = task.possibleTags.filter(tag => tag.id !== tagToAdd.id);
-                console.log('Updated possibleTags with new keys:', task.possibleTags);
-            } else {
-                console.warn('Tag already exists in task tags');
-            }
+        const targetTask = [...currentPersonalListTasks, ...currentPersonalListTasksDone]
+            .find(task => task.id === task_id);
+
+        if (!targetTask) {
+            console.error(`Task with id ${task_id} not found`);
             return;
         }
-        console.error(`Task with id ${task_id} not found`);
+
+        if (targetTask.tags.some(tag => tag.id === tagToAdd.id)) {
+            console.warn('Tag already exists in task tags');
+            return;
+        }
+
+        targetTask.tags = [...targetTask.tags, tagToAdd];
+        targetTask.possibleTags = targetTask.possibleTags.filter(tag => tag.id !== tagToAdd.id);
+        console.log('Updated task:', targetTask);
     };
     const handleDeleteTagTask = (tagDelInfo) => {
         const taskIndex = currentPersonalListTasks.findIndex(task => task.id === tagDelInfo.task_id);

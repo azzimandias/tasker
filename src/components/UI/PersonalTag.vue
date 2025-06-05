@@ -8,9 +8,14 @@ import {onMounted, reactive, ref, watch} from 'vue';
     id_task: Number,
     tag: Object,
     isCanChange: Boolean,
+    isCanCreate: Boolean,
     isRoute: Boolean,
     isHeader: Boolean,
+    width: String,
+    placeholder: String,
   });
+
+  const emit = defineEmits(["create"]);
 
   const route = useRoute();
   const name = ref(props.tag.name);
@@ -18,21 +23,21 @@ import {onMounted, reactive, ref, watch} from 'vue';
   const tag = ref(null);
   const height = ref('');
   const listView = useListViewStore();
+  const width = ref(props.width? props.width : '1px');
 
+  onMounted(() => {
+    resize();
+    needHash();
+  });
   const needHash = () => {
     if(props.tag.id !== 0 && !props.isCanChange && !props.isHeader) {
       name.value = `#${props.tag.name}`;
     }
   };
-  onMounted(() => {
-    needHash();
-  });
 
 /* + can change */
-  const width = ref(props.tag.name ? String(Number(props.tag.name.length) + 2) + 'ch' : 15 + 'ch');
   const resize = () => {
-    console.log('resize')
-    if (!tag.value.value) return;
+    if (!tag.value || !tag.value.value) return;
     requestAnimationFrame(() => {
       let hiddenSpan = document.getElementById('hidden-span-helper');
       if (!hiddenSpan) {
@@ -43,7 +48,6 @@ import {onMounted, reactive, ref, watch} from 'vue';
           position: absolute;
           white-space: pre;
           font-size: 13px;
-          padding: 5px 8px;
           font-family: Avenir, Helvetica, Arial, sans-serif;
           top: -9999px;
           left: -9999px;
@@ -51,25 +55,31 @@ import {onMounted, reactive, ref, watch} from 'vue';
         document.body.appendChild(hiddenSpan);
       }
       hiddenSpan.textContent = tag.value.value || ' ';
-      const calculatedWidth = Math.max(hiddenSpan.scrollWidth + 2, 15);
+      const calculatedWidth = hiddenSpan.scrollWidth;
       width.value = `${calculatedWidth}px`;
     });
   };
   const changeTag = async () => {
-    if (tag.value) { // needed for dblclick
-      if (tag.value.value.trim()) {
+    if (tag.value && tag.value.value.trim()) { // needed for dblclick
+      if (tag.value.value.trim() !== name.value) {
         const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: tag.value.value.trim()});
-      } else {
-        height.value = `${tagWrapper.value.scrollHeight}px`;
-        console.log(height.value)
-        tagWrapper.value.classList.remove('show');
-        tagWrapper.value.classList.add('hide');
-        setTimeout(() => {
-          listView.deleteTagTask({tag_id: props.tag.id, tag_name: props.tag.name, task_id: props.id_task});
-        }, 300);
       }
+    } else {
+      height.value = `${tagWrapper.value.scrollHeight}px`;
+      console.log(height.value)
+      tagWrapper.value.classList.remove('show');
+      tagWrapper.value.classList.add('hide');
+      setTimeout(() => {
+        listView.deleteTagTask({tag_id: props.tag.id, tag_name: props.tag.name, task_id: props.id_task});
+      }, 300);
     }
   };
+  const crateTag = () => {
+    if (tag.value && tag.value.value.trim()) {
+      emit('create', tag.value.value.trim());
+      tag.value.value = '';
+    }
+  }
 /* - can change */
 
   const sortByTag = () => {
@@ -90,8 +100,27 @@ import {onMounted, reactive, ref, watch} from 'vue';
              v-model="name"
              @blur="changeTag"
              @keyup.enter="changeTag"
-             @keyup="resize"
+             @keydown="resize"
              :style="{width: width}"
+             ref="tag"
+      />
+    </div>
+  </div>
+
+  <div v-else-if="props.isCanCreate"
+       class="personal-tag__wrapper show"
+       @dblclick="sortByTag"
+  >
+    <div class="personal-tag show blank"
+         :class="{ active: +props.tag.id === +listView.currentTag.id }"
+         ref="tagWrapper"
+    >
+      <input type="text"
+             v-model="name"
+             @keyup.enter="crateTag"
+             @keydown="resize"
+             :style="{width: width}"
+             :placeholder="props.placeholder"
              ref="tag"
       />
     </div>
@@ -110,7 +139,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
              v-model="name"
              @blur="changeTag"
              @keyup.enter="changeTag"
-             @keyup="resize"
+             @keydown="resize"
              :style="{width: width}"
              ref="tag"
       />
@@ -157,7 +186,10 @@ import {onMounted, reactive, ref, watch} from 'vue';
         &.hide {
           animation: hide .3s forwards;
         }
-        input { padding: 0; }
+        input {
+          font-size: 13px;
+          padding: 0;
+        }
     }
 
     @keyframes show {
