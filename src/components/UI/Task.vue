@@ -104,6 +104,10 @@
       listView.deleteTask({id: props.task.id});
     }, 1000);
   };
+
+  const rerenderTagCreator = () => {
+    props.task.tagCreatorKey = props.task.tagCreatorKey + 1;
+  };
 </script>
 
 <template>
@@ -155,9 +159,10 @@
             @saveChangesDate="saveChangesDate"
         />
         <TagCreator
-            :key="0"
+            :key="props.task.tagCreatorKey"
             :id_task="props.task.id"
             :possibleTags="props.task.possibleTags"
+            @rerender="rerenderTagCreator"
         />
         <PersonalTag
             v-for="tag in props.task.tags"

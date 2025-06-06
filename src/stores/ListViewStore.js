@@ -106,6 +106,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             if (route.params.id_list) {
                 arr['tasks'].forEach(item => {
                     item.key = Math.random();
+                    item.tagCreatorKey = Math.random();
                     item.tags.forEach(tag => {
                         tag.key = Math.random();
                     });
@@ -116,6 +117,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 });
                 arr['tasksDone'].forEach(item => {
                     item.key = Math.random();
+                    item.tagCreatorKey = Math.random();
                     item.tags.forEach(tag => {
                         tag.key = Math.random();
                     });
@@ -130,6 +132,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     item.key = Math.random();
                     item.tasks.forEach(task => {
                         task.key = Math.random();
+                        item.tagCreatorKey = Math.random();
                         task.tags.forEach(tag => {
                             tag.key = Math.random();
                         })
@@ -144,6 +147,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     item.key = Math.random();
                     item.tasks.forEach(task => {
                         task.key = Math.random();
+                        item.tagCreatorKey = Math.random();
                         task.tags.forEach(tag => {
                             tag.key = Math.random();
                             if (tag.id === arr['tag']['id']) tag.active = true;
@@ -370,6 +374,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
         targetTask.tags = [...targetTask.tags, tagToAdd];
         targetTask.possibleTags = targetTask.possibleTags.filter(tag => tag.id !== tagToAdd.id);
+        targetTask.tagCreatorKey = Math.random();
         console.log('Updated task:', targetTask);
     };
     const handleDeleteTagTask = (tagDelInfo) => {

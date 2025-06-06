@@ -1,6 +1,6 @@
 <script setup>
 
-  import {ref, watch} from "vue";
+  import {ref} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
 
@@ -9,48 +9,47 @@
     possibleTags: Array,
   });
 
-  const tag = ref(null);
+  const emit = defineEmits(["rerender"]);
+
   const listView = useListViewStore();
   const newName = ref('');
   const openTagList = ref(false);
   const possibleTags = ref(props.possibleTags);
+  console.log(possibleTags)
+  const createTagKey = ref(0);
 
-  const canBlur = () => {
+  const openPossibleTags = () => {
+    openTagList.value = true;
+  };
+
+  const closePossibleTags = () => {
     setTimeout(() => {
       openTagList.value = false;
     }, 500)
   };
 
-  const maybeCanAddTag = () => {
-    const foundTag = props.possibleTags.filter(tag => tag.name === newName.value)
-    if (foundTag.length) {
-      addTagToTask(foundTag[0]);
-    } else {
-      createTag();
-    }
-  };
   const createTag = async (newName) => {
     openTagList.value = false;
-    const newTag = await listView.createTag({name: newName, task_id: props.id_task});
+    const newTag = await listView.createTag({
+      name: newName,
+      task_id: props.id_task
+    });
+    emit('rerender');
   };
   const addTagToTask = async (tagToAdd) => {
-    const addTag = await listView.addTagToTask({tag_id: tagToAdd.id, tag_name: tagToAdd.name, task_id: props.id_task});
-    tag.value.value = '';
-    resize();
-  };
-  watch(newName, (newValue) => {
-    filterTags(newValue);
-  });
-  const filterTags = (newName) => {
-    possibleTags.value = props.possibleTags.filter(tag => tag.name.toLowerCase().includes(newName.toLowerCase()))
-        .sort((a, b) => a.name.localeCompare(b.name));
+    const addTag = await listView.addTagToTask({
+      tag_id: tagToAdd.id,
+      tag_name: tagToAdd.name,
+      task_id: props.id_task
+    });
+    emit('rerender');
   };
 </script>
 
 <template>
   <div class="personal-tag__wrapper visible">
     <PersonalTag
-        :key="Math.random()"
+        :key="createTagKey"
         :id_task="props.id_task"
         :tag="{
           id: 0,
@@ -60,17 +59,18 @@
         :width="'15ch'"
         :placeholder="'Добавить тег?'"
         @create="createTag"
+        @focus="openPossibleTags"
+        @blur="closePossibleTags"
     />
     <div class="personal-tag__list"
          :class="{ active: openTagList }"
     >
-      <div v-for="tag in possibleTags">
+      <div v-for="tag in  props.possibleTags" :key="tag.key">
         <PersonalTag
             v-if="tag.key"
-            :key="tag.key"
             :tag="tag"
-
-        /><!--            @click="addTagToTask(tag)"-->
+            @click="addTagToTask(tag)"
+        />
       </div>
     </div>
   </div>

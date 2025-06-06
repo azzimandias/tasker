@@ -15,7 +15,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
     placeholder: String,
   });
 
-  const emit = defineEmits(["create"]);
+  const emit = defineEmits(['create', 'focus', 'blur', 'click']);
 
   const route = useRoute();
   const name = ref(props.tag.name);
@@ -65,8 +65,9 @@ import {onMounted, reactive, ref, watch} from 'vue';
         const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: tag.value.value.trim()});
       }
     } else {
-      height.value = `${tagWrapper.value.scrollHeight}px`;
       console.log(height.value)
+      console.log(tagWrapper.value)
+      height.value = `${tagWrapper.value.scrollHeight}px`;
       tagWrapper.value.classList.remove('show');
       tagWrapper.value.classList.add('hide');
       setTimeout(() => {
@@ -119,6 +120,8 @@ import {onMounted, reactive, ref, watch} from 'vue';
              v-model="name"
              @keyup.enter="crateTag"
              @keydown="resize"
+             @focus="emit('focus')"
+             @blur="emit('blur')"
              :style="{width: width}"
              :placeholder="props.placeholder"
              ref="tag"
@@ -154,7 +157,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
   </div>
 
   <div v-else class="personal-tag__wrapper visible">
-    <div class="personal-tag-average">{{ name }}</div>
+    <div class="personal-tag-average" @click="emit('click')">{{ name }}</div>
   </div>
 </template>
 
