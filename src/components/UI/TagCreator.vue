@@ -23,9 +23,7 @@
   };
 
   const closePossibleTags = () => {
-    setTimeout(() => {
-      openTagList.value = false;
-    }, 500)
+    openTagList.value = false;
   };
 
   const createTag = async (newName) => {
@@ -62,17 +60,20 @@
         @focus="openPossibleTags"
         @blur="closePossibleTags"
     />
-    <div class="personal-tag__list"
-         :class="{ active: openTagList }"
-    >
-      <div v-for="tag in  props.possibleTags" :key="tag.key">
-        <PersonalTag
-            v-if="tag.key"
-            :tag="tag"
-            @click="addTagToTask(tag)"
-        />
+    <Transition mode="out-in" name="fade">
+      <div v-if="openTagList"
+           class="personal-tag__list scroll"
+           :class="{ active: openTagList }"
+      >
+        <div v-for="tag in  props.possibleTags" :key="tag.key">
+          <PersonalTag
+              v-if="tag.key"
+              :tag="tag"
+              @click="addTagToTask(tag)"
+          />
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -125,17 +126,16 @@
     position: absolute;
     left: 0;
     bottom: -151px;
-    width: 150px;
-    max-height: 145px;
+    width: 400px;
+    height: 145px;
     padding: 5px;
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
+    flex-wrap: wrap;
     z-index: 10;
     &.active {
       display: flex;
@@ -149,6 +149,19 @@
     font-size: 13px;
     padding: 5px 8px;
     font-family: Avenir, Helvetica, Arial, sans-serif;
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.25s ease-out;
+  }
+
+  .fade-enter-from {
+    opacity: 0;
+  }
+
+  .fade-leave-to {
+    opacity: 0;
   }
 
   @import "../../assets/styles/global.scss";

@@ -113,7 +113,6 @@
 <template>
   <div class="task"
        ref="taskNode"
-       :class="{done: props.task.is_done}"
        @mouseover="is_visible = true"
        @mouseout="is_visible = false"
   >

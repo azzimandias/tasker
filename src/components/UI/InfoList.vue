@@ -11,12 +11,9 @@
   const emit = defineEmits(['delete']);
   const infoList = ref(null);
   const dropDownList = ref(null);
+  const isOpen = ref(false);
   const openCloseDropDownList = () => {
-    if (dropDownList.value.classList.contains('active')) {
-      dropDownList.value.classList.remove('active');
-    } else {
-      dropDownList.value.classList.add('active');
-    }
+    isOpen.value = !isOpen.value;
   };
 
   const deleteAction = () => {
@@ -25,8 +22,8 @@
   }
 
   const closeDropDown = (e) => {
-    if (dropDownList.value.classList.contains('active') && !infoList.value.contains(e.target)) {
-      dropDownList.value.classList.remove('active');
+    if (!infoList.value.contains(e.target)) {
+      isOpen.value = false;
     }
   }
 
@@ -47,10 +44,15 @@
         :class="{ active: +props.idList === +router.params.id_list }"
     >
     </div>
-    <div class="drop-down-list" ref="dropDownList">
-      <button class="drop-down-list__btn">Edit</button>
-      <button class="drop-down-list__btn" @mouseup="deleteAction">Delete</button>
-    </div>
+    <Transition mode="out-in" name="fade">
+      <div v-if="isOpen"
+           class="drop-down-list active"
+           ref="dropDownList"
+      >
+        <button class="drop-down-list__btn">Edit</button>
+        <button class="drop-down-list__btn" @mouseup="deleteAction">Delete</button>
+      </div>
+    </Transition>
   </div>
 </template>
 

@@ -79,13 +79,15 @@
             v-if="listView.tasks.length"
         />
       </div>
-      <ListDone v-if="listView.tasksDone.length"
-                :isOpen="isDoneTasksOpen"
-                :class="{active: isDoneTasksOpen}"
-                @openTasksDone="openTasksDone"
-      >
-        Выполненные
-      </ListDone>
+      <Transition mode="out-in" name="fade">
+        <ListDone v-if="listView.tasksDone.length"
+                  :isOpen="isDoneTasksOpen"
+                  :class="{active: isDoneTasksOpen}"
+                  @openTasksDone="openTasksDone"
+        >
+          Выполненные
+        </ListDone>
+      </Transition>
       <Transition name="expand">
         <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
           <Task

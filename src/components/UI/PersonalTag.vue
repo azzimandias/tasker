@@ -251,27 +251,6 @@ import {onMounted, reactive, ref, watch} from 'vue';
       margin-bottom: 8.5px;
     }
 
-    .personal-tag__list {
-      position: absolute;
-      left: 0;
-      bottom: -151px;
-      width: 150px;
-      max-height: 145px;
-      padding: 5px;
-      border-width: 1px;
-      border-style: solid;
-      border-radius: 5px;
-      overflow: auto;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      z-index: 10;
-      &.active {
-        display: flex;
-      }
-    }
-
     @import "../../assets/styles/global.scss";
 
     .personal-tag {
@@ -290,11 +269,6 @@ import {onMounted, reactive, ref, watch} from 'vue';
         @include theme('background-color', $gold);
         @include theme('color', $textColorActive);
       }
-    }
-
-    .personal-tag__list {
-      @include theme('background-color', $dropDownListBackground);
-      @include theme('border-color', $dropDownListBorder);
     }
 
     .tag-header {

@@ -23,7 +23,7 @@
     <label
         :for="`dot_${props.id}`"
         class="dot"
-        :style="{border: `2px solid ${color}`}"
+        :style="{border: `${is_done ? 2 : 1}px solid ${is_done ? color : '#c4c4c4'}`}"
     >
       <input type="checkbox" :id="`dot_${props.id}`" class="checkbox"/>
     </label>
@@ -46,7 +46,7 @@
   width: 100%;
   height: 100%;
   transition: .3s;
-  border: 2px  solid #c4c4c4;
+  border: 1px  solid #c4c4c4;
   border-radius: 50%;
   cursor: pointer;
 }
