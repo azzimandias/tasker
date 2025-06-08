@@ -362,7 +362,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
             taskList.forEach(task => {
                 if (task.id !== task_id &&
                     !task.possibleTags.some(tag => tag.id === tagToAdd.id)) {
-                    // Для реактивности создаем новый массив
                     task.possibleTags = [...task.possibleTags, tagToAdd];
                 }
             });
@@ -448,9 +447,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
             if (!socket.connected) {
                 socket.connect();
             }
-            if (route.params.id_list) {
-                socket.emit('subscribe', 'ListViewStore');
-            }
+
+            socket.emit('subscribe', 'ListViewStore');
+
             socket.on('taskUpdated', (updatedTask) => {
                 if (updatedTask.uuid !== socketUUID) {
                     handlePersonalListTaskSocketUpdate(updatedTask.task);
@@ -506,28 +505,41 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const handlePersonalListTaskSocketUpdate = (updatedTask) => {
         console.log(`Updating task id=${updatedTask.id} on current list from socket:`, updatedTask);
-        if (!updatedTask.is_done) {
-            const index = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
-            if (index !== -1) {
-                currentPersonalListTasks.splice(index, 1, { ...currentPersonalListTasks[index], ...updatedTask });
+
+        if (route.params.id_list) {
+            if (!updatedTask.is_done) {
+                const index = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
+                if (index !== -1) {
+                    currentPersonalListTasks.splice(index, 1, { ...currentPersonalListTasks[index], ...updatedTask });
+                } else {
+                    const doneIndex = currentPersonalListTasksDone.findIndex(task => task.id === updatedTask.id);
+                    if (doneIndex !== -1) {
+                        currentPersonalListTasksDone.splice(doneIndex, 1);
+                        currentPersonalListTasks.push(updatedTask);
+                    }
+                }
             } else {
-                const doneIndex = currentPersonalListTasksDone.findIndex(task => task.id === updatedTask.id);
-                if (doneIndex !== -1) {
-                    currentPersonalListTasksDone.splice(doneIndex, 1);
-                    currentPersonalListTasks.push(updatedTask);
+                const index = currentPersonalListTasksDone.findIndex(task => task.id === updatedTask.id);
+                if (index !== -1) {
+                    currentPersonalListTasksDone.splice(index, 1, { ...currentPersonalListTasksDone[index], ...updatedTask });
+                } else {
+                    const todoIndex = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
+                    if (todoIndex !== -1) {
+                        currentPersonalListTasks.splice(todoIndex, 1);
+                        currentPersonalListTasksDone.push(updatedTask);
+                    }
                 }
             }
-        } else {
-            const index = currentPersonalListTasksDone.findIndex(task => task.id === updatedTask.id);
-            if (index !== -1) {
-                currentPersonalListTasksDone.splice(index, 1, { ...currentPersonalListTasksDone[index], ...updatedTask });
-            } else {
-                const todoIndex = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
-                if (todoIndex !== -1) {
-                    currentPersonalListTasks.splice(todoIndex, 1);
-                    currentPersonalListTasksDone.push(updatedTask);
+        } else if (route.params.name) {
+            currentSortListTasks.forEach((list, idx) => {
+                const index = list.tasks.findIndex(task => task.id === updatedTask.id);
+                if (index !== -1) {
+                    currentSortListTasks[idx].tasks.splice(index, 1, { ...currentSortListTasks[idx].tasks[index], ...updatedTask });
+                    return 0;
                 }
-            }
+            });
+        } else if (route.params.id_tag) {
+
         }
     };
     const handlePersonalListTaskSocketDelete = (taskId) => {
@@ -535,11 +547,24 @@ export const useListViewStore = defineStore('listViewStore', () => {
         setTimeout(() => {
             console.log(taskId)
             if (taskId) {
-                currentPersonalListTasks.forEach((task, idx) => {
-                    if (task.id === taskId) {
-                        currentPersonalListTasks.splice(idx,1);
-                    }
-                });
+                if (route.params.id_list) {
+                    currentPersonalListTasks.forEach((task, idx) => {
+                        if (task.id === taskId) {
+                            currentPersonalListTasks.splice(idx, 1);
+                        }
+                    });
+                } else if (route.params.name) {
+                    currentSortListTasks.forEach((list, index) => {
+                        list.tasks.forEach((task, idx) => {
+                            if (task.id === taskId) {
+                                currentSortListTasks[index].tasks.splice(idx, 1);
+                                return 0;
+                            }
+                        });
+                    });
+                } else if (route.params.id_tag) {
+
+                }
             }
         }, 500);
     };
@@ -547,20 +572,48 @@ export const useListViewStore = defineStore('listViewStore', () => {
         console.log('Create task from websocket...')
         setTimeout(() => {
             if (newTask) {
-                const index = currentPersonalListTasks.findIndex(task => task.id === newTask.id);
-                console.log(index)
-                if (index === -1) {
-                    currentPersonalListTasks.push(newTask);
+                if (route.params.id_list) {
+                    const index = currentPersonalListTasks.findIndex(task => task.id === newTask.id);
+                    if (index === -1) {
+                        currentPersonalListTasks.push(newTask);
+                    }
+                } else if (route.params.name) {
+                    console.log(newTask)
+                    const list = currentSortListTasks.find(list => list.personal_list.id === newTask.id_list);
+                    if (list) {
+                        const index = list.tasks.findIndex(task => task.id === newTask.id);
+                        if (index === -1) {
+                            list.tasks.push(newTask);
+                        }
+                    }
+                } else if (route.params.id_tag) {
+
                 }
             }
         },500)
     };
     const handlePersonalListSocketUpdate = (updatedList) => {
         console.log('Updating list info from websocket...')
-        currentListInfo.key = updatedList.key;
-        currentListInfo.id = updatedList.id;
-        currentListInfo.name = updatedList.name;
-        currentListInfo.color = updatedList.color;
+        if (route.params.id_list) {
+            currentListInfo.key = updatedList.key;
+            currentListInfo.id = updatedList.id;
+            currentListInfo.name = updatedList.name;
+            currentListInfo.color = updatedList.color;
+        } else if (route.params.name) {
+            const list = currentSortListTasks.find(list => list.personal_list.id === updatedList.id);
+            console.log(list)
+            if (list) {
+                list.personal_list.key = updatedList.key;
+                list.personal_list.id = updatedList.id;
+                list.personal_list.name = updatedList.name;
+                list.personal_list.color = updatedList.color;
+                list.tasks.forEach((task, idx) => {
+                    list.tasks[idx].color = updatedList.color;
+                })
+            }
+        } else if (route.params.id_tag) {
+
+        }
         bigMenu.firstRequest().then();
     };
     const handleTagTaskSocketCreate = (createdTagTask) => {

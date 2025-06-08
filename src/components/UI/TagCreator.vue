@@ -15,7 +15,6 @@
   const newName = ref('');
   const openTagList = ref(false);
   const possibleTags = ref(props.possibleTags);
-  console.log(possibleTags)
   const createTagKey = ref(0);
 
   const openPossibleTags = () => {
