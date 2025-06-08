@@ -91,9 +91,16 @@ export const useListViewStore = defineStore('listViewStore', () => {
         }
     };
     const updateData = (arr) => {
-        //console.log(arr);
-        if ((arr['sortList'] || arr['list'] || arr['tag']) && (arr['tasks'] || arr['tasksByList'])) {
+        const hasRequiredData = (arr['sortList'] || arr['list'] || arr['tag']) &&
+            (arr['tasks'] || arr['tasksByList']);
+        if (!hasRequiredData) {
+            is_somethingWrong.value = true;
+            loading.value = false;
+            loadingSmall.value = false;
+            return;
+        }
 
+        const clearCurrentData = () => {
             if (route.params.id_list) {
                 currentPersonalListTasks.length = 0;
                 currentPersonalListTasksDone.length = 0;
@@ -102,85 +109,87 @@ export const useListViewStore = defineStore('listViewStore', () => {
             } else if (route.params.id_tag) {
                 tags.length = 0;
             }
+        };
 
+        const generateKeys = (item) => {
+            item.key = Math.random();
+            if (item.tasks) {
+                item.tasks.forEach(task => processTask(task));
+            } else {
+                processTask(item);
+            }
+        };
+
+        const processTask = (task) => {
+            task.key = Math.random();
+            task.tagCreatorKey = Math.random();
+
+            [task.tags, task.possibleTags].forEach(tagArray => {
+                if (tagArray) {
+                    tagArray.forEach(tag => {
+                        tag.key = Math.random();
+                        if (route.params.id_tag && tag.id === arr.tag.id) {
+                            tag.active = true;
+                        }
+                    });
+                }
+            });
+        };
+
+        const updateCurrentInfo = () => {
             if (route.params.id_list) {
-                arr['tasks'].forEach(item => {
-                    item.key = Math.random();
-                    item.tagCreatorKey = Math.random();
-                    item.tags.forEach(tag => {
-                        tag.key = Math.random();
-                    });
-                    item.possibleTags.forEach(tag => {
-                        tag.key = Math.random();
-                    });
-                    currentPersonalListTasks.push(item);
-                });
-                arr['tasksDone'].forEach(item => {
-                    item.key = Math.random();
-                    item.tagCreatorKey = Math.random();
-                    item.tags.forEach(tag => {
-                        tag.key = Math.random();
-                    });
-                    item.possibleTags.forEach(tag => {
-                        tag.key = Math.random();
-                    });
-                    currentPersonalListTasksDone.push(item);
+                Object.assign(currentListInfo, {
+                    id: arr.list.id,
+                    name: arr.list.name,
+                    color: arr.list.color
                 });
             } else if (route.params.name) {
-                arr['tasksByList'].forEach(item => {
-                    console.log(item)
-                    item.key = Math.random();
-                    item.tasks.forEach(task => {
-                        task.key = Math.random();
-                        item.tagCreatorKey = Math.random();
-                        task.tags.forEach(tag => {
-                            tag.key = Math.random();
-                        })
-                        task.possibleTags.forEach(tag => {
-                            tag.key = Math.random();
-                        });
-                    });
-                    currentSortListTasks.push(item);
+                Object.assign(currentSortListInfo, {
+                    id: arr.sortList.id,
+                    name: arr.sortList.name,
+                    color: bigMenu.sortLists.find(sl => sl.id === arr.sortList.id)?.color
                 });
             } else if (route.params.id_tag) {
-                arr['tasksByList'].forEach(item => {
-                    item.key = Math.random();
-                    item.tasks.forEach(task => {
-                        task.key = Math.random();
-                        item.tagCreatorKey = Math.random();
-                        task.tags.forEach(tag => {
-                            tag.key = Math.random();
-                            if (tag.id === arr['tag']['id']) tag.active = true;
-                        })
-                        task.possibleTags.forEach(tag => {
-                            tag.key = Math.random();
-                        });
-                    });
-                    tags.push(item);
+                Object.assign(currentTag, {
+                    id: arr.tag.id,
+                    name: arr.tag.name,
+                    key: Math.random()
                 });
             }
+        };
+
+        const processData = () => {
+            const targetArray = route.params.id_list ?
+                { active: currentPersonalListTasks, done: currentPersonalListTasksDone } :
+                route.params.name ?
+                    { target: currentSortListTasks } :
+                    { target: tags };
 
             if (route.params.id_list) {
-                currentListInfo.id = arr['list'].id;
-                currentListInfo.name = arr['list'].name;
-                currentListInfo.color = arr['list'].color;
-            } else if (route.params.name) {
-                currentSortListInfo.id = arr['sortList'].id;
-                currentSortListInfo.name = arr['sortList'].name;
-                bigMenu.sortLists.forEach(sortList => {
-                    if (sortList.id === currentSortListInfo.id) { currentSortListInfo.color = sortList.color; }
+                arr.tasks.forEach(item => {
+                    generateKeys(item);
+                    targetArray.active.push(item);
                 });
-            } else if (route.params.id_tag) {
-                currentTag.id = arr.tag.id;
-                currentTag.name = arr.tag.name;
-                currentTag.key = Math.random();
+                arr.tasksDone.forEach(item => {
+                    generateKeys(item);
+                    targetArray.done.push(item);
+                });
+            } else {
+                arr.tasksByList.forEach(item => {
+                    generateKeys(item);
+                    targetArray.target.push(item);
+                });
             }
+        };
 
-            loading.value = false;
-            loadingSmall.value = false;
-
-        } else {
+        try {
+            clearCurrentData();
+            processData();
+            updateCurrentInfo();
+        } catch (error) {
+            console.error("Error in updateData:", error);
             is_somethingWrong.value = true;
+        } finally {
             loading.value = false;
             loadingSmall.value = false;
         }
