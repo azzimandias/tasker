@@ -71,7 +71,7 @@
       <div class="task__container">
         <Task
             v-for="task in listView.tasks"
-            :key="task.key"
+            :key="task.id"
             :task="task"
             :color="listView.listInfo.color"
             :is_new="false"

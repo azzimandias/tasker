@@ -1,5 +1,5 @@
 <script setup>
-  import {onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();

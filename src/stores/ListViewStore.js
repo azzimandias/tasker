@@ -55,10 +55,12 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const initialize = async () => {
         await getTasksOrTags();
     };
-    const getTasksOrTags = async () => {
-        await connectSocket();
-        loading.value = true;
-        loadingSmall.value = true;
+    const getTasksOrTags = async (isSocket) => {
+        if (!isSocket) {
+            await connectSocket();
+            loading.value = true;
+            loadingSmall.value = true;
+        }
         currentPath.value = route.path;
         try {
             await fetchToServer();
@@ -139,6 +141,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         const updateCurrentInfo = () => {
             if (route.params.id_list) {
                 Object.assign(currentListInfo, {
+                    key: Math.random(),
                     id: arr.list.id,
                     name: arr.list.name,
                     color: arr.list.color
@@ -594,7 +597,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const handlePersonalListSocketUpdate = (updatedList) => {
         console.log('Updating list info from websocket...')
-        if (route.params.id_list) {
+        /*if (route.params.id_list) {
             currentListInfo.key = updatedList.key;
             currentListInfo.id = updatedList.id;
             currentListInfo.name = updatedList.name;
@@ -613,7 +616,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         } else if (route.params.id_tag) {
 
-        }
+        }*/
+        getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
     const handleTagTaskSocketCreate = (createdTagTask) => {

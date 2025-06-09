@@ -1,5 +1,5 @@
 <script setup>
-  import {onMounted, ref} from 'vue';
+import {onMounted, ref, toRef, watch} from 'vue';
   import {useListViewStore} from "@/stores/ListViewStore";
   import InputTaskHeader from "@/components/UI/InputTaskHeader.vue";
   import DotBtn from "@/components/UI/DotBtn.vue";
@@ -25,10 +25,12 @@
   const height = ref('');
 
   onMounted(() => {
-    height.value = `${taskNode.value.scrollHeight}px`;
-    taskNode.value.classList.add('show-anim');
-    if (document.documentElement.clientWidth <= 700) {
-      is_visible.value = true;
+    if (!props.task.id || props.task.is_done) {
+      height.value = `${taskNode.value.scrollHeight}px`;
+      taskNode.value.classList.add('show-anim');
+      if (document.documentElement.clientWidth <= 700) {
+        is_visible.value = true;
+      }
     }
   });
 
