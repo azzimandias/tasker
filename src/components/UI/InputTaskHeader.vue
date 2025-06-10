@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
@@ -12,7 +12,12 @@ import {onMounted, ref} from "vue";
     taskName: String,
     placeholder: String,
   });
-  let taskName = props.taskName;
+  let taskName = ref(props.taskName);
+
+  watch(() => props.taskName, (newValue) => {
+        taskName.value = newValue;
+      }
+  );
 
   onMounted(() => {
     if (!props.id) {
@@ -28,11 +33,11 @@ import {onMounted, ref} from "vue";
     else saveChanges();
   };
   const createTask = async () => {
-    emit('createTask',taskName);
+    emit('createTask',taskName.value);
   }
   const saveChanges = () => {
-    if (props.taskName !== taskName) {
-      emit('saveChangesName',taskName);
+    if (props.taskName !== taskName.value) {
+      emit('saveChangesName',taskName.value);
     }
   };
 </script>

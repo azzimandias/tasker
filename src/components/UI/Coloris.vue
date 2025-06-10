@@ -1,11 +1,17 @@
 <script setup>
-  import {ref} from "vue";
+import {ref, watch} from "vue";
   import coloris from '@/coloris';
   const props = defineProps({
     color: String,
   });
   const emit = defineEmits(['onDroch']);
   const value = ref(props.color);
+
+  watch(() => props.color,
+      (newValue) => {
+          value.value = newValue;
+      })
+
   Coloris({
     el: '.coloris',
 

@@ -106,10 +106,6 @@ import {onMounted, ref, toRef, watch} from 'vue';
       listView.deleteTask({id: props.task.id});
     }, 1000);
   };
-
-  const rerenderTagCreator = () => {
-    props.task.tagCreatorKey = props.task.tagCreatorKey + 1;
-  };
 </script>
 
 <template>
@@ -163,17 +159,15 @@ import {onMounted, ref, toRef, watch} from 'vue';
             :key="props.task.tagCreatorKey"
             :id_task="props.task.id"
             :possibleTags="props.task.possibleTags"
-            @rerender="rerenderTagCreator"
         />
         <PersonalTag
             v-for="tag in props.task.tags"
-            :key="tag.key"
+            :key="tag.id"
             :id_task="props.task.id"
             :tag="tag"
             :isCanChange="true"
         />
       </div>
-
     </div>
   </div>
 </template>

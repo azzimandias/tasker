@@ -1,6 +1,6 @@
 <script setup>
 
-  import {ref} from "vue";
+import {reactive, ref} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
 
@@ -9,12 +9,11 @@
     possibleTags: Array,
   });
 
-  const emit = defineEmits(["rerender"]);
+  const emit = defineEmits([]);
 
   const listView = useListViewStore();
-  const newName = ref('');
+  const newTag = reactive({id: 0, name: ''});
   const openTagList = ref(false);
-  const possibleTags = ref(props.possibleTags);
   const createTagKey = ref(0);
 
   const openPossibleTags = () => {
@@ -22,7 +21,9 @@
   };
 
   const closePossibleTags = () => {
-    openTagList.value = false;
+    setTimeout(() => {
+      openTagList.value = false;
+    },300);
   };
 
   const createTag = async (newName) => {
@@ -31,15 +32,14 @@
       name: newName,
       task_id: props.id_task
     });
-    emit('rerender');
   };
   const addTagToTask = async (tagToAdd) => {
+    console.log('tagToAdd')
     const addTag = await listView.addTagToTask({
       tag_id: tagToAdd.id,
       tag_name: tagToAdd.name,
       task_id: props.id_task
     });
-    emit('rerender');
   };
 </script>
 
@@ -48,10 +48,7 @@
     <PersonalTag
         :key="createTagKey"
         :id_task="props.id_task"
-        :tag="{
-          id: 0,
-          name: newName,
-        }"
+        :tag="newTag"
         :isCanCreate="true"
         :width="'15ch'"
         :placeholder="'Добавить тег?'"
@@ -62,15 +59,14 @@
     <Transition mode="out-in" name="fade">
       <div v-if="openTagList"
            class="personal-tag__list scroll"
-           :class="{ active: openTagList }"
+           :class="{active: openTagList}"
       >
-        <div v-for="tag in  props.possibleTags" :key="tag.key">
-          <PersonalTag
-              v-if="tag.key"
-              :tag="tag"
-              @click="addTagToTask(tag)"
-          />
-        </div>
+        <PersonalTag
+            v-for="tag in props.possibleTags"
+            :key="tag.id"
+            :tag="tag"
+            @click="addTagToTask(tag)"
+        />
       </div>
     </Transition>
   </div>

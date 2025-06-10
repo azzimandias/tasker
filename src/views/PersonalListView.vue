@@ -54,7 +54,6 @@
     <div class="workspace scroll" v-else>
       <div class="top-header">
         <ListHeader
-            :key="listView.listInfo.key"
             :list="listView.listInfo"
             :isCanChange="true"
             :top="40"

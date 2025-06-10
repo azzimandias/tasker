@@ -17,7 +17,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const currentPersonalListTasksDone = reactive([]);
     const currentSortListTasks = reactive([]);
     const currentListInfo = reactive({
-        key: Math.random(),
         id: '',
         name: '',
         color: '',
@@ -113,14 +112,14 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         };
 
-        const generateKeys = (item) => {
+        /*const generateKeys = (item) => {
             item.key = Math.random();
             if (item.tasks) {
                 item.tasks.forEach(task => processTask(task));
             } else {
                 processTask(item);
             }
-        };
+        };*/
 
         const processTask = (task) => {
             task.key = Math.random();
@@ -141,7 +140,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         const updateCurrentInfo = () => {
             if (route.params.id_list) {
                 Object.assign(currentListInfo, {
-                    key: Math.random(),
                     id: arr.list.id,
                     name: arr.list.name,
                     color: arr.list.color
@@ -170,16 +168,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
             if (route.params.id_list) {
                 arr.tasks.forEach(item => {
-                    generateKeys(item);
                     targetArray.active.push(item);
                 });
                 arr.tasksDone.forEach(item => {
-                    generateKeys(item);
                     targetArray.done.push(item);
                 });
             } else {
                 arr.tasksByList.forEach(item => {
-                    generateKeys(item);
                     targetArray.target.push(item);
                 });
             }
@@ -285,6 +280,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         currentPersonalListTasks.forEach((task, idx) => {
             if (!task.id) {
                 task.id = response.id;
+                task.name = response.name;
             }
         });
         await bigMenu.firstRequest();
@@ -440,7 +436,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         } else {
             currentListInfo.color = list.color;
         }
-        currentListInfo.key = Math.random();
         await bigMenu.firstRequest();
     };
     /* - PERSONAL LIST */
@@ -508,8 +503,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const handlePersonalListTaskSocketUpdate = (updatedTask) => {
         console.log(`Updating task id=${updatedTask.id} on current list from socket:`, updatedTask);
-
-        if (route.params.id_list) {
+        /*if (route.params.id_list) {
             if (!updatedTask.is_done) {
                 const index = currentPersonalListTasks.findIndex(task => task.id === updatedTask.id);
                 if (index !== -1) {
@@ -543,11 +537,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
             });
         } else if (route.params.id_tag) {
 
-        }
+        }*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
     };
     const handlePersonalListTaskSocketDelete = (taskId) => {
         console.log('\\Delete task from websocket...')
-        setTimeout(() => {
+        /*setTimeout(() => {
             console.log(taskId)
             if (taskId) {
                 if (route.params.id_list) {
@@ -569,11 +565,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
                 }
             }
-        }, 500);
+        }, 500);*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
     };
     const handlePersonalListTaskSocketCreate = (newTask) => {
         console.log('Create task from websocket...')
-        setTimeout(() => {
+        /*setTimeout(() => {
             if (newTask) {
                 if (route.params.id_list) {
                     const index = currentPersonalListTasks.findIndex(task => task.id === newTask.id);
@@ -593,7 +591,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
                 }
             }
-        },500)
+        },500);*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
     };
     const handlePersonalListSocketUpdate = (updatedList) => {
         console.log('Updating list info from websocket...')
@@ -622,31 +622,39 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const handleTagTaskSocketCreate = (createdTagTask) => {
         console.log('Add created tag to task...');
-        handleAddTagToTask({
+        /*handleAddTagToTask({
             key: Math.random(),
             id: createdTagTask.tag.id,
             name: createdTagTask.tag.name,
-        }, createdTagTask.taskId);
+        }, createdTagTask.taskId);*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
     };
     const handleAddTagTaskSocket = (addTagToTask) => {
         console.log('Add tag to task...');
-        handleAddTagToTask({
+        /*handleAddTagToTask({
             key: Math.random(),
             id: addTagToTask.tag.id,
             name: addTagToTask.tag.name,
-        }, addTagToTask.taskId);
+        }, addTagToTask.taskId);*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
     };
     const handleDeleteTagTaskSocket = (deleteTagTask) => {
         console.log('\\Delete tag from websocket...');
-        handleDeleteTagTask({
+        /*handleDeleteTagTask({
             task_id: deleteTagTask.taskId,
             tag_id: deleteTagTask.tag.id,
             tag_name: deleteTagTask.tag.name,
-        });
+        });*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
     };
     const handleUpdateTagTaskSocket = (updateTag) => {
         console.log('Update tag...', updateTag.tag);
-        handleUpdateTag(updateTag.tag);
+        /*handleUpdateTag(updateTag.tag);*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
     };
     /* - SOCKET */
 

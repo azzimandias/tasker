@@ -14,6 +14,11 @@
   const deadline = ref();
   const deadlineModel = ref(props.deadline);
 
+  watch(() => props.deadline, (newValue) => {
+        deadlineModel.value = newValue;
+      }
+  );
+
   watch(deadlineModel, (newDeadlineModel) => {
     transitDate(newDeadlineModel);
   })

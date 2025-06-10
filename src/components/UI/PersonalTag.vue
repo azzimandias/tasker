@@ -100,7 +100,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
       <input type="text"
              v-model="name"
              @blur="changeTag"
-             @keyup.enter="changeTag"
+             @keyup.enter="(e) => e.target.blur()"
              @keydown="resize"
              :style="{width: width}"
              ref="tag"

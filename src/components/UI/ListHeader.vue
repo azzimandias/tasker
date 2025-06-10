@@ -2,7 +2,7 @@
   import Loader from "@/components/UI/Loader.vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import {useRouter} from "vue-router";
-  import {ref} from "vue";
+  import {ref, watch} from "vue";
   const listView = useListViewStore();
   const props = defineProps({
     list: Object,
@@ -16,6 +16,11 @@
   const emit = defineEmits(['saveChangedName']);
   const listName = ref(props.list.name);
   const listHeaderInput = ref(null);
+
+  watch(() => props.list.name, (newValue) => {
+        listName.value = newValue;
+      }
+  );
 
   const goToPersonalList = () => {
     if (props.isRouter) router.push({ name: 'list', params: { id_list: props.list.id } });
