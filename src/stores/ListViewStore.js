@@ -112,28 +112,20 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         };
 
-        /*const generateKeys = (item) => {
-            item.key = Math.random();
-            if (item.tasks) {
-                item.tasks.forEach(task => processTask(task));
-            } else {
-                processTask(item);
-            }
-        };*/
-
-        const processTask = (task) => {
-            task.key = Math.random();
-            task.tagCreatorKey = Math.random();
-
-            [task.tags, task.possibleTags].forEach(tagArray => {
-                if (tagArray) {
-                    tagArray.forEach(tag => {
-                        tag.key = Math.random();
-                        if (route.params.id_tag && tag.id === arr.tag.id) {
-                            tag.active = true;
-                        }
-                    });
-                }
+        const clearCurrentInfo = () => {
+            Object.assign(currentListInfo, {
+                id: '',
+                name: '',
+                color: '',
+            });
+            Object.assign(currentSortListInfo, {
+                id: 0,
+                name: '',
+                color: '',
+            });
+            Object.assign(currentTag, {
+                id: -1,
+                name: '',
             });
         };
 
@@ -154,7 +146,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 Object.assign(currentTag, {
                     id: arr.tag.id,
                     name: arr.tag.name,
-                    key: Math.random()
                 });
             }
         };
@@ -183,6 +174,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         try {
             clearCurrentData();
             processData();
+            clearCurrentInfo();
             updateCurrentInfo();
         } catch (error) {
             console.error("Error in updateData:", error);
@@ -322,36 +314,40 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const addTagToTask = async (tagToTask) => {
         tagToTask.uuid = socketUUID;
         const response = await api.postInfo(`addTagToTask`, tagToTask);
-        handleAddTagToTask({
+        /*handleAddTagToTask({
             key: Math.random(),
             id: tagToTask.tag_id,
             name: tagToTask.tag_name,
-        }, tagToTask.task_id);
+        }, tagToTask.task_id);*/
+        await getTasksOrTags(true);
         await bigMenu.firstRequest();
         return response;
     };
     const createTag = async (tag) => {
         tag.uuid = socketUUID;
         const response = await api.postInfo(`createTag`, tag);
-        handleAddTagToTask({
+        /*handleAddTagToTask({
             key: Math.random(),
             id: response.id,
             name: response.name,
-        }, tag.task_id);
+        }, tag.task_id);*/
+        await getTasksOrTags(true);
         await bigMenu.firstRequest();
         return response;
     };
     const updateTag = async (tag) => {
         tag.uuid = socketUUID;
         const response = await api.postInfo(`updateTag`, tag);
-        handleUpdateTag(response);
+        /*handleUpdateTag(response);*/
+        await getTasksOrTags(true);
         await bigMenu.firstRequest();
         return response;
     };
     const deleteTagTask = async (tag) => {
         tag.uuid = socketUUID;
         await api.postInfo(`deleteTagTask`, tag);
-        handleDeleteTagTask(tag);
+        /*handleDeleteTagTask(tag);*/
+        await getTasksOrTags(true);
         await bigMenu.firstRequest();
     };
     /* - TAG */

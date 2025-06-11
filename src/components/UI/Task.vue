@@ -25,12 +25,10 @@ import {onMounted, ref, toRef, watch} from 'vue';
   const height = ref('');
 
   onMounted(() => {
-    if (!props.task.id || props.task.is_done) {
-      height.value = `${taskNode.value.scrollHeight}px`;
-      taskNode.value.classList.add('show-anim');
-      if (document.documentElement.clientWidth <= 700) {
-        is_visible.value = true;
-      }
+    height.value = `${taskNode.value.scrollHeight}px`;
+    taskNode.value.classList.add('show-anim');
+    if (document.documentElement.clientWidth <= 700) {
+      is_visible.value = true;
     }
   });
 

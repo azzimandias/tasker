@@ -15,15 +15,22 @@ import {onMounted, reactive, ref, watch} from 'vue';
     placeholder: String,
   });
 
-  const emit = defineEmits(['create', 'focus', 'blur', 'click']);
+  const emit = defineEmits(['change', 'create', 'focus', 'blur', 'click']);
 
   const route = useRoute();
   const name = ref(props.tag.name);
   const tagWrapper = ref(null);
-  const tag = ref(null);
   const height = ref('');
   const listView = useListViewStore();
   const width = ref(props.width? props.width : '1px');
+
+  watch(() => props.tag.name, (newName) => {
+    name.value = newName;
+    resize();
+  });
+  watch(name, (newName) => {
+    emit('change', newName)
+  })
 
   onMounted(() => {
     resize();
@@ -37,7 +44,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
 
 /* + can change */
   const resize = () => {
-    if (!tag.value || !tag.value.value) return;
+    if (!name.value) return;
     requestAnimationFrame(() => {
       let hiddenSpan = document.getElementById('hidden-span-helper');
       if (!hiddenSpan) {
@@ -54,15 +61,19 @@ import {onMounted, reactive, ref, watch} from 'vue';
         `;
         document.body.appendChild(hiddenSpan);
       }
-      hiddenSpan.textContent = tag.value.value || ' ';
+      hiddenSpan.textContent = name.value || ' ';
       const calculatedWidth = hiddenSpan.scrollWidth;
-      width.value = `${calculatedWidth}px`;
+      if (props.isCanCreate && +calculatedWidth < 108) { // min width for tac creator
+        width.value = `108px`;
+      } else {
+        width.value = `${calculatedWidth}px`;
+      }
     });
   };
   const changeTag = async () => {
-    if (tag.value && tag.value.value.trim()) { // needed for dblclick
-      if (tag.value.value.trim() !== name.value) {
-        const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: tag.value.value.trim()});
+    if (name.value.trim()) {
+      if (props.tag.name !== name.value) {
+        const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: name.value});
       }
     } else {
       console.log(height.value)
@@ -76,14 +87,13 @@ import {onMounted, reactive, ref, watch} from 'vue';
     }
   };
   const crateTag = () => {
-    if (tag.value && tag.value.value.trim()) {
-      emit('create', tag.value.value.trim());
-      tag.value.value = '';
+    if (name.value.trim()) {
+      emit('create', name.value.trim());
+      name.value = '';
     }
   }
 /* - can change */
-
-  const sortByTag = () => {
+  const goToTagViewPage = () => {
     router.push({ name: 'tag', params: { id_tag: props.tag.id } });
   };
 </script>
@@ -91,7 +101,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
 <template>
   <div v-if="props.isCanChange"
        class="personal-tag__wrapper show"
-       @dblclick="sortByTag"
+       @dblclick="goToTagViewPage"
   >
     <div class="personal-tag show hash"
          :class="{ active: +props.tag.id === +listView.currentTag.id }"
@@ -103,17 +113,14 @@ import {onMounted, reactive, ref, watch} from 'vue';
              @keyup.enter="(e) => e.target.blur()"
              @keydown="resize"
              :style="{width: width}"
-             ref="tag"
       />
     </div>
   </div>
 
   <div v-else-if="props.isCanCreate"
        class="personal-tag__wrapper show"
-       @dblclick="sortByTag"
   >
     <div class="personal-tag show blank"
-         :class="{ active: +props.tag.id === +listView.currentTag.id }"
          ref="tagWrapper"
     >
       <input type="text"
@@ -121,10 +128,9 @@ import {onMounted, reactive, ref, watch} from 'vue';
              @keyup.enter="crateTag"
              @keydown="resize"
              @focus="emit('focus')"
-             @blur="emit('blur')"
+             @blur="() => {resize(); emit('blur')}"
              :style="{width: width}"
              :placeholder="props.placeholder"
-             ref="tag"
       />
     </div>
   </div>
@@ -132,10 +138,11 @@ import {onMounted, reactive, ref, watch} from 'vue';
   <div v-else-if="props.isHeader"
        class="tag-header"
   >
-    <div class="personal-tag visible hash" :class="{
-                                      active: +props.tag.id === +listView.currentTag.id,
-                                      blank: !props.tag.id,
-                                   }"
+    <div class="personal-tag visible hash"
+         :class="{
+            active: +props.tag.id === +listView.currentTag.id,
+            blank: !props.tag.id,
+         }"
     >
       <input v-if="props.tag.id"
              type="text"
@@ -144,7 +151,6 @@ import {onMounted, reactive, ref, watch} from 'vue';
              @keyup.enter="changeTag"
              @keydown="resize"
              :style="{width: width}"
-             ref="tag"
       />
       <div v-else>{{ name }}</div>
     </div>

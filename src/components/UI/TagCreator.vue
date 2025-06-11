@@ -1,6 +1,6 @@
 <script setup>
 
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
 
@@ -15,6 +15,13 @@ import {reactive, ref} from "vue";
   const newTag = reactive({id: 0, name: ''});
   const openTagList = ref(false);
   const createTagKey = ref(0);
+  const possibleTags = reactive(props.possibleTags);
+  const sortPossibleTagsName = ref('');
+
+  watch(() => props.possibleTags, (newPossibleTags) => {
+    possibleTags.splice(0, possibleTags.length, ...newPossibleTags);
+    sortPossibleTags(sortPossibleTagsName.value)
+  });
 
   const openPossibleTags = () => {
     openTagList.value = true;
@@ -24,6 +31,24 @@ import {reactive, ref} from "vue";
     setTimeout(() => {
       openTagList.value = false;
     },300);
+  };
+
+  const sortPossibleTags = (inputName) => {
+    console.log('fsdfds')
+    possibleTags.splice(0, possibleTags.length, ...props.possibleTags);
+
+    if (!inputName) {
+      possibleTags.sort((a, b) => a.name.localeCompare(b.name));
+      return;
+    }
+
+    const filteredAndSorted = possibleTags.filter(tag =>
+        tag.name.toLowerCase().includes(inputName.toLowerCase())
+    ).sort((a, b) =>
+        a.name.localeCompare(b.name)
+    );
+
+    possibleTags.splice(0, possibleTags.length, ...filteredAndSorted);
   };
 
   const createTag = async (newName) => {
@@ -52,6 +77,7 @@ import {reactive, ref} from "vue";
         :isCanCreate="true"
         :width="'15ch'"
         :placeholder="'Добавить тег?'"
+        @change="sortPossibleTags"
         @create="createTag"
         @focus="openPossibleTags"
         @blur="closePossibleTags"
@@ -62,7 +88,7 @@ import {reactive, ref} from "vue";
            :class="{active: openTagList}"
       >
         <PersonalTag
-            v-for="tag in props.possibleTags"
+            v-for="tag in possibleTags"
             :key="tag.id"
             :tag="tag"
             @click="addTagToTask(tag)"
