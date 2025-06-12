@@ -46,15 +46,17 @@
     {{ props.list.name }}
     <Loader v-if="listView.loadingSmall"/>
   </h2>
-  <input v-else
-         type="text"
-         class="list-header"
-         :style="{color: props.list.color, fontSize: props.fontSize, top: `${props.top}px`, zIndex: props.zIndex}"
-         v-model="listName"
-         @blur="saveChangedName"
-         @keyup.enter="blurListHeader"
-         ref="listHeaderInput"
-  />
+  <label v-else :for="`personal_list-${props.id}`">
+    <input :id="`personal_list-${props.id}`"
+           type="text"
+           class="list-header"
+           :style="{color: props.list.color, fontSize: props.fontSize, top: `${props.top}px`, zIndex: props.zIndex}"
+           v-model="listName"
+           @blur="saveChangedName"
+           @keyup.enter="blurListHeader"
+           ref="listHeaderInput"
+    />
+  </label>
 </template>
 
 <style lang="scss" scoped>

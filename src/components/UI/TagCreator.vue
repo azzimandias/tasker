@@ -15,12 +15,12 @@ import {reactive, ref, watch} from "vue";
   const newTag = reactive({id: 0, name: ''});
   const openTagList = ref(false);
   const createTagKey = ref(0);
-  const possibleTags = reactive(props.possibleTags);
+  const possibleTags = reactive([...props.possibleTags]);
   const sortPossibleTagsName = ref('');
 
   watch(() => props.possibleTags, (newPossibleTags) => {
     possibleTags.splice(0, possibleTags.length, ...newPossibleTags);
-    sortPossibleTags(sortPossibleTagsName.value)
+    sortPossibleTags(sortPossibleTagsName.value);
   });
 
   const openPossibleTags = () => {
@@ -33,23 +33,18 @@ import {reactive, ref, watch} from "vue";
     },300);
   };
 
-  const sortPossibleTags = (inputName) => {
-    console.log('fsdfds')
-    possibleTags.splice(0, possibleTags.length, ...props.possibleTags);
-
-    if (!inputName) {
-      possibleTags.sort((a, b) => a.name.localeCompare(b.name));
-      return;
-    }
-
-    const filteredAndSorted = possibleTags.filter(tag =>
-        tag.name.toLowerCase().includes(inputName.toLowerCase())
-    ).sort((a, b) =>
-        a.name.localeCompare(b.name)
-    );
-
-    possibleTags.splice(0, possibleTags.length, ...filteredAndSorted);
-  };
+const sortPossibleTags = (inputName) => {
+  const baseTags = JSON.parse(JSON.stringify(props.possibleTags));
+  if (!inputName) {
+    baseTags.sort((a, b) => a.name.localeCompare(b.name));
+    possibleTags.splice(0, possibleTags.length, ...baseTags);
+    return;
+  }
+  const filteredAndSorted = baseTags
+      .filter(tag => tag.name.toLowerCase().includes(inputName.toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  possibleTags.splice(0, possibleTags.length, ...filteredAndSorted);
+};
 
   const createTag = async (newName) => {
     openTagList.value = false;

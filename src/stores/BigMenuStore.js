@@ -78,19 +78,16 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             socket.emit('subscribe', 'bigMenuStore');
             socket.on('send_new_sort_lists_count', (new_sort_lists_count) => {
                 if (new_sort_lists_count.uuid !== socketUUID) {
-                    console.log(`Updating sort lists counts:`, new_sort_lists_count.message);
                     updSortListsCount(new_sort_lists_count.message);
                 }
             });
             socket.on('send_new_personal_lists_count', (new_personal_lists) => {
                 if (new_personal_lists.uuid !== socketUUID) {
-                    console.log(`Updating personal lists:`, new_personal_lists.message);
                     updSocketPersonalLists(new_personal_lists.message);
                 }
             });
             socket.on('send_new_personal_tags', (new_personal_tags) => {
                 if (new_personal_tags.uuid !== socketUUID) {
-                    console.log(`Updating personal tags:`, new_personal_tags.message);
                     updSocketPersonalTags(new_personal_tags.message);
                 }
             });

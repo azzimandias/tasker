@@ -20,6 +20,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         id: '',
         name: '',
         color: '',
+        count_of_active_tasks: 0,
     });
     const currentSortListInfo = reactive({
         id: 0,
@@ -117,6 +118,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 id: '',
                 name: '',
                 color: '',
+                count_of_active_tasks: 0,
             });
             Object.assign(currentSortListInfo, {
                 id: 0,
@@ -134,7 +136,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 Object.assign(currentListInfo, {
                     id: arr.list.id,
                     name: arr.list.name,
-                    color: arr.list.color
+                    color: arr.list.color,
+                    count_of_active_tasks: arr.list.count_of_active_tasks,
                 });
             } else if (route.params.name) {
                 Object.assign(currentSortListInfo, {
@@ -264,6 +267,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* + TASK */
     const updateTask = async (task) => {
         const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
+        await getTasksOrTags(true);
         await bigMenu.firstRequest();
     };
     const createTask = async (task) => {
@@ -427,11 +431,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* + PERSONAL LIST */
     const updateList = async (list) => {
         await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
-        if (list.name) {
-            currentListInfo.name = list.name;
-        } else {
-            currentListInfo.color = list.color;
-        }
+        currentListInfo.name = list.name;
+        currentListInfo.color = list.color;
+        currentListInfo.count_of_active_tasks = list.count_of_active_tasks;
         await bigMenu.firstRequest();
     };
     /* - PERSONAL LIST */

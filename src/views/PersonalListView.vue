@@ -59,6 +59,9 @@
             :top="40"
             @saveChangedName="saveChangedName"
         />
+        <div class="personal-lis-count" :style="{color: listView.listInfo.color}">
+          {{ listView.listInfo.count_of_active_tasks }}
+        </div>
         <div class="list-redact-wrapper">
           <Coloris
               :key="listView.listInfo.key"
@@ -122,13 +125,18 @@
   padding-right: 18px;
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr 30px;
+  grid-template-columns: 1fr 30px 30px;
   grid-gap: 11px;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 2;
   @include theme('background-color', $tasker);
+}
+.personal-lis-count {
+  font-size: 35px;
+  font-weight: 600;
+  padding-top: 15px;
 }
 .list-redact-wrapper {
   display: flex;
