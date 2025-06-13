@@ -431,9 +431,12 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* + PERSONAL LIST */
     const updateList = async (list) => {
         await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
-        currentListInfo.name = list.name;
-        currentListInfo.color = list.color;
-        currentListInfo.count_of_active_tasks = list.count_of_active_tasks;
+        if (list.name) {
+            currentListInfo.name = list.name;
+        } else if (list.color) {
+            currentListInfo.color = list.color;
+        }
+        //currentListInfo.count_of_active_tasks = list.count_of_active_tasks;
         await bigMenu.firstRequest();
     };
     /* - PERSONAL LIST */
@@ -655,7 +658,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         bigMenu.firstRequest().then();
     };
     /* - SOCKET */
-
     return {
         tasks: currentPersonalListTasks,
         tasksDone: currentPersonalListTasksDone,
