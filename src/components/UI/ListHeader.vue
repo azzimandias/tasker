@@ -27,7 +27,7 @@
   };
 
   const saveChangedName = () => {
-    if (listName.value) {
+    if (listName.value && listName.value !== props.list.name) {
       emit('saveChangedName', listName.value);
     }
   };
