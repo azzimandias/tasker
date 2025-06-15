@@ -229,28 +229,23 @@ export const useListViewStore = defineStore('listViewStore', () => {
         });
     };
     const updateTaskDone = (id, is_done) => {
-        if (is_done) {
-            currentPersonalListTasks.find(el => el.id === id).is_done = +is_done;
-            currentPersonalListTasks.forEach((task,idx) => {
-                if (task.id === id) {
-                    let taskDone = currentPersonalListTasks.splice(idx,1);
-                    taskDone.forEach(td => {
-                        currentPersonalListTasksDone.push(td);
-                    });
-                }
-            });
-        } else {
-            currentPersonalListTasksDone.find(el => el.id === id).is_done = +is_done;
-            currentPersonalListTasksDone.forEach((task,idx) => {
-                if (task.id === id) {
-                    let task = currentPersonalListTasksDone.splice(idx,1);
-                    task.forEach(t => {
-                        currentPersonalListTasks.push(t);
-                    })
-                }
-            });
+        try {
+            const sourceArray = is_done ? currentPersonalListTasks : currentPersonalListTasksDone;
+            const targetArray = is_done ? currentPersonalListTasksDone : currentPersonalListTasks;
+            const taskIndex = sourceArray.findIndex(el => el.id === id);
+            if (taskIndex === -1) {
+                console.warn(`Task with id ${id} not found`);
+                return;
+            }
+            const task = sourceArray[taskIndex];
+            task.is_done = is_done ? 1 : 0;
+            sourceArray.splice(taskIndex, 1);
+            targetArray.push(task);
+            sortTasksById();
+            currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
+        } catch (error) {
+            console.error('Error in updateTaskDone:', error);
         }
-        sortTasksById();
     };
     const sortTasksById = () => {
         currentPersonalListTasks.sort((a, b) => {
@@ -267,7 +262,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* + TASK */
     const updateTask = async (task) => {
         const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
-        await getTasksOrTags(true);
         await bigMenu.firstRequest();
     };
     const createTask = async (task) => {
@@ -436,7 +430,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         } else if (list.color) {
             currentListInfo.color = list.color;
         }
-        //currentListInfo.count_of_active_tasks = list.count_of_active_tasks;
         await bigMenu.firstRequest();
     };
     /* - PERSONAL LIST */

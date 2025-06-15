@@ -15,9 +15,8 @@
   const deadlineModel = ref(props.deadline);
 
   watch(() => props.deadline, (newValue) => {
-        deadlineModel.value = newValue;
-      }
-  );
+    deadlineModel.value = newValue ?? ''; // или другое дефолтное значение
+  });
 
   watch(deadlineModel, (newDeadlineModel) => {
     transitDate(newDeadlineModel);

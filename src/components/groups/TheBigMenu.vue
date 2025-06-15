@@ -27,7 +27,7 @@
         <ThePersonalLists/>
         <ThePersonalTags/>
     </div>
-    <div class="btn-wrapper">
+<!--    <div class="btn-wrapper">
       <button class="new-personal-list-btn"
               ref="newPersonalListBtn"
               @click="is_popup=true"
@@ -38,7 +38,7 @@
     </div>
     <Teleport to="body">
       <CreateNewListPopup :is_popup="is_popup" @close="is_popup=false"/>
-    </Teleport>
+    </Teleport>-->
   </div>
 </template>
 

@@ -73,7 +73,7 @@
       <div class="task__container">
         <Task
             v-for="task in listView.tasks"
-            :key="task.id"
+            :key="'task-'+task.id+'-'+task.is_done"
             :task="task"
             :color="listView.listInfo.color"
             :is_new="false"
@@ -94,7 +94,7 @@
         <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
           <Task
               v-for="task in listView.tasksDone"
-              :key="task.key"
+              :key="'taskDone-'+task.key+'-'+task.is_done"
               :task="task"
               :color="listView.listInfo.color"
               :is_new="false"

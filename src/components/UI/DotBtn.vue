@@ -18,7 +18,7 @@
 <template>
   <div
       class="dot-btn"
-      @click="changeState"
+      @mousedown="changeState"
   >
     <label
         :for="`dot_${props.id}`"
