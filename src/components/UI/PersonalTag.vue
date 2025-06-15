@@ -47,26 +47,47 @@ import {onMounted, reactive, ref, watch} from 'vue';
     if (!name.value) return;
     requestAnimationFrame(() => {
       let hiddenSpan = document.getElementById('hidden-span-helper');
-      if (!hiddenSpan) {
-        hiddenSpan = document.createElement('span');
-        hiddenSpan.id = 'hidden-span-helper';
-        hiddenSpan.style.cssText = `
+      let hiddenSpanHeader = document.getElementById('hidden-span-helper-header');
+      if (!props.isHeader) {
+        if (!hiddenSpan) {
+          hiddenSpan = document.createElement('span');
+          hiddenSpan.id = 'hidden-span-helper';
+          hiddenSpan.style.cssText = `
           visibility: hidden;
           position: absolute;
           white-space: pre;
-          font-size: 13px;
+          font-size: ${props.isHeader ? '20px' : '13px'};
           font-family: Avenir, Helvetica, Arial, sans-serif;
           top: -9999px;
           left: -9999px;
         `;
-        document.body.appendChild(hiddenSpan);
-      }
-      hiddenSpan.textContent = name.value || ' ';
-      const calculatedWidth = hiddenSpan.scrollWidth;
-      if (props.isCanCreate && +calculatedWidth < 108) { // min width for tac creator
-        width.value = `108px`;
+          document.body.appendChild(hiddenSpan);
+          hiddenSpan.textContent = name.value || ' ';
+          const calculatedWidth = hiddenSpan.scrollWidth;
+          if (props.isCanCreate && +calculatedWidth < 108) { // min width for tac creator
+            width.value = `108px`;
+          } else {
+            width.value = `${calculatedWidth}px`;
+          }
+        }
       } else {
-        width.value = `${calculatedWidth}px`;
+        if (!hiddenSpanHeader) {
+          hiddenSpanHeader = document.createElement('span');
+          hiddenSpanHeader.id = 'hidden-span-helper-header';
+          hiddenSpanHeader.style.cssText = `
+          visibility: hidden;
+          position: absolute;
+          white-space: pre;
+          font-size: '20px';
+          font-family: Avenir, Helvetica, Arial, sans-serif;
+          top: -9999px;
+          left: -9999px;
+        `;
+          document.body.appendChild(hiddenSpanHeader);
+          hiddenSpanHeader.textContent = name.value || ' ';
+          const calculatedWidth = hiddenSpanHeader.scrollWidth;
+          width.value = `${calculatedWidth}px`;
+        }
       }
     });
   };
