@@ -1,46 +1,57 @@
 <script setup>
-  import VueDatePicker from "@vuepic/vue-datepicker";
-  import '@vuepic/vue-datepicker/dist/main.css';
-  import {ref, watch} from "vue";
-  import {useListViewStore} from "@/stores/ListViewStore";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import '@vuepic/vue-datepicker/dist/main.css';
+import { computed, ref, watch } from "vue";
 
-  const listView = useListViewStore();
-  const emit = defineEmits(['saveChangesDate'])
-  const props = defineProps({
-    id: Number,
-    deadline: String,
-  })
-  const datePicker = ref(null);
-  const deadline = ref();
-  const deadlineModel = ref(props.deadline);
+const emit = defineEmits(['saveChangesDate'])
+const props = defineProps({
+  id: Number,
+  deadline: [String, Date, null],
+})
 
-  watch(() => props.deadline, (newValue) => {
-    deadlineModel.value = newValue ?? ''; // или другое дефолтное значение
-  });
+const datePicker = ref(null);
+const deadlineModel = ref(props.deadline);
 
-  watch(deadlineModel, (newDeadlineModel) => {
-    transitDate(newDeadlineModel);
-  })
+const formatDateSafe = (date) => {
+  if (!date) return { iso: null, display: 'Дата' };
 
-  const openDatePicker = () => {
-    const node = datePicker.value.firstElementChild;
-    node.querySelector('.dp__input').click();
-  };
-  const transitDate = (date) => {
-    const timestamp = Date.parse(date);
-    deadline.value = ("" + (new Date(timestamp)).toISOString()).replace(/^([^T]+)T(.+)$/,'$1');
-    if (props.deadline !== deadline.value) saveChangesDate();
-    return ("" + (new Date(timestamp)).toISOString()).replace(/^([^T]+)T(.+)$/,'$1').replace(/^(\d+)-(\d+)-(\d+)$/,'$3.$2.$1');
-  };
-  const saveChangesDate = () => {
-    emit('saveChangesDate', deadline.value);
-  };
+  try {
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return { iso: null, display: 'Дата' };
+
+    const iso = d.toISOString().split('T')[0];
+    const display = iso.split('-').reverse().join('.');
+    return { iso, display };
+  } catch {
+    return { iso: null, display: 'Дата' };
+  }
+};
+
+const displayDate = computed(() => {
+  return formatDateSafe(deadlineModel.value).display;
+});
+
+const handleDateChange = (date) => {
+  const { iso } = formatDateSafe(date);
+  if (iso) {
+    emit('saveChangesDate', iso);
+  }
+};
+
+watch(() => props.deadline, (newValue) => {
+  deadlineModel.value = newValue;
+});
+
+const openDatePicker = () => {
+  datePicker.value?.firstElementChild?.querySelector('.dp__input')?.click();
+};
 </script>
 
 <template>
   <div class="lb" @mousedown="openDatePicker" ref="datePicker">
     <VueDatePicker
         v-model="deadlineModel"
+        @update:model-value="handleDateChange"
         :dark="true"
         :position="'center'"
         :teleport="true"
@@ -52,8 +63,7 @@
     />
     <div class="date__wrapper">
       <img class="date-pic" src="../../assets/svgs/calendar.svg" alt="calendar">
-      <p class="date" v-if="deadlineModel">{{ transitDate(deadlineModel) }}</p>
-      <p class="date" v-else>Дата</p>
+      <p class="date">{{ displayDate }}</p>
     </div>
   </div>
 </template>

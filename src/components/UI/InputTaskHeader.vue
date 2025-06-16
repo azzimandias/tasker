@@ -43,21 +43,30 @@ import {onMounted, ref, watch} from "vue";
 </script>
 
 <template>
-  <input class="task__name"
-         :style="{color: props.color}"
-         :name="props.name"
-         :placeholder="props.placeholder"
-         v-model="taskName"
-         @blur="createOrUpdate"
-         @keyup.enter="blurInput"
-         ref="taskNode"
-  />
+  <label   :for="`input-task-header-${id}`"
+           class="input-task-header-label"
+  >
+    <input :id="`input-task-header-${id}`"
+           class="task__name"
+           :style="{color: props.color}"
+           :name="props.name"
+           :placeholder="props.placeholder"
+           v-model="taskName"
+           @blur="createOrUpdate"
+           @keyup.enter="blurInput"
+           ref="taskNode"
+    />
+  </label>
 </template>
 
 <style lang="scss" scoped>
   @import "../../assets/styles/global.scss";
-  .task__name {
+  .input-task-header-label {
     flex: 1 0 100px;
+    height: 25px;
+  }
+  .task__name {
+    width: 100%;
     height: 25px;
     transition: .3s;
     cursor: pointer;

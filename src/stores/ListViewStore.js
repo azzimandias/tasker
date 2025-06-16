@@ -219,6 +219,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
             is_flagged: 0,
             url: null,
             priority: null,
+            tags: [],
+            possibleTags: [],
         });
     };
     const removeNewTask = () => {

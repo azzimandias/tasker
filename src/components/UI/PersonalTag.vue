@@ -56,19 +56,19 @@ import {onMounted, reactive, ref, watch} from 'vue';
           visibility: hidden;
           position: absolute;
           white-space: pre;
-          font-size: ${props.isHeader ? '20px' : '13px'};
+          font-size: 13px;
           font-family: Avenir, Helvetica, Arial, sans-serif;
           top: -9999px;
           left: -9999px;
         `;
           document.body.appendChild(hiddenSpan);
-          hiddenSpan.textContent = name.value || ' ';
-          const calculatedWidth = hiddenSpan.scrollWidth;
-          if (props.isCanCreate && +calculatedWidth < 108) { // min width for tac creator
-            width.value = `108px`;
-          } else {
-            width.value = `${calculatedWidth}px`;
-          }
+        }
+        hiddenSpan.textContent = name.value || ' ';
+        const calculatedWidth = hiddenSpan.scrollWidth;
+        if (props.isCanCreate && +calculatedWidth < 108) { // min width for tac creator
+          width.value = `108px`;
+        } else {
+          width.value = `${calculatedWidth}px`;
         }
       } else {
         if (!hiddenSpanHeader) {
@@ -78,16 +78,16 @@ import {onMounted, reactive, ref, watch} from 'vue';
           visibility: hidden;
           position: absolute;
           white-space: pre;
-          font-size: '20px';
+          font-size: 20px;
           font-family: Avenir, Helvetica, Arial, sans-serif;
           top: -9999px;
           left: -9999px;
         `;
           document.body.appendChild(hiddenSpanHeader);
-          hiddenSpanHeader.textContent = name.value || ' ';
-          const calculatedWidth = hiddenSpanHeader.scrollWidth;
-          width.value = `${calculatedWidth}px`;
         }
+        hiddenSpanHeader.textContent = name.value || ' ';
+        const calculatedWidth = hiddenSpanHeader.scrollWidth;
+        width.value = `${calculatedWidth + 3}px`;
       }
     });
   };
@@ -120,61 +120,64 @@ import {onMounted, reactive, ref, watch} from 'vue';
 </script>
 
 <template>
-  <div v-if="props.isCanChange"
-       class="personal-tag__wrapper show"
-       @dblclick="goToTagViewPage"
-  >
-    <div class="personal-tag show hash"
+  <label v-if="props.isCanChange"
+         :for="`task-tag-${props.id_task}-${props.tag.id}`"
+         class="personal-tag show hash"
          :class="{ active: +props.tag.id === +listView.currentTag.id }"
          ref="tagWrapper"
-    >
-      <input type="text"
-             v-model="name"
-             @blur="changeTag"
-             @keyup.enter="(e) => e.target.blur()"
-             @keydown="resize"
-             :style="{width: width}"
-      />
-    </div>
-  </div>
-
-  <div v-else-if="props.isCanCreate"
-       class="personal-tag__wrapper show"
+         @dblclick="goToTagViewPage"
   >
-    <div class="personal-tag show blank"
+    <input :id="`task-tag-${props.id_task}-${props.tag.id}`"
+           type="text"
+           class="tag-input"
+           v-model="name"
+           @blur="changeTag"
+           @keyup.enter="(e) => e.target.blur()"
+           @keydown="resize"
+           :style="{width: width}"
+    />
+  </label>
+
+  <label v-else-if="props.isCanCreate"
+         :for="`create-tag-${props.id_task}`"
+         class="personal-tag show blank"
          ref="tagWrapper"
-    >
-      <input type="text"
-             v-model="name"
-             @keyup.enter="crateTag"
-             @keydown="resize"
-             @focus="emit('focus')"
-             @blur="() => {resize(); emit('blur')}"
-             :style="{width: width}"
-             :placeholder="props.placeholder"
-      />
-    </div>
-  </div>
+  >
+    <input :id="`create-tag-${props.id_task}`"
+           type="text"
+           class="tag-input"
+           v-model="name"
+           @keyup.enter="crateTag"
+           @keydown="resize"
+           @focus="emit('focus')"
+           @blur="() => {resize(); emit('blur')}"
+           :style="{width: width}"
+           :placeholder="props.placeholder"
+    />
+  </label>
 
   <div v-else-if="props.isHeader"
-       class="tag-header"
+       class="tag-header-wrapper"
   >
-    <div class="personal-tag visible hash"
-         :class="{
-            active: +props.tag.id === +listView.currentTag.id,
-            blank: !props.tag.id,
-         }"
+    <label v-if="props.tag.id"
+           :for="`header-tag-${props.tag.id}`"
+           class="tag-header personal-tag visible hash-header"
+           :class="{
+              active: +props.tag.id === +listView.currentTag.id,
+              blank: !props.tag.id,
+           }"
     >
-      <input v-if="props.tag.id"
+      <input :id="`header-tag-${props.tag.id}`"
              type="text"
+             class="tag-input"
              v-model="name"
              @blur="changeTag"
              @keyup.enter="changeTag"
              @keydown="resize"
-             :style="{width: width}"
+             :style="{width: width, fontSize: '20px'}"
       />
-      <div v-else>{{ name }}</div>
-    </div>
+    </label>
+    <div v-else class="tag-header">{{ name }}</div>
   </div>
 
   <div v-else-if="props.isRoute" class="personal-tag__wrapper visible">
@@ -193,14 +196,12 @@ import {onMounted, reactive, ref, watch} from 'vue';
       position: relative;
     }
 
-    .personal-tag__wrapper .personal-tag {
+    .personal-tag {
         width: auto;
         height: 28px;
         font-size: 13px;
         padding: 5px 8px;
         border-radius: 5px;
-        margin-right: 5px;
-        margin-bottom: 5px;
         cursor: pointer;
         opacity: 0;
         transition: .3s;
@@ -246,14 +247,17 @@ import {onMounted, reactive, ref, watch} from 'vue';
       }
     }
 
+    .tag-input {
+      width: 100%;
+      height: 100%;
+    }
+
     .personal-tag-average {
       width: auto;
       height: auto;
       font-size: 13px;
       padding: 5px 8px;
       border-radius: 5px;
-      margin-right: 5px;
-      margin-bottom: 5px;
       cursor: pointer;
       transition: .3s;
       &:active {
@@ -263,6 +267,10 @@ import {onMounted, reactive, ref, watch} from 'vue';
     }
 
     .hash::before { content: '#'; }
+    .hash-header::before {
+      content: '#';
+      font-size: 20px;
+    }
 
     .blank::before { content: ''; }
 
@@ -275,7 +283,13 @@ import {onMounted, reactive, ref, watch} from 'vue';
       border-radius: 5px;
       cursor: pointer;
       transition: 0.3s;
-      margin-bottom: 8.5px;
+      //margin-bottom: 8.5px;
+    }
+
+    .tag-header-wrapper {
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
 
     @import "../../assets/styles/global.scss";

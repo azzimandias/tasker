@@ -32,6 +32,7 @@
     .personal-tags__container {
         display: flex;
         flex-wrap: wrap;
+        grid-gap: 5px;
         //padding: 6px 15px 6px 6px;
         max-height: 205px;
     }

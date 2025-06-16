@@ -64,7 +64,7 @@ const sortPossibleTags = (inputName) => {
 </script>
 
 <template>
-  <div class="personal-tag__wrapper visible">
+  <div>
     <PersonalTag
         :key="createTagKey"
         :id_task="props.id_task"
@@ -94,50 +94,6 @@ const sortPossibleTags = (inputName) => {
 </template>
 
 <style scoped lang="scss">
-.personal-tag__wrapper .personal-tag {
-  width: auto;
-  height: 28px;
-  font-size: 13px;
-  padding: 5px 8px;
-  border-radius: 5px;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  cursor: pointer;
-  opacity: 0;
-  transition: .3s;
-  &:active {
-    opacity: 0.8;
-  }
-  &.visible {
-    opacity: 1;
-  }
-  &.show {
-    animation: show .3s forwards;
-  }
-  &.hide {
-    animation: hide .3s forwards;
-  }
-  input { padding: 0; }
-}
-
-@keyframes show {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes hide {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
   .personal-tag__list {
     position: absolute;
     left: 0;
@@ -182,14 +138,6 @@ const sortPossibleTags = (inputName) => {
 
   @import "../../assets/styles/global.scss";
 
-  .personal-tag {
-    @include theme('background-color', $personal);
-    @include theme('color', $textColor);
-    &.active {
-      @include theme('background-color', $gold);
-      @include theme('color', $textColorActive);
-    }
-  }
   .personal-tag__list {
     @include theme('background-color', $dropDownListBackground);
     @include theme('border-color', $dropDownListBorder);
