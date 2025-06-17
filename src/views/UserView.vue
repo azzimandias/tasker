@@ -1,76 +1,94 @@
 <script setup>
-  import api from "@/api";
-  import {useRouter} from "vue-router";
-  import InputBordered from "@/components/UI/InputBordered.vue";
-  import ListHeader from "@/components/UI/ListHeader.vue";
-  import {useBigMenuStore} from "@/stores/BigMenuStore";
-  import {useListViewStore} from "@/stores/ListViewStore";
-  import {onBeforeMount, onMounted, reactive, ref} from "vue";
-  import LoaderBig from "@/components/UI/LoaderBig.vue";
+import api from "@/api";
+import { useRouter } from "vue-router";
+import InputBordered from "@/components/UI/InputBordered.vue";
+import { useBigMenuStore } from "@/stores/BigMenuStore";
+import {ref, onMounted, watch, reactive} from "vue";
+import LoaderBig from "@/components/UI/LoaderBig.vue";
 
-  const router = useRouter();
-  const bigMenu = useBigMenuStore();
-  const listView = useListViewStore();
-  const loading = ref(true);
-  const userInfo = reactive({
-    id:      0,
-    email:   '',
-    name:    '',
-    surname: ''
-  });
-  const randomKey = ref(Math.random());
-  onBeforeMount(async () => {
-    await bigMenu.getUserInfo();
-    userInfo.id =      bigMenu.user.id;
-    userInfo.email =   bigMenu.user.email;
-    userInfo.name =    bigMenu.user.name;
-    userInfo.surname = bigMenu.user.surname;
-    randomKey.value = Math.random();
+const router = useRouter();
+const bigMenu = useBigMenuStore();
+const loading = ref(true);
+
+const userInfo = reactive({
+  user_id: 0,
+  user_email: '',
+  user_name: '',
+  user_surname: ''
+});
+
+watch(() => bigMenu.user, (newUserInfo) => {
+      if (!newUserInfo) return;
+      console.log('User changed:', newUserInfo);
+      Object.assign(userInfo, {
+        user_id: newUserInfo.id,
+        user_email: newUserInfo.email,
+        user_name: newUserInfo.name,
+        user_surname: newUserInfo.surname
+      });
+    }, { deep: true, immediate: true }
+);
+
+onMounted(async () => {
+  try {
+    loading.value = true;
+    userInfo.user_id = bigMenu.user.id;
+    userInfo.user_email = bigMenu.user.email;
+    userInfo.user_name = bigMenu.user.name;
+    userInfo.user_surname = bigMenu.user.surname;
+  } catch (error) {
+    console.error("Failed to load user info:", error);
+  } finally {
     loading.value = false;
-  });
+  }
+});
 
-  const exit = async () => {
+const exit = async () => {
+  try {
     const res = await api.logout();
     if (res === 'logout') {
       await router.push({ path: '/' });
     }
-  };
-  const getValue = (obj) => {
-    userInfo[obj.name] = obj.value;
+  } catch (error) {
+    console.error("Logout failed:", error);
   }
-  const save = async () => {
+};
+
+const getValue = (obj) => {
+  userInfo[obj.name] = obj.value;
+};
+
+const save = async () => {
+  try {
     await api.postInfo('updateUserInfo', userInfo);
-  };
+  } catch (error) {
+    console.error("Save failed:", error);
+  }
+};
 </script>
 
 <template>
-  <Transition mode="out-in" name="slide-up">
-
-    <LoaderBig v-if="loading"/>
-
-    <div class="user-view" v-else>
-      <ListHeader v-if="userInfo.name">Hello {{ userInfo.name }}!</ListHeader>
+  <Transition name="fade">
+    <LoaderBig v-if="loading" key="loader" />
+    <div v-else class="user-view">
       <div class="inputs-container">
         <InputBordered
-            :key="randomKey"
-            :name="'email'"
-            :value="userInfo.email"
+            :name="'user_email'"
+            :value="userInfo.user_email"
             @returnValue="getValue"
         >
           Email
         </InputBordered>
         <InputBordered
-            :key="randomKey"
-            :name="'name'"
-            :value="userInfo.name"
+            :name="'user_name'"
+            :value="userInfo.user_name"
             @returnValue="getValue"
         >
           Name
         </InputBordered>
         <InputBordered
-            :key="randomKey"
-            :name="'surname'"
-            :value="userInfo.surname"
+            :name="'user_surname'"
+            :value="userInfo.user_surname"
             @returnValue="getValue"
         >
           Surname
@@ -81,7 +99,6 @@
         </div>
       </div>
     </div>
-
   </Transition>
 </template>
 
@@ -130,19 +147,17 @@
       opacity: .5;
     }
   }
-  .slide-up-enter-active,
-  .slide-up-leave-active {
+  .fade-enter-active,
+  .fade-leave-active {
     transition: all 0.25s ease-out;
   }
 
-  .slide-up-enter-from {
+  .fade-enter-from {
     opacity: 0;
-    //transform: translateY(30px);
   }
 
-  .slide-up-leave-to {
+  .fade-leave-to {
     opacity: 0;
-    //transform: translateY(-30px);
   }
   @media screen and (max-width: 700px) {
     .inputs-container {

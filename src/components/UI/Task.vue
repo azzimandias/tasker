@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, onUpdated, ref, toRef, watch} from 'vue';
+import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
   import {useListViewStore} from "@/stores/ListViewStore";
   import InputTaskHeader from "@/components/UI/InputTaskHeader.vue";
   import DotBtn from "@/components/UI/DotBtn.vue";
@@ -25,11 +25,13 @@ import {onMounted, onUpdated, ref, toRef, watch} from 'vue';
   const height = ref('');
 
   onMounted(() => {
-    height.value = `${taskNode.value.scrollHeight}px`;
-    taskNode.value.classList.add('show-anim');
-    taskNode.value.classList.remove('hide-anim');
-    if (document.documentElement.clientWidth <= 700) {
-      is_visible.value = true;
+    if (taskNode.value.classList.contains('show-anim')) {
+      height.value = `${taskNode.value.scrollHeight}px`;
+      taskNode.value.classList.add('show-anim');
+      taskNode.value.classList.remove('hide-anim');
+      if (document.documentElement.clientWidth <= 700) {
+        is_visible.value = true;
+      }
     }
   });
 

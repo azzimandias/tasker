@@ -94,7 +94,7 @@
         <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
           <Task
               v-for="task in listView.tasksDone"
-              :key="'taskDone-'+task.key+'-'+task.is_done"
+              :key="'taskDone-'+task.id+'-'+task.is_done"
               :task="task"
               :color="listView.listInfo.color"
               :is_new="false"

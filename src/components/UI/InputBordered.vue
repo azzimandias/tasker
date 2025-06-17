@@ -6,19 +6,27 @@ import {ref, watch} from "vue";
     name: String,
     value: String,
   });
-  const value = ref(props.value);
+  const model = ref(props.value);
+
+  watch(() => props.value, (newValue) => {
+    model.value = newValue;
+  });
 
   const returnValue = () => {
-    emit('returnValue', {name: props.name, value})
+    emit('returnValue', {name: props.name, value: model.value});
   }
 </script>
 
 <template>
   <div class="wrapper">
     <div class="label"><slot/>:</div>
-    <div class="bordered">
-      <input type="text" v-model="value" @keyup="returnValue"/>
-    </div>
+    <label :for="`input-${props.name}`" class="bordered">
+      <input :id="`input-${props.name}`"
+             type="text"
+             v-model="model"
+             @keyup="returnValue"
+      />
+    </label>
   </div>
 </template>
 

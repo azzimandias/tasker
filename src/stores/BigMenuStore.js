@@ -65,13 +65,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         user.name    = userInfo.name;
         user.surname = userInfo.surname;
         initialize().then();
-    }
-
+    };
     const initialize = async () => {
         await connectSocket();
         await firstRequest();
     };
-
     const connectSocket = async () => {
         try {
             socket.connect();
@@ -98,13 +96,11 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             }, 1000);
         }
     };
-
     const firstRequest = async () => {
         await getSortListsCount();
         await getPersonalLists();
         await getPersonalTags();
-    }
-
+    };
     const getSortListsCount = async () => {
         is_load_sortLists.value = true;
         const response = await api.getInfoWithArgs('sortLists', {
@@ -123,8 +119,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             });
             is_load_sortLists.value = false;
         }
-    }
-
+    };
     const updSortListsCount = (newSortListsCount) => {
         if ((typeof newSortListsCount) === "object") {
             is_load_sortLists.value = true;
@@ -137,8 +132,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             });
             is_load_sortLists.value = false;
         }
-    }
-
+    };
     const getPersonalLists = async () => {
         try {
             is_load_personalLists.value = true;
@@ -159,8 +153,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         } catch (e) {
             console.log(e);
         }
-    }
-
+    };
     const updSocketPersonalLists = (newPersonalLists) => {
         if ((typeof newPersonalLists) === "object" && newPersonalLists.length > 0) {
             is_load_personalLists.value = true;
@@ -171,8 +164,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             });
             is_load_personalLists.value = false;
         }
-    }
-
+    };
     const getPersonalTags = async () => {
         try {
             is_load_personalTags.value = true;
@@ -194,8 +186,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         } catch (e) {
             console.log(e);
         }
-    }
-
+    };
     const updSocketPersonalTags = (newPersonalTags) => {
         if ((typeof newPersonalTags) === "object" && newPersonalTags.length > 0) {
             personalTags.length = 0;
@@ -206,22 +197,18 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             });
             is_load_personalTags.value = false;
         }
-    }
-
+    };
     const addNewList = (list) => {
         personalLists.push(list);
     };
-
     const saveList = async (list) => {
         await api.saveList(list);
         await firstRequest();
     };
-
     const deleteList = async (listId) => {
         await api.deleteList(listId);
         await firstRequest();
     };
-
     return {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,

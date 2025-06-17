@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import {ref, reactive, onMounted, watchEffect, onUnmounted} from "vue";
+import {ref, reactive, onMounted, watchEffect, onUnmounted, computed} from "vue";
 import {useRoute} from "vue-router";
 import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
@@ -276,6 +276,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         });
         await bigMenu.firstRequest();
+        currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
         return response;
     };
     const deleteTask = async (obj) => {
@@ -286,6 +287,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         });
         obj['uuid'] = socketUUID;
         await api.postInfo(`deleteTask`, obj);
+        currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
         await bigMenu.firstRequest();
     };
     /* - TASK */
