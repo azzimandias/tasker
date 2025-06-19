@@ -162,9 +162,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
             if (route.params.id_list) {
                 arr.tasks.forEach(item => {
+                    item.changer = Math.random();
                     targetArray.active.push(item);
                 });
                 arr.tasksDone.forEach(item => {
+                    item.changer = Math.random();
                     targetArray.done.push(item);
                 });
             } else {

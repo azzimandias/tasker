@@ -68,7 +68,7 @@ const save = async () => {
 </script>
 
 <template>
-  <Transition name="fade">
+  <Transition mode="out-in" name="fade">
     <LoaderBig v-if="loading" key="loader" />
     <div v-else class="user-view">
       <div class="inputs-container">

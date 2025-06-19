@@ -15,7 +15,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
     placeholder: String,
   });
 
-  const emit = defineEmits(['change', 'create', 'focus', 'blur', 'click']);
+  const emit = defineEmits(['change', 'create', 'onFocus', 'onBlur', 'click']);
 
   const route = useRoute();
   const name = ref(props.tag.name);
@@ -23,18 +23,23 @@ import {onMounted, reactive, ref, watch} from 'vue';
   const height = ref('');
   const listView = useListViewStore();
   const width = ref(props.width? props.width : '1px');
+  const span = ref(null);
+  const spanHeader = ref(null);
+  const isMounted = ref(false);
 
   watch(() => props.tag.name, (newName) => {
-    name.value = newName;
-    resize();
+    if (isMounted.value) {
+      name.value = newName;
+      resize();
+    }
   });
   watch(name, (newName) => {
     emit('change', newName)
   })
-
   onMounted(() => {
     resize();
     needHash();
+    isMounted.value = true;
   });
   const needHash = () => {
     if(props.tag.id !== 0 && !props.isCanChange && !props.isHeader) {
@@ -43,54 +48,23 @@ import {onMounted, reactive, ref, watch} from 'vue';
   };
 
 /* + can change */
-  const resize = () => {
-    if (!name.value) return;
-    requestAnimationFrame(() => {
-      let hiddenSpan = document.getElementById('hidden-span-helper');
-      let hiddenSpanHeader = document.getElementById('hidden-span-helper-header');
-      if (!props.isHeader) {
-        if (!hiddenSpan) {
-          hiddenSpan = document.createElement('span');
-          hiddenSpan.id = 'hidden-span-helper';
-          hiddenSpan.style.cssText = `
-          visibility: hidden;
-          position: absolute;
-          white-space: pre;
-          font-size: 13px;
-          font-family: Avenir, Helvetica, Arial, sans-serif;
-          top: -9999px;
-          left: -9999px;
-        `;
-          document.body.appendChild(hiddenSpan);
-        }
-        hiddenSpan.textContent = name.value || ' ';
-        const calculatedWidth = hiddenSpan.scrollWidth;
-        if (props.isCanCreate && +calculatedWidth < 108) { // min width for tac creator
-          width.value = `108px`;
-        } else {
-          width.value = `${calculatedWidth}px`;
-        }
-      } else {
-        if (!hiddenSpanHeader) {
-          hiddenSpanHeader = document.createElement('span');
-          hiddenSpanHeader.id = 'hidden-span-helper-header';
-          hiddenSpanHeader.style.cssText = `
-          visibility: hidden;
-          position: absolute;
-          white-space: pre;
-          font-size: 20px;
-          font-family: Avenir, Helvetica, Arial, sans-serif;
-          top: -9999px;
-          left: -9999px;
-        `;
-          document.body.appendChild(hiddenSpanHeader);
-        }
-        hiddenSpanHeader.textContent = name.value || ' ';
-        const calculatedWidth = hiddenSpanHeader.scrollWidth;
-        width.value = `${calculatedWidth + 3}px`;
-      }
-    });
-  };
+const resize = () => {
+  if (!name.value) return;
+  requestAnimationFrame(() => {
+    if (!props.isHeader) {
+      if (!span.value) return;
+      span.value.textContent = name.value || ' ';
+      const calculatedWidth = span.value.scrollWidth;
+      width.value = props.isCanCreate && calculatedWidth < 108
+          ? '108px'
+          : `${calculatedWidth}px`;
+    } else {
+      if (!spanHeader.value) return;
+      spanHeader.value.textContent = name.value || ' ';
+      width.value = `${spanHeader.value.scrollWidth + 10}px`;
+    }
+  });
+};
   const changeTag = async () => {
     if (name.value.trim()) {
       if (props.tag.name !== name.value) {
@@ -136,6 +110,10 @@ import {onMounted, reactive, ref, watch} from 'vue';
            @keydown="resize"
            :style="{width: width}"
     />
+    <span v-show="true"
+          class="hidden-span-helper"
+          ref="span"
+    ></span>
   </label>
 
   <label v-else-if="props.isCanCreate"
@@ -149,11 +127,15 @@ import {onMounted, reactive, ref, watch} from 'vue';
            v-model="name"
            @keyup.enter="crateTag"
            @keydown="resize"
-           @focus="emit('focus')"
-           @blur="() => {resize(); emit('blur')}"
+           @focus="emit('onFocus')"
+           @blur="() => {resize(); emit('onBlur')}"
            :style="{width: width}"
            :placeholder="props.placeholder"
     />
+    <span v-show="true"
+          class="hidden-span-helper"
+          ref="span"
+    ></span>
   </label>
 
   <div v-else-if="props.isHeader"
@@ -176,6 +158,10 @@ import {onMounted, reactive, ref, watch} from 'vue';
              @keydown="resize"
              :style="{width: width, fontSize: '20px'}"
       />
+      <span v-show="true"
+            class="hidden-span-helper-header"
+            ref="spanHeader"
+      ></span>
     </label>
     <div v-else class="tag-header">{{ name }}</div>
   </div>
@@ -290,6 +276,26 @@ import {onMounted, reactive, ref, watch} from 'vue';
       display: flex;
       align-items: center;
       height: 100%;
+    }
+
+    .hidden-span-helper {
+      visibility: hidden;
+      position: absolute;
+      white-space: pre;
+      font-size: 13px;
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    .hidden-span-helper-header {
+      visibility: hidden;
+      position: absolute;
+      white-space: pre;
+      font-size: 20px;
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      top: -9999px;
+      left: -9999px;
     }
 
     @import "../../assets/styles/global.scss";

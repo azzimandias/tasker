@@ -24,6 +24,19 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
 
   const height = ref('');
 
+  const isMounted = ref(false);
+
+  watch(() => props.task.changer, () => {
+    if (isMounted.value) {
+      console.log('watch')
+      height.value = `${taskNode.value.scrollHeight}px`;
+      taskNode.value.classList.remove('hide-anim');
+      if (document.documentElement.clientWidth <= 700) {
+        is_visible.value = true;
+      }
+    }
+  });
+
   onMounted(() => {
     if (taskNode.value.classList.contains('show-anim')) {
       height.value = `${taskNode.value.scrollHeight}px`;
@@ -33,6 +46,7 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
         is_visible.value = true;
       }
     }
+    isMounted.value = true;
   });
 
   const saveChangesName = (newName) => {saveChanges('name', newName);};
@@ -73,7 +87,6 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
   };
 
   const hideTask = () => {
-    console.log(taskNode.value.scrollHeight)
     height.value = `${taskNode.value.scrollHeight}px`;
     taskNode.value.classList.add('hide-anim');
   };
@@ -117,6 +130,7 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
   >
     <div class="task__top-container">
       <DotBtn
+          :key="props.task.changer"
           :is_done="props.task.is_done"
           :id="props.task.id"
           :color="props.color"
@@ -163,7 +177,7 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
         />
         <PersonalTag
             v-for="tag in props.task.tags"
-            :key="tag.id"
+            :key="`added-tag-${props.task.id}-${tag.id}`"
             :id_task="props.task.id"
             :tag="tag"
             :isCanChange="true"

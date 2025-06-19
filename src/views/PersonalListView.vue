@@ -8,7 +8,7 @@
   import LoaderBig from "@/components/UI/LoaderBig.vue";
   import DeleteBtn from "@/components/UI/DeleteBtn.vue";
   import Coloris from "@/components/UI/Coloris.vue";
-  import {onMounted, ref, watchEffect} from "vue";
+  import {computed, onMounted, ref, watchEffect} from "vue";
   import {useRoute} from "vue-router";
 
 
@@ -45,7 +45,7 @@
 </script>
 
 <template>
-  <Transition mode="out-in" name="fade">
+<!--  <Transition mode="out-in" name="fade">-->
 
     <LoaderBig v-if="listView.loading"/>
 
@@ -72,8 +72,8 @@
       </div>
       <div class="task__container">
         <Task
-            v-for="task in listView.tasks"
-            :key="'task-'+task.id+'-'+task.is_done"
+            v-for="(task, idx) in listView.tasks"
+            :key="`task-${idx}-${task.is_done}`"
             :task="task"
             :color="listView.listInfo.color"
             :is_new="false"
@@ -93,8 +93,8 @@
       <Transition name="expand">
         <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
           <Task
-              v-for="task in listView.tasksDone"
-              :key="'taskDone-'+task.id+'-'+task.is_done"
+              v-for="(task, idx) in listView.tasksDone"
+              :key="`taskDone-${idx}-${task.is_done}`"
               :task="task"
               :color="listView.listInfo.color"
               :is_new="false"
@@ -106,7 +106,7 @@
       <div class="empty-list__title" v-if="!listView.tasks.length && !listView.tasksDone.length"><p>Здесь пусто.</p></div>
     </div>
 
-  </Transition>
+<!--  </Transition>-->
 </template>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <script setup>
-  import {ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 
   const props = defineProps({
     is_done: Number,
@@ -8,6 +8,27 @@
   });
   const emits = defineEmits(['dot']);
   const is_doneModel = ref(Boolean(props.is_done));
+  const innerDot = ref(null);
+
+  watch(() => props.is_done, (new_is_done) => {
+    is_doneModel.value = new_is_done;
+  });
+
+  watch(is_doneModel, (new_is_done) => {
+    if (is_doneModel.value) {
+      innerDot.value.classList.add('active');
+    } else {
+      innerDot.value.classList.remove('active');
+    }
+  })
+
+  onMounted(() => {
+    if (is_doneModel.value) {
+      innerDot.value.classList.add('active');
+    } else {
+      innerDot.value.classList.remove('active');
+    }
+  });
 
   const changeState = () => {
     is_doneModel.value = !is_doneModel.value;
@@ -28,8 +49,7 @@
       <input type="checkbox" :id="`dot_${props.id}`" class="checkbox"/>
     </label>
     <Transition mode="out-in" name="fade">
-      <div class="inner-dot" v-if="is_doneModel" :style="{backgroundColor: color}"></div>
-      <div class="inner-dot" v-else></div>
+      <div class="inner-dot" ref="innerDot"></div>
     </Transition>
   </div>
 </template>
@@ -64,6 +84,9 @@
   transition: .3s;
   cursor: pointer;
   background-color: transparent;
+  &.active {
+    background-color: v-bind(color);
+  }
 }
 .fade-enter-active,
 .fade-leave-active {

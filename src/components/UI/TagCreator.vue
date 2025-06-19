@@ -24,6 +24,7 @@ import {reactive, ref, watch} from "vue";
   });
 
   const openPossibleTags = () => {
+    console.log('openPossibleTags')
     openTagList.value = true;
   };
 
@@ -64,7 +65,7 @@ const sortPossibleTags = (inputName) => {
 </script>
 
 <template>
-  <div>
+  <div class="tag-creator">
     <PersonalTag
         :key="createTagKey"
         :id_task="props.id_task"
@@ -74,8 +75,8 @@ const sortPossibleTags = (inputName) => {
         :placeholder="'Добавить тег?'"
         @change="sortPossibleTags"
         @create="createTag"
-        @focus="openPossibleTags"
-        @blur="closePossibleTags"
+        @onFocus="openPossibleTags"
+        @onBlur="closePossibleTags"
     />
     <Transition mode="out-in" name="fade">
       <div v-if="openTagList"
@@ -94,6 +95,9 @@ const sortPossibleTags = (inputName) => {
 </template>
 
 <style scoped lang="scss">
+  .tag-creator {
+    position: relative;
+  }
   .personal-tag__list {
     position: absolute;
     left: 0;
@@ -107,6 +111,7 @@ const sortPossibleTags = (inputName) => {
     overflow-y: auto;
     overflow-x: hidden;
     display: none;
+    grid-gap: 5px;
     flex-wrap: wrap;
     z-index: 10;
     &.active {

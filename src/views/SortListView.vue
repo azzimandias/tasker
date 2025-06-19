@@ -37,7 +37,7 @@
 </script>
 
 <template>
-  <Transition mode="out-in" name="fade">
+<!--  <Transition mode="out-in" name="fade">-->
     <LoaderBig v-if="listView.loading"/>
 
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
@@ -74,7 +74,7 @@
         <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
       </div>
     </div>
-  </Transition>
+<!--  </Transition>-->
 </template>
 
 <style lang="scss" scoped>
