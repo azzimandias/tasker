@@ -81,7 +81,7 @@ import {onMounted, ref, watch} from 'vue';
   width: 71%;
   height: 71%;
   border-radius: 50%;
-  transition: .3s;
+  //transition: .3s;
   cursor: pointer;
   background-color: transparent;
   &.active {

@@ -17,6 +17,8 @@ import {reactive, ref, watch} from "vue";
   const createTagKey = ref(0);
   const possibleTags = reactive([...props.possibleTags]);
   const sortPossibleTagsName = ref('');
+  const possibleTagsList =ref(null);
+  const possibleTagsListScrollHeight = ref(possibleTagsList.scrollHeight);
 
   watch(() => props.possibleTags, (newPossibleTags) => {
     possibleTags.splice(0, possibleTags.length, ...newPossibleTags);
@@ -82,6 +84,7 @@ const sortPossibleTags = (inputName) => {
       <div v-if="openTagList"
            class="personal-tag__list scroll"
            :class="{active: openTagList}"
+           ref="possibleTagsList"
       >
         <PersonalTag
             v-for="tag in possibleTags"
@@ -101,9 +104,9 @@ const sortPossibleTags = (inputName) => {
   .personal-tag__list {
     position: absolute;
     left: 0;
-    bottom: -151px;
+    bottom: v-bind(possibleTagsListScrollHeight);
     width: 400px;
-    height: 145px;
+    max-height: 145px;
     padding: 5px;
     border-width: 1px;
     border-style: solid;

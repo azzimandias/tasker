@@ -180,6 +180,7 @@ const resize = () => {
 <style lang="scss">
     .personal-tag__wrapper {
       position: relative;
+      height: 28px;
     }
 
     .personal-tag {
