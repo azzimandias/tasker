@@ -74,34 +74,26 @@ export const useListViewStore = defineStore('listViewStore', () => {
         }
     };
     const fetchToServer =  async () => {
-        if (route.params.id_list) {
+        if (route.params.id_list && route.params.id_list !== 'new') {
             request.value = `list?id=${route.params.id_list}`;
         } else if (route.params.name) {
             request.value = `list?name=${route.params.name}`;
-        } else if (route.params.id_tag) {
+        } else if (route.params.id_tag && route.params.id_tag !== 'new') {
             request.value = `tag?id=${route.params.id_tag}`;
         } else { request.value = ''; }
+        let response = null;
         if (request.value) {
-            const response = await api.getInfoWithArgs(request.value, {
+            response = await api.getInfoWithArgs(request.value, {
                 params: {
                     user_id: user.id
                 }
             });
-            setTimeout(() => {
-                updateData(response);
-            }, 300);
         }
+        setTimeout(() => {
+            updateData(response);
+        }, 300);
     };
     const updateData = (arr) => {
-        const hasRequiredData = (arr['sortList'] || arr['list'] || arr['tag']) &&
-            (arr['tasks'] || arr['tasksByList']);
-        if (!hasRequiredData) {
-            is_somethingWrong.value = true;
-            loading.value = false;
-            loadingSmall.value = false;
-            return;
-        }
-
         const clearCurrentData = () => {
             if (route.params.id_list) {
                 currentPersonalListTasks.length = 0;
@@ -112,12 +104,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 tags.length = 0;
             }
         };
-
         const clearCurrentInfo = () => {
             Object.assign(currentListInfo, {
                 id: '',
                 name: '',
-                color: '',
+                color: '#ffffff',
                 count_of_active_tasks: 0,
             });
             Object.assign(currentSortListInfo, {
@@ -130,29 +121,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 name: '',
             });
         };
-
-        const updateCurrentInfo = () => {
-            if (route.params.id_list) {
-                Object.assign(currentListInfo, {
-                    id: arr.list.id,
-                    name: arr.list.name,
-                    color: arr.list.color,
-                    count_of_active_tasks: arr.list.count_of_active_tasks,
-                });
-            } else if (route.params.name) {
-                Object.assign(currentSortListInfo, {
-                    id: arr.sortList.id,
-                    name: arr.sortList.name,
-                    color: bigMenu.sortLists.find(sl => sl.id === arr.sortList.id)?.color
-                });
-            } else if (route.params.id_tag) {
-                Object.assign(currentTag, {
-                    id: arr.tag.id,
-                    name: arr.tag.name,
-                });
-            }
-        };
-
         const processData = () => {
             const targetArray = route.params.id_list ?
                 { active: currentPersonalListTasks, done: currentPersonalListTasksDone } :
@@ -175,12 +143,34 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 });
             }
         };
-
+        const updateCurrentInfo = () => {
+            if (route.params.id_list) {
+                Object.assign(currentListInfo, {
+                    id: arr.list.id,
+                    name: arr.list.name,
+                    color: arr.list.color,
+                    count_of_active_tasks: arr.list.count_of_active_tasks,
+                });
+            } else if (route.params.name) {
+                Object.assign(currentSortListInfo, {
+                    id: arr.sortList.id,
+                    name: arr.sortList.name,
+                    color: bigMenu.sortLists.find(sl => sl.id === arr.sortList.id)?.color
+                });
+            } else if (route.params.id_tag) {
+                Object.assign(currentTag, {
+                    id: arr.tag.id,
+                    name: arr.tag.name,
+                });
+            }
+        };
         try {
             clearCurrentData();
-            processData();
             clearCurrentInfo();
-            updateCurrentInfo();
+            if (arr) {
+                processData();
+                updateCurrentInfo();
+            }
         } catch (error) {
             console.error("Error in updateData:", error);
             is_somethingWrong.value = true;
@@ -431,6 +421,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     /* - TAG replacement */
     /* + PERSONAL LIST */
+    const createList = async (list) => {
+        const response = await api.postInfo(`saveList/`, {list, uuid: socketUUID});
+        await bigMenu.firstRequest();
+        return response;
+    };
     const updateList = async (list) => {
         await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
         if (list.name) {
@@ -665,6 +660,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         sortTasks: currentSortListTasks,
         listInfo: currentListInfo,
         sortListInfo: currentSortListInfo,
+        user,
         searchResult,
         loading,
         loadingSmall,
@@ -689,6 +685,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         createTag,
         updateTag,
         deleteTagTask,
+        createList,
         updateList,
     };
 });

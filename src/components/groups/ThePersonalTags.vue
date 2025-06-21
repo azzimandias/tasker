@@ -4,14 +4,23 @@
   import SectionHeader from '../UI/SectionHeader.vue';
   import PersonalTag from '@/components/UI/PersonalTag.vue';
   import {inject, watch} from "vue";
+  import TopButton from "@/components/UI/TopButton.vue";
+  import {useRouter} from "vue-router";
 
   const bigMenuStore = useBigMenuStore();
   const isOpenBigMenu = inject('isOpenBigMenu');
+  const router = useRouter();
 </script>
 
 <template>
     <div class="personal-tags" :class="{hidden: !isOpenBigMenu}" v-if="bigMenuStore.personalTags.length > 1">
-        <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
+        <div class="personal-lists__header">
+          <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
+          <TopButton
+              :cl="'plus'"
+              @click="router.push({ name: 'tag', params: { id_tag: 'new' } })"
+          />
+        </div>
         <div class="personal-tags__container scroll">
             <PersonalTag
                 v-for="tag in bigMenuStore.personalTags"
@@ -38,5 +47,11 @@
     }
     .hidden {
       display: none;
+    }
+    .personal-lists__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 10px 10px 0;
     }
 </style>

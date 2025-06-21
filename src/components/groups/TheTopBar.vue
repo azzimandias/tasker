@@ -42,7 +42,10 @@ import {onMounted, ref, watch} from 'vue';
 
         <div class="top-bar__container" v-if="!isSearchMode">
             <router-link :to="'/workspace/user'"><TopButton :cl="cl[0]"/></router-link>
-            <TopButton :cl="cl[1]" @mouseup="listInfo.addNewTask" v-if="route.params.id_list"/>
+            <TopButton v-if="route.params.id_list && route.params.id_list !== 'new'"
+                       :cl="cl[1]"
+                       @mouseup="listInfo.addNewTask"
+            />
         </div>
         <div class="top-bar__container vide" v-else>
             <SearchInputText

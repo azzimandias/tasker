@@ -29,7 +29,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 6px 10px 12px;
+        //padding: 20px 6px 10px 12px;
         height: 46px;
       &.hide {
         animation: hide .3s forwards;

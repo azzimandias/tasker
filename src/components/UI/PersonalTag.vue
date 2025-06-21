@@ -25,6 +25,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
   const width = ref(props.width? props.width : '1px');
   const span = ref(null);
   const spanHeader = ref(null);
+  const headerTag = ref(null);
   const isMounted = ref(false);
 
   watch(() => props.tag.name, (newName) => {
@@ -39,6 +40,9 @@ import {onMounted, reactive, ref, watch} from 'vue';
   onMounted(() => {
     resize();
     needHash();
+    if (route.params.id_tag === 'new' && headerTag.value) {
+      headerTag.value.focus();
+    }
     isMounted.value = true;
   });
   const needHash = () => {
@@ -49,7 +53,6 @@ import {onMounted, reactive, ref, watch} from 'vue';
 
 /* + can change */
 const resize = () => {
-  if (!name.value) return;
   requestAnimationFrame(() => {
     if (!props.isHeader) {
       if (!span.value) return;
@@ -61,7 +64,7 @@ const resize = () => {
     } else {
       if (!spanHeader.value) return;
       spanHeader.value.textContent = name.value || ' ';
-      width.value = `${spanHeader.value.scrollWidth + 10}px`;
+      width.value = name.value ? `${spanHeader.value.scrollWidth + 10}px` : '250px';
     }
   });
 };
@@ -70,7 +73,7 @@ const resize = () => {
       if (props.tag.name !== name.value) {
         const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: name.value});
       }
-    } else {
+    } else if (tagWrapper.value) {
       console.log(height.value)
       console.log(tagWrapper.value)
       height.value = `${tagWrapper.value.scrollHeight}px`;
@@ -152,11 +155,13 @@ const resize = () => {
       <input :id="`header-tag-${props.tag.id}`"
              type="text"
              class="tag-input"
+             placeholder="Введите название тега"
              v-model="name"
              @blur="changeTag"
              @keyup.enter="changeTag"
              @keydown="resize"
              :style="{width: width, fontSize: '20px'}"
+             ref="headerTag"
       />
       <span v-show="true"
             class="hidden-span-helper-header"

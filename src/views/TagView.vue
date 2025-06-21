@@ -29,47 +29,44 @@
 </script>
 
 <template>
-<!--  <Transition mode="out-in" name="fade">-->
+  <LoaderBig v-if="listView.loading"/>
 
-    <LoaderBig v-if="listView.loading"/>
+  <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
-    <SomethingWrong v-else-if="listView.is_somethingWrong"/>
-
-    <div class="workspace scroll" v-else>
-      <div class="workspace__label">
-        <p class="workspace__name">По тегам:</p>
-        <PersonalTag
-            :key="listView.currentTag.key"
-            :tag="listView.currentTag"
-            :isHeader="true"
+  <div class="workspace scroll" v-else>
+    <div class="workspace__label">
+      <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>
+      <PersonalTag
+          :key="listView.currentTag.key"
+          :tag="listView.currentTag"
+          :isHeader="true"
+      />
+    </div>
+    <div class="task__container">
+      <div class="list-tasks__wrapper"
+           v-for="byList in listView.tags"
+           :key="byList.key"
+           v-if="listView.tags.length"
+      >
+        <ListHeader :list="byList.personal_list"
+                    :isRouter="true"
+                    :fontSize="'20px'"
+                    v-if="byList.tasks.length"
+        />
+        <Task
+            v-for="task in byList.tasks"
+            :key="task.key"
+            :task="task"
+            :color="byList.personal_list.color"
+            @done="refreshSortLists"
+            @flag="refreshSortLists"
+            @date="refreshSortLists"
+            v-if="byList.tasks.length"
         />
       </div>
-      <div class="task__container">
-        <div class="list-tasks__wrapper"
-             v-for="byList in listView.tags"
-             :key="byList.key"
-             v-if="listView.tags.length"
-        >
-          <ListHeader :list="byList.personal_list"
-                      :isRouter="true"
-                      :fontSize="'20px'"
-                      v-if="byList.tasks.length"
-          />
-          <Task
-              v-for="task in byList.tasks"
-              :key="task.key"
-              :task="task"
-              :color="byList.personal_list.color"
-              @done="refreshSortLists"
-              @flag="refreshSortLists"
-              @date="refreshSortLists"
-              v-if="byList.tasks.length"
-          />
-        </div>
-        <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
-      </div>
+      <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
     </div>
-<!--  </Transition>-->
+  </div>
 </template>
 
 <style lang="scss" scoped>

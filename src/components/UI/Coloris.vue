@@ -5,7 +5,7 @@ import {ref, watch} from "vue";
     color: String,
   });
   const emit = defineEmits(['onDroch']);
-  const value = ref(props.color);
+  const value = ref(props.color ? props.color : '#ffffff');
 
   watch(() => props.color,
       (newValue) => {

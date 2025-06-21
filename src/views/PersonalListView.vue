@@ -9,12 +9,13 @@
   import DeleteBtn from "@/components/UI/DeleteBtn.vue";
   import Coloris from "@/components/UI/Coloris.vue";
   import {computed, onMounted, ref, watchEffect} from "vue";
-  import {useRoute} from "vue-router";
+  import {useRoute, useRouter} from "vue-router";
 
 
   const listView = useListViewStore();
   const imageDB = useImageDBStore();
   const route = useRoute();
+  const router = useRouter();
   const isDoneTasksOpen = ref(false);
 
   onMounted(async () => {
@@ -35,8 +36,13 @@
     isDoneTasksOpen.value = !isDoneTasksOpen.value;
   };
 
-  const saveChangedName = (newName) => {
-    listView.updateList({id: listView.listInfo.id, name: newName});
+  const saveChangedName = async (newName) => {
+    if (route.params.id_list !== 'new' && newName) {
+      await listView.updateList({id: listView.listInfo.id, name: newName});
+    } else {
+      const response = await listView.createList({name: newName, color: listView.listInfo.color, user_id: listView.user.id});
+      await router.push({name: 'list', params: {id_list: response.id}});
+    }
   }
 
   const saveChangedColor = (newColor) => {
@@ -45,68 +51,62 @@
 </script>
 
 <template>
-<!--  <Transition mode="out-in" name="fade">-->
-
-    <LoaderBig v-if="listView.loading"/>
-
-    <SomethingWrong v-else-if="listView.is_somethingWrong"/>
-
-    <div class="workspace scroll" v-else>
-      <div class="top-header">
-        <ListHeader
-            :list="listView.listInfo"
-            :isCanChange="true"
-            :top="40"
-            @saveChangedName="saveChangedName"
-        />
-        <div class="personal-lis-count" :style="{color: listView.listInfo.color}">
-          {{ listView.listInfo.count_of_active_tasks }}
-        </div>
-        <div class="list-redact-wrapper">
-          <Coloris
-              :key="listView.listInfo.key"
-              :color="listView.listInfo.color"
-              @onDroch="saveChangedColor"
-          />
-        </div>
+  <LoaderBig v-if="listView.loading"/>
+  <SomethingWrong v-else-if="listView.is_somethingWrong"/>
+  <div class="workspace scroll" v-else>
+    <div class="top-header">
+      <ListHeader
+          :list="listView.listInfo"
+          :isCanChange="true"
+          :top="40"
+          @saveChangedName="saveChangedName"
+      />
+      <div class="personal-lis-count" :style="{color: listView.listInfo.color}">
+        {{ listView.listInfo.count_of_active_tasks }}
       </div>
-      <div class="task__container">
+      <div class="list-redact-wrapper">
+        <Coloris v-if="route.params.id_list !== 'new'"
+                 :key="listView.listInfo.key"
+                 :color="listView.listInfo.color"
+                 @onDroch="saveChangedColor"
+        />
+      </div>
+    </div>
+    <div class="task__container">
+      <Task
+          v-for="(task, idx) in listView.tasks"
+          :key="`task-${idx}-${task.is_done}`"
+          :task="task"
+          :color="listView.listInfo.color"
+          :is_new="false"
+          @done="taskSlideToBottom"
+          v-if="listView.tasks.length"
+      />
+    </div>
+    <Transition mode="out-in" name="fade">
+      <ListDone v-if="listView.tasksDone.length"
+                :isOpen="isDoneTasksOpen"
+                :class="{active: isDoneTasksOpen}"
+                @openTasksDone="openTasksDone"
+      >
+        Выполненные
+      </ListDone>
+    </Transition>
+    <Transition name="expand">
+      <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
         <Task
-            v-for="(task, idx) in listView.tasks"
-            :key="`task-${idx}-${task.is_done}`"
+            v-for="(task, idx) in listView.tasksDone"
+            :key="`taskDone-${idx}-${task.is_done}`"
             :task="task"
             :color="listView.listInfo.color"
             :is_new="false"
             @done="taskSlideToBottom"
-            v-if="listView.tasks.length"
+            v-if="listView.tasksDone.length"
         />
       </div>
-      <Transition mode="out-in" name="fade">
-        <ListDone v-if="listView.tasksDone.length"
-                  :isOpen="isDoneTasksOpen"
-                  :class="{active: isDoneTasksOpen}"
-                  @openTasksDone="openTasksDone"
-        >
-          Выполненные
-        </ListDone>
-      </Transition>
-      <Transition name="expand">
-        <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
-          <Task
-              v-for="(task, idx) in listView.tasksDone"
-              :key="`taskDone-${idx}-${task.is_done}`"
-              :task="task"
-              :color="listView.listInfo.color"
-              :is_new="false"
-              @done="taskSlideToBottom"
-              v-if="listView.tasksDone.length"
-          />
-        </div>
-      </Transition>
-      <div class="empty-list__title" v-if="!listView.tasks.length && !listView.tasksDone.length"><p>Здесь пусто.</p></div>
-    </div>
-
-<!--  </Transition>-->
+    </Transition>
+    <div class="empty-list__title" v-if="!listView.tasks.length && !listView.tasksDone.length"><p>Здесь пусто.</p></div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
