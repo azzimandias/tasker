@@ -30,6 +30,7 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
     if (isMounted.value) {
       console.log('watch')
       height.value = `${taskNode.value.scrollHeight}px`;
+      taskNode.value.classList.remove('show-anim');
       taskNode.value.classList.remove('hide-anim');
       if (document.documentElement.clientWidth <= 700) {
         is_visible.value = true;
@@ -38,13 +39,11 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
   });
 
   onMounted(() => {
-    if (taskNode.value.classList.contains('show-anim')) {
-      height.value = `${taskNode.value.scrollHeight}px`;
-      taskNode.value.classList.add('show-anim');
-      taskNode.value.classList.remove('hide-anim');
-      if (document.documentElement.clientWidth <= 700) {
-        is_visible.value = true;
-      }
+    height.value = `${taskNode.value.scrollHeight}px`;
+    taskNode.value.classList.add('show-anim');
+    taskNode.value.classList.remove('hide-anim');
+    if (document.documentElement.clientWidth <= 700) {
+      is_visible.value = true;
     }
     isMounted.value = true;
   });

@@ -275,6 +275,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
             if (!task.id) {
                 task.id = response.id;
                 task.name = response.name;
+                task.tags = response.tags;
+                task.possibleTags = response.possibleTags;
             }
         });
         await bigMenu.firstRequest();
