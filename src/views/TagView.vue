@@ -78,7 +78,7 @@
     justify-content: flex-start;
     align-items: center;
     grid-gap: 20px;
-    padding: 0 20px;
+    padding: 0 20px 150px 20px;
   }
   .task__container {
     width: 100%;

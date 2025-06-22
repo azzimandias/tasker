@@ -72,7 +72,7 @@
         />
       </div>
     </div>
-    <div class="task__container">
+    <div class="task__container" v-if="listView.tasks.length">
       <Task
           v-for="(task, idx) in listView.tasks"
           :key="`task-${idx}-${task.is_done}`"
@@ -80,7 +80,6 @@
           :color="listView.listInfo.color"
           :is_new="false"
           @done="taskSlideToBottom"
-          v-if="listView.tasks.length"
       />
     </div>
     <Transition mode="out-in" name="fade">
@@ -93,7 +92,8 @@
       </ListDone>
     </Transition>
     <Transition name="expand">
-      <div class="task__container" v-if="listView.tasksDone.length && isDoneTasksOpen">
+      <div class="task__container done" v-if="listView.tasksDone.length && isDoneTasksOpen">
+        kvdflgkdff
         <Task
             v-for="(task, idx) in listView.tasksDone"
             :key="`taskDone-${idx}-${task.is_done}`"
