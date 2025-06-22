@@ -69,9 +69,14 @@ const resize = () => {
   });
 };
   const changeTag = async () => {
+    console.log('zalupa')
     if (name.value.trim()) {
-      if (props.tag.name !== name.value) {
-        const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: name.value});
+      if (route.params.id_tag === 'new') {
+        createTag();
+      } else {
+        if (props.tag.name !== name.value) {
+          const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: name.value});
+        }
       }
     } else if (tagWrapper.value) {
       console.log(height.value)
@@ -84,7 +89,7 @@ const resize = () => {
       }, 300);
     }
   };
-  const crateTag = () => {
+  const createTag = () => {
     if (name.value.trim()) {
       emit('create', name.value.trim());
       name.value = '';
@@ -128,7 +133,7 @@ const resize = () => {
            type="text"
            class="tag-input"
            v-model="name"
-           @keyup.enter="crateTag"
+           @keyup.enter="createTag"
            @keydown="resize"
            @focus="emit('onFocus')"
            @blur="() => {resize(); emit('onBlur')}"

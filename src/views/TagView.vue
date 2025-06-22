@@ -4,13 +4,15 @@
   import TagHeader from "@/components/UI/TagHeader.vue";
   import Task from "@/components/UI/Task.vue";
   import LoaderBig from "@/components/UI/LoaderBig.vue";
-  import {useRoute} from "vue-router";
+  import {useRoute, useRouter} from "vue-router";
   import {onMounted, ref, watchEffect} from "vue";
   import ListHeader from "@/components/UI/ListHeader.vue";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
+  import InfoList from "@/components/UI/InfoList.vue";
 
   const listView = useListViewStore();
   const route = useRoute();
+  const router = useRouter();
 
   onMounted(async () => {
     await listView.getTasksOrTags();
@@ -26,6 +28,13 @@
     /*listView.clearTasks(obj.task.id);*/
     listView.updateSortListTasks();
   };
+
+  const deleteTag = () => {
+    listView.deleteTag(listView.currentTag);
+    if (+listView.currentTag.id === +route.params.id_tag) {
+      router.push({ name: 'intro' });
+    }
+  };
 </script>
 
 <template>
@@ -34,12 +43,18 @@
   <SomethingWrong v-else-if="listView.is_somethingWrong"/>
 
   <div class="workspace scroll" v-else>
-    <div class="workspace__label">
-      <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>
-      <PersonalTag
-          :key="listView.currentTag.key"
-          :tag="listView.currentTag"
-          :isHeader="true"
+    <div class="workspace__header">
+      <div class="workspace__label">
+        <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>
+        <PersonalTag
+            :key="listView.currentTag.key"
+            :tag="listView.currentTag"
+            :isHeader="true"
+        />
+      </div>
+      <InfoList
+          :idList="listView.currentTag.id"
+          @delete="deleteTag"
       />
     </div>
     <div class="task__container">
@@ -82,7 +97,7 @@
   }
   .task__container {
     width: 100%;
-    padding: 0 18px;
+    //padding: 0 18px;
     flex: 1 0 100px;
     display: flex;
     flex-direction: column;
@@ -101,13 +116,19 @@
     display: flex;
     align-items: center;
   }
+  .workspace__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .workspace__label {
     width: 100%;
     position: sticky;
     top: 0;
     min-height: 60px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     grid-gap: 5px;
     padding: 10px 0;
     color: #aaadae;

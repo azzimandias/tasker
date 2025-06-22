@@ -315,7 +315,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             id: tagToTask.tag_id,
             name: tagToTask.tag_name,
         }, tagToTask.task_id);*/
-        await getTasksOrTags(true);
+        await getTasksOrTags();
         await bigMenu.firstRequest();
         return response;
     };
@@ -335,7 +335,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         tag.uuid = socketUUID;
         const response = await api.postInfo(`updateTag`, tag);
         /*handleUpdateTag(response);*/
-        await getTasksOrTags(true);
+        await getTasksOrTags();
         await bigMenu.firstRequest();
         return response;
     };
@@ -344,6 +344,12 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await api.postInfo(`deleteTagTask`, tag);
         /*handleDeleteTagTask(tag);*/
         await getTasksOrTags(true);
+        await bigMenu.firstRequest();
+    };
+    const deleteTag = async (tag) => {
+        tag['uuid'] = socketUUID;
+        await api.postInfo(`deleteTag`, tag);
+        await getTasksOrTags();
         await bigMenu.firstRequest();
     };
     /* - TAG */
@@ -478,6 +484,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
             socket.on('deleteTagTask', (deleteTagTask) => {
                 if (deleteTagTask.uuid !== socketUUID) {
                     handleDeleteTagTaskSocket(deleteTagTask);
+                }
+            });
+            socket.on('deleteTag', (deleteTag) => {
+                if (deleteTag.uuid !== socketUUID) {
+                    handleDeleteTagSocket(deleteTag);
                 }
             });
             socket.on('updateTag', (updateTag) => {
@@ -638,12 +649,17 @@ export const useListViewStore = defineStore('listViewStore', () => {
         bigMenu.firstRequest().then();
     };
     const handleDeleteTagTaskSocket = (deleteTagTask) => {
-        console.log('\\Delete tag from websocket...');
+        console.log('\\Delete tag task from websocket...');
         /*handleDeleteTagTask({
             task_id: deleteTagTask.taskId,
             tag_id: deleteTagTask.tag.id,
             tag_name: deleteTagTask.tag.name,
         });*/
+        getTasksOrTags(true).then();
+        bigMenu.firstRequest().then();
+    };
+    const handleDeleteTagSocket = () => {
+        console.log('\\Delete tag from websocket...');
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
@@ -685,6 +701,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         createTag,
         updateTag,
         deleteTagTask,
+        deleteTag,
         createList,
         updateList,
     };

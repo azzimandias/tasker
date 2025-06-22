@@ -21,8 +21,7 @@
 </script>
 
 <template>
-    <div v-if="bigMenuStore.personalLists.length"
-         class="personal-lists"
+    <div class="personal-lists"
          ref="personalLists"
          :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}">
         <div class="personal-lists__header">
@@ -32,11 +31,12 @@
               @click="router.push({ name: 'list', params: { id_list: 'new' } })"
           />
         </div>
-        <div class="personal-lists__container">
+        <div class="personal-lists__container scroll" v-if="bigMenuStore.personalLists.length">
             <PersonalList 
                 v-for="list in bigMenuStore.personalLists"
                 :key="list.key"
-                :list="list">
+                :list="list"
+            >
                 <template #name>{{ list.name }}</template>
                 <template #count>{{ list.count_of_active_tasks }}</template>
             </PersonalList>

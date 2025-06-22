@@ -93,7 +93,6 @@
     </Transition>
     <Transition name="expand">
       <div class="task__container done" v-if="listView.tasksDone.length && isDoneTasksOpen">
-        kvdflgkdff
         <Task
             v-for="(task, idx) in listView.tasksDone"
             :key="`taskDone-${idx}-${task.is_done}`"

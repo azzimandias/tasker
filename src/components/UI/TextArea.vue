@@ -32,7 +32,7 @@
 
 <template>
   <textarea
-      class="task__description"
+      class="task__description scroll"
       ref="taskTextareaNode"
       :placeholder="props.placeholder"
       :name="props.name"

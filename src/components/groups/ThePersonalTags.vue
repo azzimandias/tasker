@@ -13,7 +13,7 @@
 </script>
 
 <template>
-    <div class="personal-tags" :class="{hidden: !isOpenBigMenu}" v-if="bigMenuStore.personalTags.length > 1">
+    <div class="personal-tags" :class="{hidden: !isOpenBigMenu}">
         <div class="personal-lists__header">
           <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
           <TopButton
@@ -21,7 +21,7 @@
               @click="router.push({ name: 'tag', params: { id_tag: 'new' } })"
           />
         </div>
-        <div class="personal-tags__container scroll">
+        <div class="personal-tags__container scroll" v-if="bigMenuStore.personalTags.length > 1">
             <PersonalTag
                 v-for="tag in bigMenuStore.personalTags"
                 :key="tag.key"
