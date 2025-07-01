@@ -74,7 +74,7 @@
     .personal-lists__container {
         display: grid;
         max-height: 200px;
-        padding-right: 5px;
+        //padding-right: 5px;
     }
     .personal-lists__header {
       display: flex;

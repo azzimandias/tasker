@@ -37,7 +37,11 @@ import {onMounted, ref, watch} from "vue";
   }
   const saveChanges = () => {
     if (props.taskName !== taskName.value) {
-      emit('saveChangesName',taskName.value);
+      if (taskName.value) {
+        emit('saveChangesName',taskName.value);
+      } else {
+
+      }
     }
   };
 </script>

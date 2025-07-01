@@ -45,7 +45,7 @@
   <div class="workspace scroll" v-else>
     <div class="workspace__header">
       <div class="workspace__label">
-        <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>
+        <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>`
         <PersonalTag
             :key="listView.currentTag.key"
             :tag="listView.currentTag"

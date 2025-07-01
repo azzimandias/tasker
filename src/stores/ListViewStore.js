@@ -256,6 +256,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* + TASK */
     const updateTask = async (task) => {
         const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
+        handleUpdateTask(response);
+        //await getTasksOrTags();
         await bigMenu.firstRequest();
     };
     const createTask = async (task) => {
@@ -284,6 +286,15 @@ export const useListViewStore = defineStore('listViewStore', () => {
         currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
         await bigMenu.firstRequest();
     };
+    const handleUpdateTask = (task) => {
+        if (!task.is_done) {
+            const idx = currentPersonalListTasks.findIndex(el => el.id === task.id);
+            currentPersonalListTasks[idx] = task;
+        } else {
+            const idx = currentPersonalListTasksDone.findIndex(el => el.id === task.id);
+            currentPersonalListTasksDone[idx] = task;
+        }
+    }
     /* - TASK */
     /* + Search */
     const findTasks = async (searchObj) => {

@@ -69,7 +69,6 @@ const resize = () => {
   });
 };
   const changeTag = async () => {
-    console.log('zalupa')
     if (name.value.trim()) {
       if (route.params.id_tag === 'new') {
         createTag();

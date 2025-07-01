@@ -1,5 +1,5 @@
 <script setup>
-  import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
@@ -11,6 +11,11 @@
     value: String,
   });
   const taskTextareaNode = ref(null);
+  const valueModel = ref(props.value);
+
+  watch(() => props.value, (newValue) => {
+    valueModel.value = newValue;
+  });
 
   onMounted(() => {
     resize();
@@ -22,10 +27,10 @@
   };
 
   const saveChangesTextarea = () => {
-    taskTextareaNode.value.blur();
-    let valueModel = taskTextareaNode.value.value;
-    if (props.value !== valueModel) {
-      emit('saveChangesDescription', valueModel);
+    console.log(props.value)
+    console.log(valueModel.value)
+    if (props.value !== valueModel.value && valueModel.value) {
+      emit('saveChangesDescription', valueModel.value);
     }
   };
 </script>
@@ -36,6 +41,7 @@
       ref="taskTextareaNode"
       :placeholder="props.placeholder"
       :name="props.name"
+      v-model="valueModel"
       @blur="saveChangesTextarea"
       @keyup="resize"
   >{{ props.value }}</textarea>
