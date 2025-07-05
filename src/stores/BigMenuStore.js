@@ -49,16 +49,35 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             name: 'Все теги'
         }
     ]);
-    const lv = useListViewStore();
     const is_load_sortLists     = ref(false);
     const is_load_personalLists = ref(false);
     const is_load_personalTags  = ref(false);
-    const socketUUID = uuidv4();
+    let socketUUID = uuidv4();
 
     onUnmounted(() => {
         socket.disconnect();
     });
 
+    const clearAll = () => {
+        user.id = 0;
+        user.email = '';
+        user.name = '';
+        user.surname = '';
+        sortLists.forEach((list, idx) => {
+            list.count = '';
+            sortLists[idx] = list;
+        });
+        personalLists.length = 0;
+        personalTags.length = 0;
+        personalTags.push({
+            id:   0,
+            name: 'Все теги'
+        });
+        is_load_sortLists.value = false;
+        is_load_personalLists.value = false;
+        is_load_personalTags.value = false;
+        socketUUID = uuidv4();
+    };
     const setUserInfo = (userInfo) => {
         user.id      = userInfo.id;
         user.email   = userInfo.email;
@@ -148,8 +167,8 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
                     item.key = Math.random();
                     personalLists.push(item);
                 });
-                is_load_personalLists.value = false;
             }
+            is_load_personalLists.value = false;
         } catch (e) {
             console.log(e);
         }
@@ -181,8 +200,8 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
                     item.key = Math.random();
                     personalTags.push(item);
                 });
-                is_load_personalTags.value = false;
             }
+            is_load_personalTags.value = false;
         } catch (e) {
             console.log(e);
         }
@@ -213,6 +232,6 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
         personalTags, is_load_personalTags, user,
-        setUserInfo, firstRequest, addNewList, saveList, deleteList,
+        clearAll, setUserInfo, firstRequest, addNewList, saveList, deleteList,
     };
 });

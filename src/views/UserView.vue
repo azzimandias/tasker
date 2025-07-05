@@ -47,6 +47,7 @@ const exit = async () => {
   try {
     const res = await api.logout();
     if (res === 'logout') {
+      bigMenu.clearAll();
       await router.push({ path: '/' });
     }
   } catch (error) {

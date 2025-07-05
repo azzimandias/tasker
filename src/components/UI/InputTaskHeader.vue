@@ -12,7 +12,8 @@ import {onMounted, ref, watch} from "vue";
     taskName: String,
     placeholder: String,
   });
-  let taskName = ref(props.taskName);
+  const taskName = ref(props.taskName);
+  const oldTaskName = ref(props.taskName);
 
   watch(() => props.taskName, (newValue) => {
         taskName.value = newValue;
@@ -40,6 +41,7 @@ import {onMounted, ref, watch} from "vue";
       if (taskName.value) {
         emit('saveChangesName',taskName.value);
       } else {
+        taskName.value = oldTaskName.value;
         listView.addAlert({
           id: Math.random(),
           name: "У задачи должно быть название",

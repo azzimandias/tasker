@@ -459,10 +459,18 @@ export const useListViewStore = defineStore('listViewStore', () => {
             alerts.splice(0, 1);
         }
         alerts.push(newAlert);
+        sortAlertsTop();
     };
     const removeAlert = (alertId) => {
         const idx = alerts.findIndex(alert => alert.id === alertId);
         alerts.splice(idx, 1);
+        sortAlertsTop();
+    };
+    const sortAlertsTop = () => {
+        alerts.forEach((alert, idx) => {
+            alert.top = ((10 + 75) * idx) + 10 + 'px';
+            alerts[idx] = alert;
+        });
     };
     /* + SOCKET */
     const connectSocket = async () => {

@@ -1,18 +1,34 @@
 <script setup>
+import {onMounted, ref, watch} from "vue";
   const emit = defineEmits(['closeAlert']);
   const props = defineProps({
     alert: Object
   })
+  const alert = ref(null);
+  const scrollWidth = ref('');
+  const top = ref(props.alert.top);
+  watch(() => props.alert.top, (newTop) => {
+    top.value = newTop;
+  });
+  onMounted(() => {
+    scrollWidth.value = -1 * alert.value.scrollWidth + 20 + 'px';
+  })
+  const hideAndRemoveAlert = () => {
+    alert.value.classList.add('hide');
+    setTimeout(() => {
+      emit('closeAlert', props.alert.id);
+    }, 300);
+  };
 </script>
 
 <template>
-  <div class="alert">
+  <div class="alert slide" ref="alert">
     <div class="info_error"></div>
     <div class="alert_name_container">
       <p class="alert_name">{{ props.alert.name }}</p>
     </div>
     <div class="close_alert"
-         @click="emit('closeAlert', props.alert.id)"
+         @click="hideAndRemoveAlert"
     ></div>
     <div></div>
     <div class="alert_description_container">
@@ -24,7 +40,7 @@
 <style scoped lang="scss">
   .alert {
     position: absolute;
-    top: 10px;
+    top: v-bind(top);
     right: 20px;
     color: #ff6467;
     background-color: #171717;
@@ -70,5 +86,31 @@
 
   .alert_description {
     font-size: 13px;
+  }
+
+  .slide {
+    animation: slide .3s forwards;
+  }
+
+  .hide {
+    animation: hide .3s forwards;
+  }
+
+  @keyframes slide {
+    0% {
+      right: v-bind(scrollWidth);
+    }
+    100% {
+      right: 20px;
+    }
+  }
+
+  @keyframes hide {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 </style>
