@@ -33,6 +33,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     });
     const tags = reactive([]);
     const searchResult = reactive([]);
+    const alerts = reactive([]);
     const loading = ref(true);
     const loadingSmall = ref(true);
     const is_somethingWrong = ref(false);
@@ -453,6 +454,16 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await bigMenu.firstRequest();
     };
     /* - PERSONAL LIST */
+    const addAlert = (newAlert) => {
+        if (alerts.length > 2) {
+            alerts.splice(0, 1);
+        }
+        alerts.push(newAlert);
+    };
+    const removeAlert = (alertId) => {
+        const idx = alerts.findIndex(alert => alert.id === alertId);
+        alerts.splice(idx, 1);
+    };
     /* + SOCKET */
     const connectSocket = async () => {
         try {
@@ -696,6 +707,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         tags,
         currentTag,
         currentPath,
+        alerts,
         setUserInfo,
         getTasksOrTags,
         updateTask,
@@ -715,5 +727,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         deleteTag,
         createList,
         updateList,
+        addAlert,
+        removeAlert,
     };
 });

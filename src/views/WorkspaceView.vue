@@ -6,7 +6,7 @@
   import api from "@/api";
   import {useBigMenuStore} from "@/stores/BigMenuStore";
   import {useListViewStore} from "@/stores/ListViewStore";
-  import Alert from "@/components/UI/Alert.vue";
+  import TheAlerts from "@/components/groups/TheAlerts.vue";
   const imageDB = useImageDBStore();
 
   const workspace = ref(null);
@@ -42,7 +42,7 @@
   <div class="workspace" ref="workspace">
     <TheBigMenu/>
     <TheTasker/>
-    <Alert/>
+    <TheAlerts/>
   </div>
 </template>
 

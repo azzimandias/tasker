@@ -40,7 +40,11 @@ import {onMounted, ref, watch} from "vue";
       if (taskName.value) {
         emit('saveChangesName',taskName.value);
       } else {
-
+        listView.addAlert({
+          id: Math.random(),
+          name: "У задачи должно быть название",
+          description: "Добавьте имя задаче"
+        });
       }
     }
   };
