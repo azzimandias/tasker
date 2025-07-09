@@ -1,6 +1,6 @@
 <script setup>
 
-import {reactive, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
 
@@ -9,16 +9,17 @@ import {reactive, ref, watch} from "vue";
     possibleTags: Array,
   });
 
-  const emit = defineEmits([]);
-
   const listView = useListViewStore();
   const newTag = reactive({id: 0, name: ''});
   const openTagList = ref(false);
   const createTagKey = ref(0);
-  const possibleTags = reactive([...props.possibleTags]);
+  const possibleTags = reactive(props.possibleTags.length ? [...props.possibleTags] : []);
   const sortPossibleTagsName = ref('');
   const possibleTagsList =ref(null);
   const possibleTagsListScrollHeight = ref(possibleTagsList.scrollHeight);
+  const scrollHeightStyle = computed(() => ({
+    bottom: possibleTagsListScrollHeight.value + 'px'
+  }));
 
   watch(() => props.possibleTags, (newPossibleTags) => {
     possibleTags.splice(0, possibleTags.length, ...newPossibleTags);
@@ -26,7 +27,6 @@ import {reactive, ref, watch} from "vue";
   });
 
   const openPossibleTags = () => {
-    console.log('openPossibleTags')
     openTagList.value = true;
   };
 
@@ -36,18 +36,18 @@ import {reactive, ref, watch} from "vue";
     },300);
   };
 
-const sortPossibleTags = (inputName) => {
-  const baseTags = JSON.parse(JSON.stringify(props.possibleTags));
-  if (!inputName) {
-    baseTags.sort((a, b) => a.name.localeCompare(b.name));
-    possibleTags.splice(0, possibleTags.length, ...baseTags);
-    return;
-  }
-  const filteredAndSorted = baseTags
-      .filter(tag => tag.name.toLowerCase().includes(inputName.toLowerCase()))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  possibleTags.splice(0, possibleTags.length, ...filteredAndSorted);
-};
+  const sortPossibleTags = (inputName) => {
+    const baseTags = JSON.parse(JSON.stringify(props.possibleTags));
+    if (!inputName) {
+      baseTags.sort((a, b) => a.name.localeCompare(b.name));
+      possibleTags.splice(0, possibleTags.length, ...baseTags);
+      return;
+    }
+    const filteredAndSorted = baseTags
+        .filter(tag => tag.name.toLowerCase().includes(inputName.toLowerCase()))
+        .sort((a, b) => a.name.localeCompare(b.name));
+    possibleTags.splice(0, possibleTags.length, ...filteredAndSorted);
+  };
 
   const createTag = async (newName) => {
     openTagList.value = false;
@@ -83,6 +83,7 @@ const sortPossibleTags = (inputName) => {
     <Transition mode="out-in" name="fade">
       <div v-if="openTagList"
            class="personal-tag__list scroll"
+           :style="scrollHeightStyle"
            :class="{active: openTagList}"
            ref="possibleTagsList"
       >
@@ -104,7 +105,7 @@ const sortPossibleTags = (inputName) => {
   .personal-tag__list {
     position: absolute;
     left: 0;
-    bottom: v-bind(possibleTagsListScrollHeight);
+    bottom: 0;
     width: 400px;
     max-height: 145px;
     padding: 5px;

@@ -74,7 +74,7 @@ const resize = () => {
         createTag();
       } else {
         if (props.tag.name !== name.value) {
-          const updatedTag = await listView.updateTag({tag_id: props.tag.id, name: name.value});
+          const updatedTag = await listView.updateTag({id: props.tag.id, name: name.value});
         }
       }
     } else if (tagWrapper.value) {

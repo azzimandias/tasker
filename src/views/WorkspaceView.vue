@@ -60,6 +60,7 @@
     &.closed {
       grid-template-columns: 50px 1fr;
     }
+    overflow: hidden;
   }
   @media screen and (max-width: 700px) {
     .workspace {

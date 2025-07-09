@@ -80,7 +80,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         } else if (route.params.name) {
             request.value = `list?name=${route.params.name}`;
         } else if (route.params.id_tag && route.params.id_tag !== 'new') {
-            request.value = `tag?id=${route.params.id_tag}`;
+            request.value = `tag/${route.params.id_tag}`;
         } else { request.value = ''; }
         let response = null;
         if (request.value) {
@@ -345,9 +345,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const updateTag = async (tag) => {
         tag.uuid = socketUUID;
-        const response = await api.postInfo(`updateTag`, tag);
+        const response = await api.postInfo(`updateTag/${tag.id}`, tag);
         /*handleUpdateTag(response);*/
-        await getTasksOrTags();
+        //await getTasksOrTags();
         await bigMenu.firstRequest();
         return response;
     };
@@ -360,7 +360,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const deleteTag = async (tag) => {
         tag['uuid'] = socketUUID;
-        await api.postInfo(`deleteTag`, tag);
+        await api.postInfo(`deleteTag/${tag.id}`, tag);
         await getTasksOrTags();
         await bigMenu.firstRequest();
     };

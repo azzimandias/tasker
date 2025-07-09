@@ -45,7 +45,7 @@
   <div class="workspace scroll" v-else>
     <div class="workspace__header">
       <div class="workspace__label">
-        <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>`
+        <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>
         <PersonalTag
             :key="listView.currentTag.key"
             :tag="listView.currentTag"
@@ -63,20 +63,20 @@
            :key="byList.key"
            v-if="listView.tags.length"
       >
-        <ListHeader :list="byList.personal_list"
+        <ListHeader :list="byList.list"
                     :isRouter="true"
                     :fontSize="'20px'"
                     v-if="byList.tasks.length"
         />
         <Task
+            v-if="byList.tasks.length"
             v-for="task in byList.tasks"
             :key="task.key"
             :task="task"
-            :color="byList.personal_list.color"
+            :color="byList.list.color"
             @done="refreshSortLists"
             @flag="refreshSortLists"
             @date="refreshSortLists"
-            v-if="byList.tasks.length"
         />
       </div>
       <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>

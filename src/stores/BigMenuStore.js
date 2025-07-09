@@ -187,7 +187,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getPersonalTags = async () => {
         try {
             is_load_personalTags.value = true;
-            const response = await api.getInfoWithArgs('tags', {
+            const response = await api.getInfoWithArgs(`tags/${user.id}`, {
                 params: {
                     user_id: user.id,
                     uuid: socketUUID
