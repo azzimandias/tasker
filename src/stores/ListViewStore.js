@@ -80,7 +80,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
         } else if (route.params.name) {
             request.value = `list?name=${route.params.name}`;
         } else if (route.params.id_tag && route.params.id_tag !== 'new') {
-            request.value = `tag/${route.params.id_tag}`;
+            if (+route.params.id_tag) {
+                request.value = `tag/${route.params.id_tag}`;
+            } else {
+                request.value = `tag`;
+            }
         } else { request.value = ''; }
         let response = null;
         if (request.value) {
