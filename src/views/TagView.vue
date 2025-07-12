@@ -59,21 +59,21 @@
     </div>
     <div class="task__container">
       <div class="list-tasks__wrapper"
-           v-for="byList in listView.tags"
-           :key="byList.key"
-           v-if="listView.tags.length"
+           v-for="list in listView.tags"
+           :key="list.id"
+           v-if="listView.tags && listView.tags.length"
       >
-        <ListHeader :list="byList.list"
+        <ListHeader :list="list"
                     :isRouter="true"
                     :fontSize="'20px'"
-                    v-if="byList.tasks.length"
+                    v-if="list.tasks.length"
         />
         <Task
-            v-if="byList.tasks.length"
-            v-for="task in byList.tasks"
+            v-if="list.tasks.length"
+            v-for="task in list.tasks"
             :key="task.key"
             :task="task"
-            :color="byList.list.color"
+            :color="list.color"
             @done="refreshSortLists"
             @flag="refreshSortLists"
             @date="refreshSortLists"
