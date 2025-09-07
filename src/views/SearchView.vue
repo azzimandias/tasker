@@ -4,8 +4,14 @@ import SomethingWrong from "@/components/UI/SomethingWrong.vue";
 import LoaderBig from "@/components/UI/LoaderBig.vue";
 import Task from "@/components/UI/Task.vue";
 import ListHeader from "@/components/UI/ListHeader.vue";
+import {onUnmounted} from "vue";
 
 const listView = useListViewStore();
+
+onUnmounted(() => {
+  listView.clearSearchTasks();
+});
+
 </script>
 
 <template>
