@@ -1,18 +1,22 @@
 import axios from "axios";
 
+const PRODMODE = !['localhost', '127.0.0.1', '0.0.0.0', ''].includes(window.location.hostname);
+
 export const HTTP = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
+    baseURL: PRODMODE ? process.env.VUE_APP_API_URL_PROD : process.env.VUE_APP_API_URL,
+    withCredentials: true,
     headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
     }
 });
 
 export default {
-    url: process.env.VUE_APP_API_URL,
+    url: PRODMODE ? process.env.VUE_APP_API_URL_PROD : process.env.VUE_APP_API_URL,
     prefix: 'api/',
+
     async getCookies() {
-        HTTP.defaults.withCredentials = true;
         try {
             await HTTP.get(this.url + 'sanctum/csrf-cookie');
             //console.log('csrf-cookie')
