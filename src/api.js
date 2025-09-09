@@ -1,10 +1,7 @@
 import axios from "axios";
-import {useRoute, useRouter} from 'vue-router'
+import router from "@/router";
 
-const router = useRouter();
-const route = useRoute();
-
-const PRODMODE = !['localhost', '127.0.0.1', '0.0.0.0', ''].includes(window.location.hostname);
+const PRODMODE = !(['localhost', '127.0.0.1', '0.0.0.0', ''].includes(window.location.hostname));
 
 export const HTTP = axios.create({
     baseURL: PRODMODE ? process.env.VUE_APP_API_URL_PROD : process.env.VUE_APP_API_URL,
@@ -33,9 +30,6 @@ export default {
             return await response.data;
         } catch (e) {
             console.log(e);
-            if (e.response && +e.response.status === 401 && route.path.includes('workspace')) {
-                await router.push({name: '/'});
-            }
             return e;
         }
     },
@@ -45,7 +39,7 @@ export default {
             return await response.data;
         } catch (e) {
             console.log(e);
-            if (e.response && +e.response.status === 401 && route.path.includes('workspace')) {
+            if (e.response && +e.response.status === 401 && router.currentRoute.value.path.includes('workspace')) {
                 await router.push({name: '/'});
             }
         }
