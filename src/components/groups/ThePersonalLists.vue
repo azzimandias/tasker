@@ -34,7 +34,10 @@
               @click="router.push({ name: 'list', params: { id_list: 'new' } })"
           />
         </div>
-        <div class="personal-lists__container scroll" v-if="bigMenuStore.personalLists.length">
+        <div class="personal-lists__container scroll"
+             v-if="bigMenuStore.personalLists.length"
+             :class="{minimized: !isOpenBigMenu}"
+        >
             <PersonalList 
                 v-for="list in bigMenuStore.personalLists"
                 :key="list.key"
@@ -78,7 +81,10 @@
         display: grid;
         max-height: 200px;
         //padding-right: 5px;
-      overflow-x: hidden;
+        &.minimized {
+          overflow: hidden;
+          padding: 0;
+        }
     }
     .personal-lists__header {
       display: flex;
