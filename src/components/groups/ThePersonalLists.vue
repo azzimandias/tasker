@@ -23,8 +23,11 @@
 <template>
     <div class="personal-lists"
          ref="personalLists"
-         :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}">
-        <div class="personal-lists__header">
+         :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}"
+    >
+        <div class="personal-lists__header"
+             :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}"
+        >
           <SectionHeader :is_load="bigMenuStore.is_load_personalLists">Мои списки</SectionHeader>
           <TopButton
               :cl="'plus'"
@@ -50,7 +53,7 @@
       transition: all .3s, opacity 0s;
       position: relative;
       &.hidden {
-        opacity: 0;
+        display: none;
       }
       &.minimized {
         padding: 6px;
@@ -75,11 +78,27 @@
         display: grid;
         max-height: 200px;
         //padding-right: 5px;
+      overflow-x: hidden;
     }
     .personal-lists__header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 20px 10px 10px 0;
+      &.hidden {
+        display: none;
+      }
+      &.minimized {
+        padding: 6px;
+        &::after {
+          content: '';
+          width: 30px;
+          height: 1px;
+          background-color: #383939;
+          position: absolute;
+          bottom: 0;
+          left: calc(50% - 15px);
+        }
+      }
     }
 </style>
