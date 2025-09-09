@@ -1,4 +1,8 @@
 import axios from "axios";
+import {useRoute, useRouter} from 'vue-router'
+
+const router = useRouter();
+const route = useRoute();
 
 const PRODMODE = !['localhost', '127.0.0.1', '0.0.0.0', ''].includes(window.location.hostname);
 
@@ -19,8 +23,6 @@ export default {
     async getCookies() {
         try {
             await HTTP.get(this.url + 'sanctum/csrf-cookie');
-            //console.log('csrf-cookie')
-
         } catch (e) {
             console.log(e);
         }
@@ -28,10 +30,12 @@ export default {
     async isAuthorized() {
         try {
             const response = await HTTP.get(this.url + 'check');
-            //console.log('user authorized')
             return await response.data;
         } catch (e) {
             console.log(e);
+            if (e.response && +e.response.status === 401 && route.path.includes('workspace')) {
+                await router.push({name: '/'});
+            }
             return e;
         }
     },
@@ -41,6 +45,9 @@ export default {
             return await response.data;
         } catch (e) {
             console.log(e);
+            if (e.response && +e.response.status === 401 && route.path.includes('workspace')) {
+                await router.push({name: '/'});
+            }
         }
     },
     async getInfoWithArgs(path, args) {
