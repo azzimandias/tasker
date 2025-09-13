@@ -170,7 +170,7 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
             @saveChangesDate="saveChangesDate"
         />
         <TagCreator
-            v-if="props.task.possibleTags && props.task.possibleTags.length > 0"
+            v-if="props.task.possibleTags"
             :key="props.task.tagCreatorKey"
             :id_task="props.task.id"
             :possibleTags="props.task.possibleTags"
