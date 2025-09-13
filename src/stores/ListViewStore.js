@@ -76,9 +76,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const fetchToServer =  async () => {
         if (route.params.id_list && route.params.id_list !== 'new') {
-            request.value = `list?id=${route.params.id_list}`;
+            request.value = `list/${route.params.id_list}`;
         } else if (route.params.name) {
-            request.value = `list?name=${route.params.name}`;
+            request.value = `listName?name=${route.params.name}`;
         } else if (route.params.id_tag && route.params.id_tag !== 'new') {
             if (+route.params.id_tag) {
                 request.value = `tag/${route.params.id_tag}`;
@@ -88,11 +88,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
         } else { request.value = ''; }
         let response = null;
         if (request.value) {
-            response = await api.getInfoWithArgs(request.value, {
+            response = await api.getInfoWithArgs(request.value/*, {
                 params: {
                     user_id: user.id
                 }
-            });
+            }*/);
         }
         setTimeout(() => {
             updateData(response);
