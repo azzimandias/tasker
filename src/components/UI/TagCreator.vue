@@ -147,7 +147,7 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
 
   .fade-enter-active,
   .fade-leave-active {
-    transition: all 0.25s ease-out;
+    transition: opacity 0.25s ease-out;
   }
 
   .fade-enter-from {
