@@ -15,11 +15,35 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
   const createTagKey = ref(0);
   const possibleTags = reactive(props.possibleTags.length ? [...props.possibleTags] : []);
   const sortPossibleTagsName = ref('');
+  const windowHeight = ref(window.innerHeight)
   const possibleTagsList = ref(null);
   const possibleTagsListScrollHeight = ref(possibleTagsList.offsetHeight);
-  const scrollHeightStyle = computed(() => ({
+
+  /*const scrollHeightStyle = computed(() => ({
     bottom: '-' + (possibleTagsListScrollHeight.value + 5) + 'px'
-  }));
+  }));*/
+
+  const scrollHeightStyle = computed(() => {
+    if (!possibleTagsList.value) return {}
+
+    const rect = possibleTagsList.value.getBoundingClientRect()
+    const spaceBelow = windowHeight.value - rect.bottom
+    const spaceAbove = rect.top
+
+    if (spaceBelow < possibleTagsListScrollHeight.value && spaceAbove > possibleTagsListScrollHeight.value) {
+      return {
+        bottom: '100%',
+        top: 'auto',
+        marginBottom: '5px'
+      }
+    }
+
+    return {
+      top: '100%',
+      bottom: 'auto',
+      marginTop: '5px'
+    }
+  });
 
   watch(() => props.possibleTags, (newPossibleTags) => {
     possibleTags.splice(0, possibleTags.length, ...newPossibleTags);
@@ -120,7 +144,9 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
   .personal-tag__list {
     position: absolute;
     left: 0;
-    bottom: 0;
+    right: 0;
+    top: 100%;
+    bottom: auto;
     width: 400px;
     max-height: 145px;
     padding: 5px;
@@ -157,7 +183,7 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
 
   .fade-enter-active,
   .fade-leave-active {
-    transition: opacity 0.25s ease-out;
+    transition: opacity .1s ease-out;
   }
 
   .fade-enter-from {
