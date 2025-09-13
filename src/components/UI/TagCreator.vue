@@ -101,11 +101,13 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
            @vue:mounted="updateScrollHeight"
       >
         <PersonalTag
+            v-if="possibleTags.length > 0"
             v-for="tag in possibleTags"
             :key="tag.id"
             :tag="tag"
             @click="addTagToTask(tag)"
         />
+        <div class="empty-list__title" v-else>Здесь пусто.</div>
       </div>
     </Transition>
   </div>
@@ -143,6 +145,14 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
     font-size: 13px;
     padding: 5px 8px;
     font-family: Avenir, Helvetica, Arial, sans-serif;
+  }
+
+  .empty-list__title {
+    flex: 1 0 100px;
+    font-size: 14px;
+    color: #c4c4c4;
+    display: flex;
+    align-items: center;
   }
 
   .fade-enter-active,
