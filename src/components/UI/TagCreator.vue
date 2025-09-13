@@ -19,30 +19,23 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
   const possibleTagsList = ref(null);
   const possibleTagsListScrollHeight = ref(possibleTagsList.offsetHeight);
 
-  /*const scrollHeightStyle = computed(() => ({
-    bottom: '-' + (possibleTagsListScrollHeight.value + 5) + 'px'
-  }));*/
-
   const scrollHeightStyle = computed(() => {
     if (!possibleTagsList.value) return {}
-
     const rect = possibleTagsList.value.getBoundingClientRect()
     const spaceBelow = windowHeight.value - rect.bottom
     const spaceAbove = rect.top
-
     if (spaceBelow < possibleTagsListScrollHeight.value && spaceAbove > possibleTagsListScrollHeight.value) {
       return {
         bottom: '100%',
         top: 'auto',
         marginBottom: '5px'
-      }
+      };
     }
-
     return {
       top: '100%',
       bottom: 'auto',
       marginTop: '5px'
-    }
+    };
   });
 
   watch(() => props.possibleTags, (newPossibleTags) => {

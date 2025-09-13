@@ -31,7 +31,7 @@ watch(() => bigMenu.user, (newUserInfo) => {
 
 onMounted(async () => {
   try {
-    loading.value = true;
+    /*loading.value = true;*/
     userInfo.user_id = bigMenu.user.id;
     userInfo.user_email = bigMenu.user.email;
     userInfo.user_name = bigMenu.user.name;

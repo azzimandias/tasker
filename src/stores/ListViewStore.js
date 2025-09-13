@@ -304,9 +304,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* + Search */
     const findTasks = async (searchObj) => {
         loading.value = true;
-        //currentSearchTasks
         const response = await api.globalSearch(searchObj);
-        //console.log(response)
         searchResult.length = 0;
         if (typeof response === 'object') {
             response.forEach(item => {

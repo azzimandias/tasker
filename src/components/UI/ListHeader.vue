@@ -79,7 +79,7 @@
     font-weight: 600;
     color: #c4c4c4;
     position: sticky;
-    top: 60px;
+    top: 0;
     @include theme('background-color', $tasker);
     display: flex;
     justify-content: space-between;

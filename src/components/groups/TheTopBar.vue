@@ -11,8 +11,26 @@ import {onMounted, ref, watch} from 'vue';
   const emit = defineEmits(['newTask']);
   const cl = ref(['person','plus','loup','close']);
   const isSearchMode = ref(false);
+  const isNeedToClearSearch = ref(false);
   const listInfo = useListViewStore();
   const imageDB = useImageDBStore();
+
+  const props = defineProps({
+    isOpenSearchTopBar: Boolean,
+  })
+
+  watch(route, () => {
+    if (route.path.indexOf('search') >= 0) {
+      showSearch();
+    } else {
+      hideSearch();
+    }
+  });
+
+  watch(() => props.isOpenSearchTopBar, (newIsOpenSearch) => {
+    isSearchMode.value = newIsOpenSearch;
+
+  });
 
   const showSearch = () => {
     isSearchMode.value = true;
@@ -21,18 +39,9 @@ import {onMounted, ref, watch} from 'vue';
   const hideSearch = () => {
     isSearchMode.value = false;
   };
-  const hideAndRedirectSearch = () => {
-    isSearchMode.value = false;
-    router.push({ name: 'intro' });
+  const clearSearch = () => {
+    isNeedToClearSearch.value = true;
   };
-
-  watch(route, () => {
-    if (route.path.indexOf('search') >= 0) {
-      showSearch();
-    } else {
-      hideSearch();
-    }
-  })
 </script>
 
 <template>
@@ -49,8 +58,10 @@ import {onMounted, ref, watch} from 'vue';
         </div>
         <div class="top-bar__container vide" v-else>
             <SearchInputText
-                :placeholder="'Поиск по задачам'"
+                :placeholder="'Введите название задачи...'"
                 :isSearchMode="isSearchMode"
+                :isNeedToClearSearch="isNeedToClearSearch"
+                @needNoMore="isNeedToClearSearch = false"
             />
         </div>
 
@@ -66,7 +77,7 @@ import {onMounted, ref, watch} from 'vue';
         </router-link>
         <TopButton v-else
             :cl="cl[3]"
-            @click="hideAndRedirectSearch"
+            @click="clearSearch"
         />
 
       </Transition>

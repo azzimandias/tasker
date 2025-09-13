@@ -1,22 +1,59 @@
 <script setup>
-  import { ref } from 'vue';
-  import {useListViewStore} from "@/stores/ListViewStore";
+import {ref, watch, onUnmounted, onMounted} from 'vue';
+  import { useListViewStore } from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
   const props = defineProps({
     placeholder: String,
     width: String,
     border: String,
+    isNeedToClearSearch: Boolean,
   });
+  const emit = defineEmits(['needNoMore']);
   const search = ref('');
+  const searchInput = ref(null);
+  let timeout = null;
+  let isActive = true;
 
-  const setChanges = () => {
-    if (search.value) {
-      listView.findTasks({searchString: search.value});
+  const performSearch = (searchValue) => {
+    if (!isActive) return;
+
+    if (searchValue) {
+      listView.findTasks({ searchString: searchValue });
     } else {
       listView.clearSearchTasks();
     }
   };
+
+  const setChanges = () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      performSearch(search.value);
+    }, 300);
+  };
+
+  onMounted(() => {
+    searchInput.value.focus();
+  });
+
+  onUnmounted(() => {
+    isActive = false;
+    clearTimeout(timeout);
+  });
+
+  watch(search, (newValue) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      performSearch(newValue);
+    }, 300);
+  });
+
+  watch(() => props.isNeedToClearSearch, (newValue) => {
+    if (newValue) {
+      search.value = '';
+      emit('needNoMore');
+    }
+  });
 </script>
 
 <template>

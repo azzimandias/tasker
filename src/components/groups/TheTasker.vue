@@ -3,16 +3,12 @@
   import TheTopBar from '@/components/groups/TheTopBar.vue';
   import {ref, watch} from "vue";
   const route = useRoute();
-
-  /*let keyGen = Math.random();
-  watch(route, () => {
-    keyGen = Math.random();
-  })*/
+  const isOpenSearchTopBar = ref(false);
 </script>
 
 <template>
   <div class="tasker">
-      <TheTopBar/>
+      <TheTopBar :isOpenSearchTopBar="isOpenSearchTopBar"/>
       <router-view
           v-if="route.params.name"
           :key="route.params.name"
@@ -28,6 +24,7 @@
       <router-view
           v-else
           :key="route.path"
+          @openSearchTopBar="isOpenSearchTopBar = true"
       />
   </div>
 </template>
