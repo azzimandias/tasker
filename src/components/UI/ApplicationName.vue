@@ -3,7 +3,6 @@
   import {useRoute} from 'vue-router'
 
   const route = useRoute();
-  //console.log(route)
   const applicationNameLabel = ref(null);
   const closeOpen = ref(null);
   const isOpenBigMenu = inject('isOpenBigMenu');

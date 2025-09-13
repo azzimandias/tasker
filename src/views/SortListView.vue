@@ -63,12 +63,13 @@
           v-for="task in stask.tasks"
           :key="task.key"
           :task="task"
-          :color="task.color"
+          :color="stask.personal_list.color"
           @done="refreshSortLists"
           @flag="refreshSortLists"
           @date="refreshSortLists"
           v-if="stask.tasks.length"
         />
+        <!--          :color="task.color"-->
       </div>
       <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
     </div>

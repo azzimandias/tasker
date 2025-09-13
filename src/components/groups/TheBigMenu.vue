@@ -3,11 +3,9 @@
   import TheSortLists from '@/components/groups/TheSortLists.vue';
   import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
   import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
-  import CreateNewListPopup from "@/components/groups/CreateNewListPopup.vue";
   import {inject, ref, watch} from "vue";
 
   const newPersonalListBtn = ref(null);
-  const is_popup = ref(false);
   const isOpenBigMenu = inject('isOpenBigMenu');
 
   watch(isOpenBigMenu, (newVal) => {
@@ -27,18 +25,6 @@
         <ThePersonalLists/>
         <ThePersonalTags/>
     </div>
-<!--    <div class="btn-wrapper">
-      <button class="new-personal-list-btn"
-              ref="newPersonalListBtn"
-              @click="is_popup=true"
-              :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}"
-      >
-        Новый список
-      </button>
-    </div>
-    <Teleport to="body">
-      <CreateNewListPopup :is_popup="is_popup" @close="is_popup=false"/>
-    </Teleport>-->
   </div>
 </template>
 
