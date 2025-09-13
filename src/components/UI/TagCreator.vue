@@ -1,6 +1,6 @@
 <script setup>
 
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import PersonalTag from "@/components/UI/PersonalTag.vue";
 
@@ -11,14 +11,14 @@ import {computed, onMounted, reactive, ref, watch} from "vue";
 
   const listView = useListViewStore();
   const newTag = reactive({id: 0, name: ''});
-  const openTagList = ref(false);
+  const isOpenTagList = ref(false);
   const createTagKey = ref(0);
   const possibleTags = reactive(props.possibleTags.length ? [...props.possibleTags] : []);
   const sortPossibleTagsName = ref('');
-  const possibleTagsList =ref(null);
-  const possibleTagsListScrollHeight = ref(possibleTagsList.scrollHeight);
+  const possibleTagsList = ref(null);
+  const possibleTagsListScrollHeight = ref(possibleTagsList.offsetHeight);
   const scrollHeightStyle = computed(() => ({
-    bottom: possibleTagsListScrollHeight.value + 'px'
+    bottom: '-' + (possibleTagsListScrollHeight.value + 5) + 'px'
   }));
 
   watch(() => props.possibleTags, (newPossibleTags) => {
@@ -26,13 +26,25 @@ import {computed, onMounted, reactive, ref, watch} from "vue";
     sortPossibleTags(sortPossibleTagsName.value);
   });
 
+  watch(possibleTags, async () => {
+    await nextTick();
+    updateScrollHeight();
+  });
+
+  const updateScrollHeight = () => {
+    if (possibleTagsList.value) {
+      possibleTagsListScrollHeight.value = possibleTagsList.value.offsetHeight;
+      console.log(scrollHeightStyle.value)
+    }
+  };
+
   const openPossibleTags = () => {
-    openTagList.value = true;
+    isOpenTagList.value = true;
   };
 
   const closePossibleTags = () => {
     setTimeout(() => {
-      openTagList.value = false;
+      isOpenTagList.value = false;
     },300);
   };
 
@@ -50,7 +62,7 @@ import {computed, onMounted, reactive, ref, watch} from "vue";
   };
 
   const createTag = async (newName) => {
-    openTagList.value = false;
+    isOpenTagList.value = false;
     const newTag = await listView.createTag({
       name: newName,
       task_id: props.id_task
@@ -81,11 +93,12 @@ import {computed, onMounted, reactive, ref, watch} from "vue";
         @onBlur="closePossibleTags"
     />
     <Transition mode="out-in" name="fade">
-      <div v-if="openTagList"
+      <div v-if="isOpenTagList"
            class="personal-tag__list scroll"
            :style="scrollHeightStyle"
-           :class="{active: openTagList}"
+           :class="{active: isOpenTagList}"
            ref="possibleTagsList"
+           @vue:mounted="updateScrollHeight"
       >
         <PersonalTag
             v-for="tag in possibleTags"
