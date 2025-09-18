@@ -9,6 +9,10 @@
   const listView = useListViewStore();
   const emit = defineEmits(["openSearchTopBar"]);
 
+  const refreshSortLists = (obj) => {
+    //listView.updateSortListTasks();
+  };
+
   onMounted(() => {
     emit('openSearchTopBar');
     listView.loading = false;
@@ -25,15 +29,35 @@
     <LoaderBig v-if="listView.loading"/>
 
     <SomethingWrong v-else-if="listView.is_somethingWrong"/>
+
     <div class="workspace scroll" v-else>
       <ListHeader :list="{name: 'Поиск по задачам'}"/>
-      <Task
-          v-if="listView.searchResult && listView.searchResult.length > 0"
-          v-for="task in listView.searchResult"
-          :key="task.id"
-          :task="task"
-      />
-      <div v-else class="empty-list__title">Ничего не нашли.</div>
+      <div class="task__container">
+        <div class="list-tasks__wrapper"
+             v-for="list in listView.searchResult.filter(list => list.tasks.length > 0)"
+             :key="list.changer"
+             v-if="listView.searchResult.length"
+        >
+          <ListHeader :list="list"
+                      :isRouter="true"
+                      :fontSize="'20px'"
+                      :top="60"
+                      :zIndex="1"
+          />
+          <Task
+              v-for="task in list.tasks"
+              :key="task.key"
+              :task="task"
+              :color="list.color"
+              @done="refreshSortLists"
+              @flag="refreshSortLists"
+              @date="refreshSortLists"
+          />
+        </div>
+        <div class="empty-list__title" v-if="!listView.searchResult.length">
+          <p>Здесь пусто.</p>
+        </div>
+      </div>
     </div>
   </Transition>
 </template>
@@ -49,6 +73,23 @@
   padding: 0 20px;
   overflow-y: auto;
 }
+
+.task__container {
+  width: 100%;
+  padding: 0 18px;
+  flex: 1 0 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  grid-gap: 20px;
+  overflow: revert;
+}
+
+.list-tasks__wrapper {
+  width: 100%;
+}
+
 .slide-up-enter-active,
 .slide-up-leave-active {
   transition: all 0.25s ease-out;

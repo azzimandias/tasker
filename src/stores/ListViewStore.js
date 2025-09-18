@@ -308,6 +308,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         searchResult.length = 0;
         if (typeof response === 'object') {
             response.forEach(item => {
+                item.changer = Math.random();
                 searchResult.push(item);
             });
             loading.value = false;
