@@ -8,7 +8,7 @@
   const props = defineProps({
     idList: Number,
   });
-  const emit = defineEmits(['delete']);
+  const emit = defineEmits(['delete', 'share']);
   const infoList = ref(null);
   const dropDownList = ref(null);
   const isOpen = ref(false);
@@ -19,6 +19,11 @@
   const deleteAction = () => {
     openCloseDropDownList();
     emit('delete');
+  }
+
+  const shareAction = () => {
+    openCloseDropDownList();
+    emit('share');
   }
 
   const closeDropDown = (e) => {
@@ -49,7 +54,7 @@
            class="drop-down-list active"
            ref="dropDownList"
       >
-        <button class="drop-down-list__btn">Edit</button>
+        <button class="drop-down-list__btn" @mouseup="shareAction">Share</button>
         <button class="drop-down-list__btn" @mouseup="deleteAction">Delete</button>
       </div>
     </Transition>

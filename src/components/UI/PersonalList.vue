@@ -23,6 +23,10 @@
     }
   };
 
+  const shareList = () => {
+
+  };
+
   const deleteList = () => {
     bigMenu.deleteList(props.list.id);
     if (+props.list.id === +route.params.id_list) {
@@ -41,6 +45,7 @@
         <div class="info-list__wrapper" ref="infoList">
           <InfoList
               :idList="props.list.id"
+              @share="shareList"
               @delete="deleteList"
           />
         </div>

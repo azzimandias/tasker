@@ -10,6 +10,7 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
   import PersonalTag from "@/components/UI/PersonalTag.vue";
   import {useRoute} from "vue-router";
   import TagCreator from "@/components/UI/TagCreator.vue";
+import DeleteBtn from "@/components/UI/DeleteBtn.vue";
 
   const props = defineProps({
     task: Object,
@@ -150,9 +151,10 @@ import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
               :id="props.task.id"
               @flag="saveChangesFlag"
         />
-        <InfoList
+<!--        <InfoList
             @delete="deleteTask"
-        />
+        />-->
+        <DeleteBtn @delete="deleteTask"/>
       </div>
     </div>
     <div class="task__bottom-container">

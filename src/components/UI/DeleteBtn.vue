@@ -1,20 +1,24 @@
 <script setup>
-
+  const emit = defineEmits(['delete']);
 </script>
 
 <template>
-  <button class="delete-btn" type="button"></button>
+  <button class="delete-btn"
+          type="button"
+          title="Удалить"
+          @mouseup="emit('delete')"
+  ></button>
 </template>
 
 <style scoped lang="scss">
   .delete-btn {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     background-position: center;
-    background-size: 28px 28px;
+    background-size: 20px 20px;
     background-repeat: no-repeat;
-    background-image: url("../../assets/svgs/delete.svg");
+    background-image: url("../../assets/svgs/close.svg");
     padding: 0;
   }
 </style>
