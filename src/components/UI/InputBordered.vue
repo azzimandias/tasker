@@ -31,14 +31,14 @@ import {ref, watch} from "vue";
 </template>
 
 <style scoped lang="scss">
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .wrapper {
     width: 100%;
     height: 40px;
     display: grid;
     grid-template-columns: 1fr 3fr;
     align-items: center;
-    @include theme('color', $textColor);
+    /*@include theme('color', $textColor);*/
     grid-gap: 20px;
   }
   .label {
@@ -50,7 +50,7 @@ import {ref, watch} from "vue";
     height: 100%;
     border-width: 1px;
     border-style: solid;
-    @include theme('border-color', $SvgColor);
+    /*@include theme('border-color', $SvgColor);*/
     border-radius: 5px;
     input {
       width: 100%;

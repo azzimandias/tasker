@@ -40,11 +40,11 @@
 </template>
 
 <style scoped lang="scss">
-    @import "../../assets/styles/global.scss";
+    /*@import "../../assets/styles/global.scss";*/
     .sort-list {
         width: 100%;
         height: 70px;
-        @include theme('background-color', $personal);
+        /*@include theme('background-color', $personal);*/
         border-radius: 13px;
         padding: 8px 9px 5px 9px;
         display: flex;
@@ -53,16 +53,16 @@
         cursor: pointer;
         transition: .3s;
         &:active {
-            @include theme('background-color', $gold);
+            /*@include theme('background-color', $gold);*/
             opacity: 0.8;
             .sort-list__count, .sort-list__label {
-                @include theme('color', $textColorActive);
+                /*@include theme('color', $textColorActive);*/
             }
         }
         &.active {
-          @include theme('background-color', $gold);
+          /*@include theme('background-color', $gold);*/
           .sort-list__count, .sort-list__label {
-            @include theme('color', $textColorActive);
+            /*@include theme('color', $textColorActive);*/
           }
           .circle {
             box-shadow: 0 0 6px #26282B;
@@ -95,12 +95,12 @@
     }
     .sort-list__count, .sort-list__label {
         font-size: 18px;
-        @include theme('color', $textColor);
+        /*@include theme('color', $textColor);*/
     }
     .sort-list__count-small {
         font-size: 14px;
         line-height: 21px;
-        @include theme('color', $textColorActive);
+        /*@include theme('color', $textColorActive);*/
     }
     .sort-list__count, .sort-list__count-small { font-weight: 600; }
     .sort-list__label { font-weight: 400; font-size: 15px; }

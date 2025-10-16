@@ -7,11 +7,11 @@
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .tag-header {
     width: auto;
     height: auto;
-    @include theme('background-color', $gold);
+    /*@include theme('background-color', $gold);*/
     color: #171515;
     font-size: 20px;
     padding: 5px 8px;

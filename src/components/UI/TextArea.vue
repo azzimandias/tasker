@@ -48,12 +48,12 @@ import {onMounted, ref, watch} from "vue";
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .task__description {
     width: 100%;
     height: 25px;
     color: $description;
-    @include theme('color', $description);
-    &::placeholder { @include theme('color', $placeholder); }
+    /*@include theme('color', $description);*/
+    &::placeholder { /*@include theme('color', $placeholder);*/ }
   }
 </style>

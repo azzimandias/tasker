@@ -30,9 +30,9 @@
 </template>
 
 <style lang="scss">
-    @import "../../assets/styles/global.scss";
+    /*@import "../../assets/styles/global.scss";*/
     .tasker {
-      @include theme('background-color', $tasker);
+      /*@include theme('background-color', $tasker);*/
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 40px 1fr;

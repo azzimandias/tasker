@@ -62,7 +62,7 @@
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .info-list__wrapper {
     position: relative;
   }
@@ -84,10 +84,10 @@
     bottom: calc(0px - 55px);
     width: 150px;
     padding: 5px;
-    @include theme('background-color', $dropDownListBackground);
+    /*@include theme('background-color', $dropDownListBackground);*/
     border-width: 1px;
     border-style: solid;
-    @include theme('border-color', $dropDownListBorder);
+    /*@include theme('border-color', $dropDownListBorder);*/
     border-radius: 5px;
     overflow: hidden;
     display: none;
@@ -105,7 +105,7 @@
       cursor: pointer;
       transition: .3s;
       &:hover {
-        @include theme('color', $gold);
+        /*@include theme('color', $gold);*/
       }
     }
   }

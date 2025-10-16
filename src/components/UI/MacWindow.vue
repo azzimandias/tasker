@@ -243,14 +243,14 @@
 </template>
 
 <style scoped lang="scss">
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .mac-window {
     border-radius: 20px;
-    @include theme('background-color', $AnimatedWindow);
+    /*@include theme('background-color', $AnimatedWindow);*/
     overflow: hidden;
     outline-width: 1px;
     outline-style: solid;
-    @include theme('outline-color', $gold);
+    /*@include theme('outline-color', $gold);*/
     min-width: 500px;
     flex: 1 1 800px;
     height: 500px;
@@ -290,11 +290,11 @@
     width: 200px;
     height: 100%;
     padding: 20px 10px 15px 10px;
-    @include theme('background-color', $bigMenu);
+    /*@include theme('background-color', $bigMenu);*/
   }
   .mac-window__tasker {
     height: 100%;
-    @include theme('background-color', $tasker);
+    /*@include theme('background-color', $tasker);*/
     width: calc(100% - 200px);
   }
   .sort-lists__container {
@@ -326,7 +326,7 @@
   .sort-list {
     width: 85px;
     height: 50px;
-    @include theme('background-color', $personal);
+    /*@include theme('background-color', $personal);*/
     border-radius: 10px;
     position: relative;
     &:after {
@@ -364,7 +364,7 @@
     &.active {
       background-color: #6b6c6d;
       .count {
-        @include theme('color', $description);
+        /*@include theme('color', $description);*/
       }
     }
     &.deactivate {
@@ -386,7 +386,7 @@
       background-color: rgb(218, 173, 173);
     }
     &.fourth {
-      @include theme('background-color', $gold);
+      /*@include theme('background-color', $gold);*/
     }
     &:before {
       content: '';
@@ -400,7 +400,7 @@
     }
   }
   .count {
-    @include theme('color', $textColor);
+    /*@include theme('color', $textColor);*/
   }
   .tag {
     height: 25px;
@@ -426,7 +426,7 @@
     line-height: 80px;
     font-size: 30px;
     font-weight: 600;
-    @include theme('color', $gold);
+    /*@include theme('color', $gold);*/
     padding-left: 30px;
     opacity: 0;
     &.active {
@@ -474,7 +474,7 @@
     transition: 0.3s;
     border-width: 2px;
     border-style: solid;
-    @include theme('border-color', $gold);
+    /*@include theme('border-color', $gold);*/
     border-radius: 50%;
     position: relative;
   }
@@ -495,10 +495,10 @@
   }
   @keyframes click-dot {
     0% { background-color: transparent; }
-    100% { @include theme('background-color', $gold); }
+    100% { /*@include theme('background-color', $gold);*/ }
   }
   @keyframes undo-dot {
-    0% { @include theme('background-color', $gold); }
+    0% { /*@include theme('background-color', $gold);*/ }
     100% { background-color: transparent; }
   }
   .task-body {
@@ -510,6 +510,6 @@
     align-items: center;
   }
   .task-name {
-    @include theme('color', $gold);
+    /*@include theme('color', $gold);*/
   }
 </style>

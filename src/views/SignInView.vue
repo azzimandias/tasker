@@ -65,11 +65,11 @@
 </template>
 
 <style scoped lang="scss">
-  @import "../assets/styles/global.scss";
+  /*@import "../assets/styles/global.scss";*/
   .header_big {
     font-size: 50px;
     line-height: 60px;
-    @include theme('color', $introTextColor);
+    /*@include theme('color', $introTextColor);*/
     margin-bottom: 20px;
     text-align: center;
   }
@@ -85,7 +85,7 @@
       height: 35px;
       border-bottom-width: 1px;
       border-bottom-style: solid;
-      @include theme('border-bottom-color', $line);
+      /*@include theme('border-bottom-color', $line);*/
       &.empty {
         border-bottom: 1px solid darkred;
       }
@@ -94,12 +94,12 @@
       width: 90%;
       height: 28px;
       font-size: 28px;
-      @include theme('color', $introTextColor);
+      /*@include theme('color', $introTextColor);*/
     }
   }
   .input-label {
     font-size: 18px;
-    @include theme('color', $introTextColor);
+    /*@include theme('color', $introTextColor);*/
   }
   .submit-log {
     width: 50px;

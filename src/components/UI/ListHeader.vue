@@ -73,14 +73,14 @@
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .list-header, input.list-header {
     font-size: 35px;
     font-weight: 600;
     color: #c4c4c4;
     position: sticky;
     top: 0;
-    @include theme('background-color', $tasker);
+    /*@include theme('background-color', $tasker);*/
     display: flex;
     justify-content: space-between;
     align-items: center;

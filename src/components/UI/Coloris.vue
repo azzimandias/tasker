@@ -1,6 +1,6 @@
 <script setup>
 import {ref, watch} from "vue";
-  import coloris from '@/coloris';
+  /*import coloris from '@/coloris';*/
   const props = defineProps({
     color: String,
   });
@@ -12,7 +12,7 @@ import {ref, watch} from "vue";
           value.value = newValue;
       })
 
-  Coloris({
+  /*Coloris({
     el: '.coloris',
 
     themeMode: 'auto',
@@ -30,7 +30,7 @@ import {ref, watch} from "vue";
       '#00b4d8',
       '#48cae4',
     ]
-  });
+  });*/
 </script>
 
 <template>

@@ -75,12 +75,12 @@
 </template>
 
 <style lang="scss" scoped>
-  @import "../assets/styles/global.scss";
+  /*@import "../assets/styles/global.scss";*/
   .skin {
     width: 100%;
     max-width: 2000px;
     height: 100%;
-    @include theme('background-color', $tasker);
+    /*@include theme('background-color', $tasker);*/
     overflow: hidden;
     position: relative;
     display: flex;
@@ -92,7 +92,7 @@
     height: 40px;
     line-height: 40px;
     text-align: center;
-    @include theme('background-color', $topBlock);
+    /*@include theme('background-color', $topBlock);*/
   }
   .header {
     width: 100%;
@@ -116,7 +116,7 @@
   .logo-description {
     height: 47px;
     line-height: 50px;
-    @include theme('color', $introTextColor);
+    /*@include theme('color', $introTextColor);*/
   }
   .btns-wrapper {
     width: 320px;
@@ -158,7 +158,7 @@
     height: auto;
     padding: 30px;
     border-radius: 20px;
-    @include theme('background-color', $substrate);
+    /*@include theme('background-color', $substrate);*/
   }
   .main-block__right {
     padding: 0 0 0 30px;

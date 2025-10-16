@@ -65,11 +65,11 @@
         {{ listView.listInfo.count_of_active_tasks }}
       </div>
       <div class="list-redact-wrapper">
-        <Coloris v-if="route.params.id_list !== 'new'"
+<!--        <Coloris v-if="route.params.id_list !== 'new'"
                  :key="listView.listInfo.key"
                  :color="listView.listInfo.color"
                  @onDroch="saveChangedColor"
-        />
+        />-->
       </div>
     </div>
     <div class="task__container" v-if="listView.tasks.length">
@@ -109,7 +109,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import "../assets/styles/global.scss";
+/*@import "../assets/styles/global.scss";*/
 .workspace {
   height: 100%;
   display: flex;
@@ -130,7 +130,7 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  @include theme('background-color', $tasker);
+  /*@include theme('background-color', $tasker);*/
 }
 .personal-lis-count {
   font-size: 35px;

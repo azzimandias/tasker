@@ -220,21 +220,21 @@
 </template>
 
 <style scoped lang="scss">
-@import "../../assets/styles/global.scss";
+/*@import "../../assets/styles/global.scss";*/
 .phone-window {
   border-radius: 20px;
-  background-color: $textColorActive;
-  @include theme('background-color', $textColorActive);
+  /*background-color: $textColorActive;*/
+  /*@include theme('background-color', $textColorActive);*/
   overflow: hidden;
   outline-width: 1px;
   outline-style: solid;
-  @include theme('outline-color', $gold);
+  /*@include theme('outline-color', $gold);*/
   max-width: 230px;
   flex: 0 0 230px;
   height: 500px;
   border-width: 6px;
   border-style: solid;
-  @include theme('border-color', $textColorActive);
+  /*@include theme('border-color', $textColorActive);*/
   position: relative;
   z-index: 1;
 }
@@ -244,8 +244,8 @@
   left: calc(50% - 50px);
   border-width: 10px;
   border-style: solid;
-  @include theme('border-color', $textColorActive);
-  @include theme('background-color', $textColorActive);
+  /*@include theme('border-color', $textColorActive);
+  @include theme('background-color', $textColorActive);*/
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   height: 0;
@@ -256,7 +256,7 @@
 }
 .phone-window__tasker {
   height: 100%;
-  @include theme('background-color', $AnimatedWindow);
+  /*@include theme('background-color', $AnimatedWindow);*/
   width: 100%;
   padding-top: 30px;
   .list-label {
@@ -278,8 +278,8 @@
   line-height: 80px;
   font-size: 30px;
   font-weight: 600;
-  color: $gold;
-  @include theme('color', $gold);
+  /*color: $gold;*/
+  /*@include theme('color', $gold);*/
   padding-left: 30px;
   opacity: 0;
   &.active {
@@ -327,7 +327,7 @@
   transition: 0.3s;
   border-width: 2px;
   border-style: solid;
-  @include theme('border-color', $gold);
+  /*@include theme('border-color', $gold);*/
   border-radius: 50%;
   position: relative;
 }
@@ -348,10 +348,10 @@
 }
 @keyframes click-dot {
   0% { background-color: transparent; }
-  100% { @include theme('background-color', $gold); }
+  100% { /*@include theme('background-color', $gold);*/ }
 }
 @keyframes undo-dot {
-  0% { @include theme('background-color', $gold); }
+  0% { /*@include theme('background-color', $gold);*/ }
   100% { background-color: transparent; }
 }
 .task-body {
@@ -363,6 +363,6 @@
   align-items: center;
 }
 .task-name {
-  @include theme('color', $gold);
+  /*@include theme('color', $gold);*/
 }
 </style>

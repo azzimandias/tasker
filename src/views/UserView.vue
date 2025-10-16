@@ -104,7 +104,7 @@ const save = async () => {
 </template>
 
 <style scoped lang="scss">
-  @import "../assets/styles/global.scss";
+  /*@import "../assets/styles/global.scss";*/
   .user-view {
     width: 100%;
     height: 100%;
@@ -121,7 +121,7 @@ const save = async () => {
     padding: 20px;
     border-width: 1px;
     border-style: solid;
-    @include theme('border-color', $description);
+    /*@include theme('border-color', $description);*/
     border-radius: 5px;
   }
   .btn-container {
@@ -141,7 +141,7 @@ const save = async () => {
       color: black;
     }
     &.save {
-      @include theme('background-color', $gold);
+      /*@include theme('background-color', $gold);*/
       color: black;
     }
     &:active {

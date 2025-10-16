@@ -69,7 +69,7 @@ const openDatePicker = () => {
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .lb {
     width: 100px;
     height: 28px;
@@ -98,7 +98,7 @@ const openDatePicker = () => {
   }
   .date {
     width: 100%;
-    @include theme('color', $smallTextColor);
+    /*@include theme('color', $smallTextColor);*/
     text-align: right;
     font-size: 12px;
   }

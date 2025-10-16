@@ -190,7 +190,7 @@ import DeleteBtn from "@/components/UI/DeleteBtn.vue";
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .task {
     width: 100%;
     color: #C5C7CA;
@@ -274,7 +274,7 @@ import DeleteBtn from "@/components/UI/DeleteBtn.vue";
     padding-bottom: 5px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    @include theme('border-bottom-color', $line);
+    /*@include theme('border-bottom-color', $line);*/
   }
   .info-btns__container {
     width: 100%;

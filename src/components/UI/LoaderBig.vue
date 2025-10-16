@@ -37,7 +37,7 @@
 
 <style lang="scss" scoped>
 @use "sass:math";
-@import "../../assets/styles/global.scss";
+/*@import "../../assets/styles/global.scss";*/
 $size: 12px;
 $time: 1;
 
@@ -59,7 +59,7 @@ $time: 1;
   border-right: $size solid transparent;
   border-bottom-width: ($size * 1.8);
   border-bottom-style: solid;
-  @include theme('border-bottom-color', $gold);
+  /*@include theme('border-bottom-color', $gold);*/
   animation: blink $time + s infinite;
   //filter: drop-shadow(0 0 ($size * 1.5) $gold);
 

@@ -12,13 +12,13 @@
 </template>
 
 <style scoped lang="scss">
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .list-done {
     font-size: 20px;
-    @include theme('color', $description);
+    /*@include theme('color', $description);*/
     position: sticky;
     top: 60px;
-    @include theme('background-color', $tasker);
+    /*@include theme('background-color', $tasker);*/
     display: flex;
     justify-content: space-between;
     align-items: center;

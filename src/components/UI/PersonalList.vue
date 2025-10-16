@@ -54,7 +54,7 @@
 </template>
 
 <style lang="scss">
-    @import "../../assets/styles/global.scss";
+    /*@import "../../assets/styles/global.scss";*/
     .personal-list {
         display: flex;
         align-items: center;
@@ -63,9 +63,9 @@
         cursor: pointer;
         transition: .3s;
         &.active {
-          @include theme('background-color', $gold);
+          /*@include theme('background-color', $gold);*/
           .personal-list__circle { box-shadow: 0 0 6px #26282B; }
-          .personal-list__count, .personal-list__label { @include theme('color', $textColorActive); }
+          .personal-list__count, .personal-list__label { /*@include theme('color', $textColorActive);*/ }
         }
         &.minimized {
           width: 40px;
@@ -86,7 +86,7 @@
     .personal-list__label {
         margin-left: 8px;
         font-size: 14px;
-        @include theme('color', $textColor);
+        /*@include theme('color', $textColor);*/
         flex-grow: 1;
         overflow: hidden;
         white-space: nowrap;
@@ -99,7 +99,7 @@
         font-size: 14px;
         font-weight: 600;
         text-align: right;
-        @include theme('color', $textColor);
+        /*@include theme('color', $textColor);*/
         transition: .3s;
     }
     .info-list__wrapper {

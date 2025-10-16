@@ -5,7 +5,7 @@
 </template>
 
 <style scoped lang="scss">
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .sign-btn {
     width: 130px;
     height: 50px;
@@ -17,18 +17,18 @@
     }
   }
   .sign-in {
-    @include theme('color', $gold);
+    /*@include theme('color', $gold);*/
     background-color: transparent;
     border-width: 1px;
     border-style: solid;
-    @include theme('border-color', $gold);
+    /*@include theme('border-color', $gold);*/
   }
   .sign-up {
-    @include theme('color', $textColorActive);
-    @include theme('background-color', $gold);
+    /*@include theme('color', $textColorActive);*/
+    /*@include theme('background-color', $gold);*/
     border-width: 1px;
     border-style: solid;
-    @include theme('border-color', $gold);
+    /*@include theme('border-color', $gold);*/
   }
   @media screen and (max-width: 730px) {
     .sign-btn {

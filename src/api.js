@@ -1,10 +1,16 @@
 import axios from "axios";
 import router from "@/router";
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+}
+
 const PRODMODE = !(['localhost', '127.0.0.1', '0.0.0.0', ''].includes(window.location.hostname));
 
 export const HTTP = axios.create({
-    baseURL: PRODMODE ? process.env.VUE_APP_API_URL_PROD : process.env.VUE_APP_API_URL,
+    baseURL: PRODMODE ? import.meta.env.VITE_APP_API_URL_PROD : import.meta.env.VITE_APP_API_URL,
     withCredentials: true,
     headers: {
         'Accept': 'application/json',
@@ -13,8 +19,16 @@ export const HTTP = axios.create({
     }
 });
 
+HTTP.interceptors.request.use(config => {
+    const token = getCookie('XSRF-TOKEN');
+    if (token) {
+        config.headers['X-XSRF-TOKEN'] = token;
+    }
+    return config;
+});
+
 export default {
-    url: PRODMODE ? process.env.VUE_APP_API_URL_PROD : process.env.VUE_APP_API_URL,
+    url: PRODMODE ? import.meta.env.VITE_APP_API_URL_PROD : import.meta.env.VITE_APP_API_URL,
     prefix: 'api/',
 
     async getCookies() {

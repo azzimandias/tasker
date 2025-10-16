@@ -86,14 +86,14 @@ import {onMounted, ref, watch} from 'vue';
 </template>
 
 <style lang="scss">
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .top-bar {
     width: 100%;
     height: 40px;
     display: flex;
     align-items: center;
     padding: 6px 17.5px 0 17.5px;
-    @include theme('background-color', $tasker);
+    /*@include theme('background-color', $tasker);*/
     position: sticky;
     top: 0;
     z-index: 1;

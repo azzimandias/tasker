@@ -308,27 +308,27 @@ const resize = () => {
       left: -9999px;
     }
 
-    @import "../../assets/styles/global.scss";
+    /*@import "../../assets/styles/global.scss";*/
 
     .personal-tag {
-      @include theme('background-color', $personal);
-      @include theme('color', $textColor);
+      /*@include theme('background-color', $personal);
+      @include theme('color', $textColor);*/
       &.active {
-        @include theme('background-color', $gold);
-        @include theme('color', $textColorActive);
+        /*@include theme('background-color', $gold);
+        @include theme('color', $textColorActive);*/
       }
     }
 
     .personal-tag-average {
-      @include theme('background-color', $personal);
-      @include theme('color', $textColor);
+      /*@include theme('background-color', $personal);
+      @include theme('color', $textColor);*/
       &.active {
-        @include theme('background-color', $gold);
-        @include theme('color', $textColorActive);
+        /*@include theme('background-color', $gold);
+        @include theme('color', $textColorActive);*/
       }
     }
 
     .tag-header {
-      @include theme('background-color', $gold);
+      /*@include theme('background-color', $gold);*/
     }
 </style>

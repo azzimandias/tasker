@@ -11,7 +11,7 @@
 </template>
 
 <style lang="scss">
-  @import './assets/styles/global.scss';
+  /*@import './assets/styles/global.scss';*/
   html {
     font-size: 16px;
   }
@@ -19,8 +19,8 @@
     width: 100vw;
     max-height: 100vh;
     height: 100vh;
-    background-color: $tasker;
-    @include theme('background-color', $tasker);
+    /*background-color: 'tasker';*/
+    /*@include theme('background-color', tasker);*/
     display: flex;
     justify-content: center;
   }

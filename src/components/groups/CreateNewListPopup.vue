@@ -58,10 +58,10 @@
             />
             <div class="line">
               Цвет:
-              <Coloris
+<!--              <Coloris
                   :color="color"
                   @onDroch="saveColor"
-              />
+              />-->
             </div>
             <p class="tip">Совет: выбирайте цвета, которые будут заметны на светлом/темном фоне</p>
           </div>
@@ -77,7 +77,7 @@
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .blur {
     position: absolute;
     top: 0;
@@ -101,7 +101,7 @@
     left: calc(50vw - 250px);
     border-radius: 10px;
     border: 2px solid grey;
-    @include theme('background-color', $bigMenu);
+    /*@include theme('background-color', $bigMenu);*/
     padding: 10px 20px;
     z-index: 100;
   }
@@ -114,13 +114,13 @@
   .popup__label {
     width: auto;
     font-size: 30px;
-    @include theme('color', $textColor);
+    /*@include theme('color', $textColor);*/
   }
   .popup__body {
     height: 130px;
     display: flex;
     justify-content: space-between;
-    @include theme('color', $textColorActive);
+    /*@include theme('color', $textColorActive);*/
     font-size: 20px;
   }
   .big-a {
@@ -134,7 +134,7 @@
     width: 250px;
     font-size: 12px;
     text-align: justify;
-    @include theme('color', $textColor);
+    /*@include theme('color', $textColor);*/
   }
   .body__wrapper {
     display: flex;
@@ -145,7 +145,7 @@
     display: flex;
     grid-gap: 5px;
     align-items: center;
-    @include theme('color', $textColor);
+    /*@include theme('color', $textColor);*/
   }
   .popup__btns {
     height: 30px;
@@ -158,8 +158,8 @@
   .popup__btn {
     width: 100px;
     border-radius: 5px;
-    @include theme('color', $textColorActive);
-    @include theme('background-color', $personal);
+    /*@include theme('color', $textColorActive);
+    @include theme('background-color', $personal);*/
     &:active { opacity: 0.8 }
   }
   .fade-enter-active,

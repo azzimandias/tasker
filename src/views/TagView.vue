@@ -85,7 +85,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import "../assets/styles/global.scss";
+/*@import "../assets/styles/global.scss";*/
   .workspace {
     height: 100%;
     display: flex;
@@ -135,7 +135,7 @@
     font-size: 35px;
     font-weight: 600;
     z-index: 2;
-    @include theme('background-color', $tasker);
+    /*@include theme('background-color', $tasker);*/
   }
   .workspace__name {
     //padding: 5px 0;

@@ -187,10 +187,10 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
     opacity: 0;
   }
 
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
 
   .personal-tag__list {
-    @include theme('background-color', $dropDownListBackground);
-    @include theme('border-color', $dropDownListBorder);
+    /*@include theme('background-color', $dropDownListBackground);
+    @include theme('border-color', $dropDownListBorder);*/
   }
 </style>

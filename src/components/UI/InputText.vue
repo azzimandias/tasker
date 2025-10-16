@@ -26,12 +26,12 @@
 </template>
 
 <style lang="scss">
-    @import "../../assets/styles/global.scss";
+    /*@import "../../assets/styles/global.scss";*/
     .searcher {
         width: 100%;
         color: #aaadae !important;
       &::placeholder {
-        @include theme('color', $placeholder);
+        /*@include theme('color', $placeholder);*/
       }
     }
 </style>

@@ -70,7 +70,7 @@ import {onMounted, ref, watch} from "vue";
 </template>
 
 <style lang="scss" scoped>
-  @import "../../assets/styles/global.scss";
+  /*@import "../../assets/styles/global.scss";*/
   .input-task-header-label {
     flex: 1 0 100px;
     height: 25px;
@@ -81,6 +81,6 @@ import {onMounted, ref, watch} from "vue";
     transition: .3s;
     cursor: pointer;
     font-weight: 600;
-    &::placeholder { @include theme('color', $placeholder); }
+    &::placeholder { /*@include theme('color', $placeholder);*/ }
   }
 </style>

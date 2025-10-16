@@ -29,13 +29,13 @@
 </template>
 
 <style scoped lang="scss">
-    @import "../../assets/styles/global.scss";
+    /*@import "../../assets/styles/global.scss";*/
     .big-menu {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding-bottom: 10px;
-        @include theme('background-color', $bigMenu);
+        /*@include theme('background-color', $bigMenu);*/
         user-select: none;
         overflow-x: clip;
         overflow-y: auto;
@@ -65,7 +65,7 @@
     }
     .new-personal-list-btn {
         width: 155px;
-        @include theme('color', $textColor);
+        /*@include theme('color', $textColor);*/
         transition: all .3s, opacity 0s;
         cursor: pointer;
         position: relative;
