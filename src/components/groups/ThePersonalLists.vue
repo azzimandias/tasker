@@ -1,9 +1,9 @@
 <script setup>
   import { useBigMenuStore } from "@/stores/BigMenuStore";
-  import SectionHeader from '../UI/SectionHeader.vue';
-  import PersonalList from '@/components/UI/PersonalList.vue';
+  import SectionHeader from '@/components/MY_UI/SectionHeader.vue';
+  import PersonalList from '@/components/MY_UI/PersonalList.vue';
   import {inject, watch, ref} from "vue";
-  import TopButton from "@/components/UI/TopButton.vue";
+  import TopButton from "@/components/MY_UI/TopButton.vue";
   import {useRouter} from "vue-router";
 
   const personalLists =ref(null);
@@ -50,7 +50,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style>
     .personal-lists {
       padding: 11px;
       transition: all .3s, opacity 0s;

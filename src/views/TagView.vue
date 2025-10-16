@@ -1,14 +1,14 @@
 <script setup>
   import { useListViewStore } from "@/stores/ListViewStore";
-  import SomethingWrong from "@/components/UI/SomethingWrong.vue";
-  import TagHeader from "@/components/UI/TagHeader.vue";
-  import Task from "@/components/UI/Task.vue";
-  import LoaderBig from "@/components/UI/LoaderBig.vue";
+  import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
+  import TagHeader from "@/components/MY_UI/TagHeader.vue";
+  import Task from "@/components/MY_UI/Task.vue";
+  import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
   import {useRoute, useRouter} from "vue-router";
   import {onMounted, ref, watchEffect} from "vue";
-  import ListHeader from "@/components/UI/ListHeader.vue";
-  import PersonalTag from "@/components/UI/PersonalTag.vue";
-  import InfoList from "@/components/UI/InfoList.vue";
+  import ListHeader from "@/components/MY_UI/ListHeader.vue";
+  import PersonalTag from "@/components/MY_UI/PersonalTag.vue";
+  import InfoList from "@/components/MY_UI/InfoList.vue";
 
   const listView = useListViewStore();
   const route = useRoute();
@@ -84,8 +84,7 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-/*@import "../assets/styles/global.scss";*/
+<style scoped>
   .workspace {
     height: 100%;
     display: flex;
@@ -97,7 +96,6 @@
   }
   .task__container {
     width: 100%;
-    //padding: 0 18px;
     flex: 1 0 100px;
     display: flex;
     flex-direction: column;
@@ -135,10 +133,7 @@
     font-size: 35px;
     font-weight: 600;
     z-index: 2;
-    /*@include theme('background-color', $tasker);*/
-  }
-  .workspace__name {
-    //padding: 5px 0;
+    background-color: var(--tasker);
   }
   .fade-enter-active,
   .fade-leave-active {

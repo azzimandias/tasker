@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue';
-  import TopButton from '@/components/UI/TopButton.vue';
-  import SearchInputText from '@/components/UI/SearchInputText.vue'
+  import TopButton from '@/components/MY_UI/TopButton.vue';
+  import SearchInputText from '@/components/MY_UI/SearchInputText.vue'
   import {useImageDBStore} from "@/stores/imageDBStore";
   import {useListViewStore} from "@/stores/ListViewStore";
   import {useRoute, useRouter} from "vue-router";
@@ -85,15 +85,14 @@ import {onMounted, ref, watch} from 'vue';
     </div>
 </template>
 
-<style lang="scss">
-  /*@import "../../assets/styles/global.scss";*/
+<style>
   .top-bar {
     width: 100%;
     height: 40px;
     display: flex;
     align-items: center;
     padding: 6px 17.5px 0 17.5px;
-    /*@include theme('background-color', $tasker);*/
+    background-color: var(--tasker);
     position: sticky;
     top: 0;
     z-index: 1;

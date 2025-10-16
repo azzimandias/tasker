@@ -1,5 +1,5 @@
 <script setup>
-  import ApplicationName from '@/components/UI/ApplicationName.vue';
+  import ApplicationName from '@/components/MY_UI/ApplicationName.vue';
   import TheSortLists from '@/components/groups/TheSortLists.vue';
   import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
   import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
@@ -28,14 +28,13 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-    /*@import "../../assets/styles/global.scss";*/
+<style scoped>
     .big-menu {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding-bottom: 10px;
-        /*@include theme('background-color', $bigMenu);*/
+        background-color: var(--bigMenu);
         user-select: none;
         overflow-x: clip;
         overflow-y: auto;
@@ -65,7 +64,7 @@
     }
     .new-personal-list-btn {
         width: 155px;
-        /*@include theme('color', $textColor);*/
+      color: var(--textColor);
         transition: all .3s, opacity 0s;
         cursor: pointer;
         position: relative;

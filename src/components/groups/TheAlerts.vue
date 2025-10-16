@@ -1,5 +1,5 @@
 <script setup>
-  import Alert from "@/components/UI/Alert.vue";
+  import Alert from "@/components/MY_UI/Alert.vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import {reactive, watch} from "vue";
 

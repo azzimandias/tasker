@@ -1,8 +1,7 @@
 <script setup>
   import {ref} from 'vue';
-  import TopButton from "@/components/UI/TopButton.vue";
-  import InputText from "@/components/UI/InputText.vue";
-  import Coloris from "@/components/UI/Coloris.vue";
+  import TopButton from "@/components/MY_UI/TopButton.vue";
+  import InputText from "@/components/MY_UI/InputText.vue";
   import api from "@/api";
   import {useBigMenuStore} from "@/stores/BigMenuStore";
 
@@ -76,8 +75,7 @@
 <!--  </Transition>-->
 </template>
 
-<style lang="scss" scoped>
-  /*@import "../../assets/styles/global.scss";*/
+<style scoped>
   .blur {
     position: absolute;
     top: 0;
@@ -101,7 +99,7 @@
     left: calc(50vw - 250px);
     border-radius: 10px;
     border: 2px solid grey;
-    /*@include theme('background-color', $bigMenu);*/
+    background-color: var(--bigMenu);
     padding: 10px 20px;
     z-index: 100;
   }
@@ -114,13 +112,13 @@
   .popup__label {
     width: auto;
     font-size: 30px;
-    /*@include theme('color', $textColor);*/
+    color: var(--textColor);
   }
   .popup__body {
     height: 130px;
     display: flex;
     justify-content: space-between;
-    /*@include theme('color', $textColorActive);*/
+    color: var(--textColorActive);
     font-size: 20px;
   }
   .big-a {
@@ -134,7 +132,7 @@
     width: 250px;
     font-size: 12px;
     text-align: justify;
-    /*@include theme('color', $textColor);*/
+    color: var(--textColor);
   }
   .body__wrapper {
     display: flex;
@@ -145,7 +143,7 @@
     display: flex;
     grid-gap: 5px;
     align-items: center;
-    /*@include theme('color', $textColor);*/
+    color: var(--textColor);
   }
   .popup__btns {
     height: 30px;
@@ -158,8 +156,8 @@
   .popup__btn {
     width: 100px;
     border-radius: 5px;
-    /*@include theme('color', $textColorActive);
-    @include theme('background-color', $personal);*/
+    color: var(--textColorActive);
+    background-color: var(--personal);
     &:active { opacity: 0.8 }
   }
   .fade-enter-active,

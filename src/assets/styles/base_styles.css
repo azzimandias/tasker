@@ -4,3 +4,108 @@
 
 @import "tailwindcss";
 
+.light-theme {
+    --workspace: white;
+    --bigMenu: #e0e0e0;
+    --tasker: #f6f6f6;
+    --gold: #ffd700ff;
+    --personal: #f9f9f9;
+    --substrate: #e5e5e5;
+    --topBlock: #dfdddd;
+    --textColorActive: #171515;
+    --textColor: #736f6f;
+    --description: #c4c4c4;
+    --placeholder: rgba(115, 111, 111, 0.44);
+    --smallTextColor: #f8f8f8;
+    --AnimatedWindow: #f1eeee;
+    --SvgColor: #aaadae;
+    --macWindow: #383939;
+    --introTextColor: #5C5D5F;
+    --line: #494B4E;
+    --dropDownListBackground: #b6b1b1;
+    --dropDownListBorder: #5F6164;
+    --goldBorder: 1px solid #ffd700ff;
+}
+
+.dark-theme {
+    --workspace: #0f0f0f;
+    --bigMenu: #26282B;
+    --tasker: #1b1c1f;
+    --gold: #af9a64;
+    --personal: #494B4E;
+    --substrate: #494B4E;
+    --topBlock: #494B4E;
+    --textColorActive: #171515;
+    --textColor: #c5c7ca;
+    --description: #c4c4c4;
+    --placeholder: rgba(115, 111, 111, 0.44);
+    --smallTextColor: #f8f8f8;
+    --AnimatedWindow: #383939;
+    --SvgColor: #aaadae;
+    --macWindow: #383939;
+    --introTextColor: #c4c4c4;
+    --line: #c4c4c466;
+    --dropDownListBackground: #0a0a0a;
+    --dropDownListBorder: #5F6164;
+    --goldBorder: 1px solid #af9a64;
+}
+
+
+.scroll {
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+    //background-color: #c4c4c4;
+        /*@include theme('background-color', $description);*/
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body {
+    overflow: hidden;
+}
+button {
+    background: none;
+    border: 0;
+}
+input {
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+h1,h2,h3,h4,h5,h6 {
+    color: white;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+textarea {
+    background: none;
+    border: none;
+    resize: none;
+    outline: none;
+}
+

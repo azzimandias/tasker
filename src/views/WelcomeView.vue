@@ -1,8 +1,8 @@
 <script setup>
-  import ApplicationName from '@/components/UI/ApplicationName.vue';
-  import SignButton from '@/components/UI/SignButton.vue';
-  import MacWindow from "@/components/UI/MacWindow.vue";
-  import PhoneWindow from "@/components/UI/PhoneWindow.vue";
+  import ApplicationName from '@/components/MY_UI/ApplicationName.vue';
+  import SignButton from '@/components/MY_UI/SignButton.vue';
+  import MacWindow from "@/components/MY_UI/MacWindow.vue";
+  import PhoneWindow from "@/components/MY_UI/PhoneWindow.vue";
   import {ref} from "vue";
   import {useRoute} from "vue-router";
 
@@ -74,13 +74,12 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-  /*@import "../assets/styles/global.scss";*/
+<style scoped>
   .skin {
     width: 100%;
     max-width: 2000px;
     height: 100%;
-    /*@include theme('background-color', $tasker);*/
+    background-color: var(--tasker);
     overflow: hidden;
     position: relative;
     display: flex;
@@ -92,7 +91,7 @@
     height: 40px;
     line-height: 40px;
     text-align: center;
-    /*@include theme('background-color', $topBlock);*/
+    background-color: var(--topBlock);
   }
   .header {
     width: 100%;
@@ -116,7 +115,7 @@
   .logo-description {
     height: 47px;
     line-height: 50px;
-    /*@include theme('color', $introTextColor);*/
+    color: var(--introTextColor);
   }
   .btns-wrapper {
     width: 320px;
@@ -158,7 +157,7 @@
     height: auto;
     padding: 30px;
     border-radius: 20px;
-    /*@include theme('background-color', $substrate);*/
+    background-color: var(--substrate);
   }
   .main-block__right {
     padding: 0 0 0 30px;

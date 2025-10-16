@@ -1,9 +1,9 @@
 <script setup>
   import {useListViewStore} from "@/stores/ListViewStore";
-  import SomethingWrong from "@/components/UI/SomethingWrong.vue";
-  import LoaderBig from "@/components/UI/LoaderBig.vue";
-  import Task from "@/components/UI/Task.vue";
-  import ListHeader from "@/components/UI/ListHeader.vue";
+  import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
+  import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
+  import Task from "@/components/MY_UI/Task.vue";
+  import ListHeader from "@/components/MY_UI/ListHeader.vue";
   import {onMounted, onUnmounted} from "vue";
 
   const listView = useListViewStore();
@@ -62,7 +62,7 @@
   </Transition>
 </template>
 
-<style scoped lang="scss">
+<style scoped >
 .workspace {
   height: 100%;
   display: flex;

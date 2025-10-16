@@ -1,13 +1,12 @@
 <script setup>
   import { useListViewStore } from "@/stores/ListViewStore";
   import {useImageDBStore} from "@/stores/imageDBStore";
-  import ListHeader from "@/components/UI/ListHeader.vue";
-  import ListDone from "@/components/UI/ListDone.vue";
-  import SomethingWrong from "@/components/UI/SomethingWrong.vue";
-  import Task from "@/components/UI/Task.vue";
-  import LoaderBig from "@/components/UI/LoaderBig.vue";
-  import DeleteBtn from "@/components/UI/DeleteBtn.vue";
-  import Coloris from "@/components/UI/Coloris.vue";
+  import ListHeader from "@/components/MY_UI/ListHeader.vue";
+  import ListDone from "@/components/MY_UI/ListDone.vue";
+  import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
+  import Task from "@/components/MY_UI/Task.vue";
+  import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
+  import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
   import {computed, onMounted, ref, watchEffect} from "vue";
   import {useRoute, useRouter} from "vue-router";
 
@@ -65,11 +64,6 @@
         {{ listView.listInfo.count_of_active_tasks }}
       </div>
       <div class="list-redact-wrapper">
-<!--        <Coloris v-if="route.params.id_list !== 'new'"
-                 :key="listView.listInfo.key"
-                 :color="listView.listInfo.color"
-                 @onDroch="saveChangedColor"
-        />-->
       </div>
     </div>
     <div class="task__container" v-if="listView.tasks.length">
@@ -108,8 +102,7 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-/*@import "../assets/styles/global.scss";*/
+<style scoped>
 .workspace {
   height: 100%;
   display: flex;
@@ -130,7 +123,7 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  /*@include theme('background-color', $tasker);*/
+  background-color: var(--tasker);
 }
 .personal-lis-count {
   font-size: 35px;

@@ -1,10 +1,10 @@
 <script setup>
 import api from "@/api";
 import { useRouter } from "vue-router";
-import InputBordered from "@/components/UI/InputBordered.vue";
+import InputBordered from "@/components/MY_UI/InputBordered.vue";
 import { useBigMenuStore } from "@/stores/BigMenuStore";
 import {ref, onMounted, watch, reactive} from "vue";
-import LoaderBig from "@/components/UI/LoaderBig.vue";
+import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
 
 const router = useRouter();
 const bigMenu = useBigMenuStore();
@@ -103,8 +103,7 @@ const save = async () => {
   </Transition>
 </template>
 
-<style scoped lang="scss">
-  /*@import "../assets/styles/global.scss";*/
+<style scoped>
   .user-view {
     width: 100%;
     height: 100%;
@@ -121,7 +120,7 @@ const save = async () => {
     padding: 20px;
     border-width: 1px;
     border-style: solid;
-    /*@include theme('border-color', $description);*/
+    border-color: var(--description);
     border-radius: 5px;
   }
   .btn-container {
@@ -141,7 +140,7 @@ const save = async () => {
       color: black;
     }
     &.save {
-      /*@include theme('background-color', $gold);*/
+      background-color: var(--gold);
       color: black;
     }
     &:active {

@@ -1,9 +1,9 @@
 <script setup>
   import { useListViewStore } from "@/stores/ListViewStore";
-  import ListHeader from "@/components/UI/ListHeader.vue";
-  import SomethingWrong from "@/components/UI/SomethingWrong.vue";
-  import Task from "@/components/UI/Task.vue";
-  import LoaderBig from "@/components/UI/LoaderBig.vue";
+  import ListHeader from "@/components/MY_UI/ListHeader.vue";
+  import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
+  import Task from "@/components/MY_UI/Task.vue";
+  import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
   import {onMounted, watchEffect} from "vue";
   import {useRoute} from "vue-router";
 
@@ -76,7 +76,7 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .workspace {
   height: 100%;
   display: flex;

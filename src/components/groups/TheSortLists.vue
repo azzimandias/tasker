@@ -1,8 +1,8 @@
 <script setup>
   import {inject, ref, watch} from 'vue';
   import { useBigMenuStore } from "@/stores/BigMenuStore";
-  import SectionHeader from '../UI/SectionHeader.vue';
-  import SortList from '@/components/UI/SortList.vue';
+  import SectionHeader from '@/components/MY_UI/SectionHeader.vue';
+  import SortList from '@/components/MY_UI/SortList.vue';
 
   const sortLists = ref(null);
   const bigMenuStore = useBigMenuStore();
@@ -36,7 +36,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style>
     .sort-lists {
       padding: 11px;
       transition: all .3s, opacity 0s;

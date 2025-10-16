@@ -1,10 +1,10 @@
 <script setup>
   /*import { ref,reactive,onMounted } from 'vue';*/
   import { useBigMenuStore } from "@/stores/BigMenuStore";
-  import SectionHeader from '../UI/SectionHeader.vue';
-  import PersonalTag from '@/components/UI/PersonalTag.vue';
+  import SectionHeader from '@/components/MY_UI/SectionHeader.vue';
+  import PersonalTag from '@/components/MY_UI/PersonalTag.vue';
   import {inject, watch} from "vue";
-  import TopButton from "@/components/UI/TopButton.vue";
+  import TopButton from "@/components/MY_UI/TopButton.vue";
   import {useRouter} from "vue-router";
 
   const bigMenuStore = useBigMenuStore();
@@ -32,7 +32,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style>
     .personal-tags {
       padding: 11px;
       transition: all 0.3s, opacity 0s;
@@ -42,7 +42,6 @@
         display: flex;
         flex-wrap: wrap;
         grid-gap: 5px;
-        //padding: 6px 15px 6px 6px;
         max-height: 205px;
     }
     .hidden {

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  /*import SignButton from "@/components/UI/SignButton.vue";*/
-  import { Button } from "@/components/UI/button"
-  const emits = defineEmits(['clearInterval']);
+  import SignButton from "@/components/MY_UI/SignButton.vue";
+  import { Button } from "@/components/ui/button"
+  const emit = defineEmits(['clearInterval']);
 </script>
 
 <template>
-  <div class="bg-red-500 text-white p-4">Tailwind работает?</div>
+  <div class="bg-red-500 text-white p-20">Tailwind работает?</div>
   <h2 class="header_big">Are you constantly planning something?</h2>
   <p class="description">
     Then we have a solution for you — TASKER.
@@ -20,18 +20,17 @@
   <Button>Button</Button>
 </template>
 
-<style scoped lang="scss">
-  /*@import "../assets/styles/global.scss";*/
+<style scoped>
   .header_big {
     font-size: 50px;
     line-height: 60px;
-    /*@include theme('color', $introTextColor);*/
+    color: var(--introTextColor);
     margin-bottom: 20px;
   }
   .description {
     font-size: 20px;
     line-height: 30px;
-    /*@include theme('color', $introTextColor);*/
+    color: var(--introTextColor);
     margin-bottom: 20px;
     text-align: justify;
   }

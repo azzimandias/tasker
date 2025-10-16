@@ -1,8 +1,8 @@
 <script setup>
   import { ref,onMounted,reactive  } from "vue";
-  import ListHeader from "@/components/UI/ListHeader.vue";
-  import Task from "@/components/UI/Task.vue";
-  import LoaderBig from "@/components/UI/LoaderBig.vue";
+  import ListHeader from "@/components/MY_UI/ListHeader.vue";
+  import Task from "@/components/MY_UI/Task.vue";
+  import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
 
   const testTasks = reactive([]);
   let header = ref('');

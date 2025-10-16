@@ -93,12 +93,11 @@
   <button class="submit-log" @click="signUp"></button>
 </template>
 
-<style scoped lang="scss">
-  /*@import "../assets/styles/global.scss";*/
+<style scoped>
   .header_big {
     font-size: 50px;
     line-height: 60px;
-    /*@include theme('color', $introTextColor);*/
+    color: var(--introTextColor);
     margin-bottom: 20px;
     text-align: center;
   }
@@ -119,7 +118,7 @@
       height: 35px;
       border-bottom-width: 1px;
       border-bottom-style: solid;
-      /*@include theme('border-bottom-color', $line);*/
+      border-bottom-color: var(--line);
       &.empty {
         border-bottom: 1px solid darkred;
       }
@@ -128,7 +127,7 @@
       width: 90%;
       height: 100%;
       font-size: 28px;
-      /*@include theme('color', $introTextColor);*/
+      color: var(--introTextColor);
     }
     &.half {
       width: 45%;
@@ -136,7 +135,7 @@
   }
   .input-label {
     font-size: 18px;
-    /*@include theme('color', $introTextColor);*/
+    color: var(--introTextColor);
     span {
       color: darkred;
     }
