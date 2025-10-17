@@ -1,6 +1,6 @@
 <script setup>
   import { useListViewStore } from "@/stores/ListViewStore";
-  import {useImageDBStore} from "@/stores/imageDBStore";
+  /*import {useImageDBStore} from "@/stores/imageDBStore";*/
   import ListHeader from "@/components/MY_UI/ListHeader.vue";
   import ListDone from "@/components/MY_UI/ListDone.vue";
   import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
@@ -12,7 +12,7 @@
 
 
   const listView = useListViewStore();
-  const imageDB = useImageDBStore();
+  /*const imageDB = useImageDBStore();*/
   const route = useRoute();
   const router = useRouter();
   const isDoneTasksOpen = ref(false);

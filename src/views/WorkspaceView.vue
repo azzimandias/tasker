@@ -1,13 +1,13 @@
 <script setup>
   import TheBigMenu from '@/components/groups/TheBigMenu.vue';
   import TheTasker from '@/components/groups/TheTasker.vue';
-  import {useImageDBStore} from "@/stores/imageDBStore";
+  /*import {useImageDBStore} from "@/stores/imageDBStore";*/
   import {onMounted, provide, ref, watch} from "vue";
   import api from "@/api";
   import {useBigMenuStore} from "@/stores/BigMenuStore";
   import {useListViewStore} from "@/stores/ListViewStore";
   import TheAlerts from "@/components/groups/TheAlerts.vue";
-  const imageDB = useImageDBStore();
+  /*const imageDB = useImageDBStore();*/
 
   const workspace = ref(null);
   const isOpenBigMenu = ref(true);

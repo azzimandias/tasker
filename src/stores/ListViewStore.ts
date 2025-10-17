@@ -7,6 +7,68 @@ import socket from "@/plugins/socket";
 import { v4 as uuidv4 } from 'uuid';
 
 export const useListViewStore = defineStore('listViewStore', () => {
+
+    type User = {
+        id:      number,
+        email:   string,
+        name:    string,
+        surname: string,
+    };
+
+    type List = {
+        "id": number | null,
+        "name": string,
+        "count_of_active_tasks": number,
+        "color": string,
+        "created_at": string | null,
+        "updated_at": string | null,
+        "deleted_at": string | null,
+        "owner_id": number | null
+    };
+
+    type Task = {
+        id: number | null,
+        id_list: number,
+        name: string | null,
+        description: string | null,
+        deadline: string | null,
+        is_done: number,
+        is_flagged: number,
+        url: string | null,
+        priority: null,
+        tags: Tag[],
+        possibleTags: Tag[],
+    };
+
+    type Tag = {
+        key: number | null,
+        id: number | null,
+        name: string,
+        created_at: string | null,
+        updated_at: string | null,
+        deleted_at: string | null,
+        task_id: number | null,
+    };
+
+    type FoundedListWithTasks = {
+        changer: number | null,
+        id: number,
+        name: string,
+        count_of_active_tasks: number,
+        color: string,
+        created_at: string | null,
+        updated_at: string | null,
+        deleted_at: string | null,
+        owner_id: number,
+        tasks: Task[]
+    };
+
+    type Alert = {
+        id: number,
+        name: string,
+        description: string
+    };
+
     const user = reactive({
         id:      0,
         email:   '',
@@ -17,7 +79,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const currentPersonalListTasksDone = reactive([]);
     const currentSortListTasks = reactive([]);
     const currentListInfo = reactive({
-        id: '',
+        id: 0,
         name: '',
         color: '',
         count_of_active_tasks: 0,
@@ -46,7 +108,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     onUnmounted(() => {
         disconnectSocket();
     });
-    const setUserInfo = (userInfo) => {
+    const setUserInfo = (userInfo: User) => {
         user.id      = userInfo.id;
         user.email   = userInfo.email;
         user.name    = userInfo.name;
@@ -54,9 +116,9 @@ export const useListViewStore = defineStore('listViewStore', () => {
         initialize().then();
     };
     const initialize = async () => {
-        await getTasksOrTags();
+        await getTasksOrTags(false);
     };
-    const getTasksOrTags = async (isSocket) => {
+    const getTasksOrTags = async (isSocket: boolean) => {
         if (!isSocket) {
             await connectSocket();
             loading.value = true;
@@ -88,11 +150,11 @@ export const useListViewStore = defineStore('listViewStore', () => {
         } else { request.value = ''; }
         let response = null;
         if (request.value) {
-            response = await api.getInfoWithArgs(request.value/*, {
+            response = await api.getInfoWithArgs(request.value, {
                 params: {
-                    user_id: user.id
+                    /*user_id: user.id*/
                 }
-            }*/);
+            });
         }
         setTimeout(() => {
             updateData(response);
@@ -185,10 +247,10 @@ export const useListViewStore = defineStore('listViewStore', () => {
         }
     };
 
-    const clearTasks = (id) => {
+    const clearTasks = (id: number) => {
         let i = 0;
         currentSortListTasks.forEach((list) => {
-            list.tasks.forEach((task,idx) => {
+            list.tasks.forEach((task: Task,idx: number) => {
                 if (+id === +task.id) {
                     //console.log(list.tasks[idx])
                     list.tasks.splice(idx,1);
@@ -203,7 +265,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         }
     };
     const updateSortListTasks = async () => {
-        await getTasksOrTags();
+        await getTasksOrTags(false);
     };
     const addNewTask = () => {
         currentPersonalListTasks.push({
@@ -227,7 +289,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         });
     };
-    const updateTaskDone = (id, is_done) => {
+    const updateTaskDone = (id: number, is_done: number) => {
         try {
             const sourceArray = is_done ? currentPersonalListTasks : currentPersonalListTasksDone;
             const targetArray = is_done ? currentPersonalListTasksDone : currentPersonalListTasks;
@@ -259,13 +321,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
         });
     };
     /* + TASK */
-    const updateTask = async (task) => {
+    const updateTask = async (task: Task) => {
         const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
         handleUpdateTask(response);
         //await getTasksOrTags();
         await bigMenu.firstRequest();
     };
-    const createTask = async (task) => {
+    const createTask = async (task: Task) => {
         task.id_list = currentListInfo.id;
         const response = await api.postInfo(`createTask`, {task, uuid: socketUUID});
         currentPersonalListTasks.forEach((task, idx) => {
@@ -280,7 +342,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
         return response;
     };
-    const deleteTask = async (obj) => {
+    const deleteTask = async (obj: {id: number}) => {
         currentPersonalListTasks.forEach((task, idx) => {
             if (task.id === obj.id) {
                 currentPersonalListTasks.splice(idx,1);
@@ -291,7 +353,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
         await bigMenu.firstRequest();
     };
-    const handleUpdateTask = (task) => {
+    const handleUpdateTask = (task: Task) => {
         if (!task.is_done) {
             const idx = currentPersonalListTasks.findIndex(el => el.id === task.id);
             currentPersonalListTasks[idx] = task;
@@ -302,12 +364,12 @@ export const useListViewStore = defineStore('listViewStore', () => {
     }
     /* - TASK */
     /* + Search */
-    const findTasks = async (searchObj) => {
+    const findTasks = async (searchObj: { searchString: string }) => {
         loading.value = true;
         const response = await api.globalSearch(searchObj);
         searchResult.length = 0;
         if (typeof response === 'object') {
-            response.forEach(item => {
+            response.forEach((item: FoundedListWithTasks) => {
                 item.changer = Math.random();
                 searchResult.push(item);
             });
@@ -322,20 +384,20 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     /* - Search */
     /* + TAG */
-    const addTagToTask = async (tagToTask) => {
-        tagToTask.uuid = socketUUID;
+    const addTagToTask = async (tagToTask: Tag) => {
+        tagToTask["uuid"] = socketUUID;
         const response = await api.postInfo(`addTagToTask`, tagToTask);
         /*handleAddTagToTask({
             key: Math.random(),
             id: tagToTask.tag_id,
             name: tagToTask.tag_name,
         }, tagToTask.task_id);*/
-        await getTasksOrTags();
+        await getTasksOrTags(false);
         await bigMenu.firstRequest();
         return response;
     };
-    const createTag = async (tag) => {
-        tag.uuid = socketUUID;
+    const createTag = async (tag: Tag) => {
+        tag['uuid'] = socketUUID;
         const response = await api.postInfo(`createTag`, tag);
         /*handleAddTagToTask({
             key: Math.random(),
@@ -346,34 +408,34 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await bigMenu.firstRequest();
         return response;
     };
-    const updateTag = async (tag) => {
-        tag.uuid = socketUUID;
+    const updateTag = async (tag: Tag) => {
+        tag["uuid"] = socketUUID;
         const response = await api.postInfo(`updateTag/${tag.id}`, tag);
         /*handleUpdateTag(response);*/
         //await getTasksOrTags();
         await bigMenu.firstRequest();
         return response;
     };
-    const deleteTagTask = async (tag) => {
-        tag.uuid = socketUUID;
+    const deleteTagTask = async (tag: Tag) => {
+        tag["uuid"] = socketUUID;
         await api.postInfo(`deleteTagTask`, tag);
         /*handleDeleteTagTask(tag);*/
         await getTasksOrTags(true);
         await bigMenu.firstRequest();
     };
-    const deleteTag = async (tag) => {
+    const deleteTag = async (tag: Tag) => {
         tag['uuid'] = socketUUID;
         await api.postInfo(`deleteTag/${tag.id}`, tag);
-        await getTasksOrTags();
+        await getTasksOrTags(false);
         await bigMenu.firstRequest();
     };
     /* - TAG */
     /* + TAG replacement */
-    const handleAddTagToTask = (tagToAdd, task_id) => {
+    const handleAddTagToTask = (tagToAdd: Tag, task_id: number) => {
         [currentPersonalListTasks, currentPersonalListTasksDone].forEach(taskList => {
             taskList.forEach(task => {
                 if (task.id !== task_id &&
-                    !task.possibleTags.some(tag => tag.id === tagToAdd.id)) {
+                    !task.possibleTags.some((tag: Tag) => tag.id === tagToAdd.id)) {
                     task.possibleTags = [...task.possibleTags, tagToAdd];
                 }
             });
@@ -397,33 +459,33 @@ export const useListViewStore = defineStore('listViewStore', () => {
         targetTask.tagCreatorKey = Math.random();
         console.log('Updated task:', targetTask);
     };
-    const handleDeleteTagTask = (tagDelInfo) => {
+    const handleDeleteTagTask = (tagDelInfo: Tag) => {
         const taskIndex = currentPersonalListTasks.findIndex(task => task.id === tagDelInfo.task_id);
         if (taskIndex !== -1) {
-            currentPersonalListTasks[taskIndex].tags = currentPersonalListTasks[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.tag_id);
+            currentPersonalListTasks[taskIndex].tags = currentPersonalListTasks[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.id);
             currentPersonalListTasks[taskIndex].possibleTags.push({
                 key: Math.random(),
-                id: tagDelInfo.tag_id,
-                name: tagDelInfo.tag_name
+                id: tagDelInfo.id,
+                name: tagDelInfo.name
             });
         } else {
             const taskIndex = currentPersonalListTasksDone.findIndex(task => task.id === tagDelInfo.task_id);
             if (taskIndex !== -1) {
-                currentPersonalListTasksDone[taskIndex].tags = currentPersonalListTasksDone[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.tag_id);
+                currentPersonalListTasksDone[taskIndex].tags = currentPersonalListTasksDone[taskIndex].tags.filter(tag => tag.id !== tagDelInfo.id);
                 currentPersonalListTasks[taskIndex].possibleTags.push({
                     key: Math.random(),
-                    id: tagDelInfo.tag_id,
-                    name: tagDelInfo.tag_name
+                    id: tagDelInfo.id,
+                    name: tagDelInfo.name
                 });
             }
         }
     };
-    const handleUpdateTag = (updatedTag) => {
+    const handleUpdateTag = (updatedTag: Tag) => {
         updateTagsInReactiveArray(updatedTag, currentPersonalListTasks);
         updateTagsInReactiveArray(updatedTag, currentPersonalListTasksDone);
     };
-    const updateTagsInReactiveArray = (updatedTag, reactiveTaskArray) => {
-        reactiveTaskArray.forEach((task) => {
+    const updateTagsInReactiveArray = (updatedTag: Tag, reactiveTaskArray: Task[]) => {
+        reactiveTaskArray.forEach((task: Task) => {
             if (task.tags) {
                 const tagIndex = task.tags.findIndex(tag => tag.id === updatedTag.id);
                 if (tagIndex !== -1) {
@@ -442,12 +504,12 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     /* - TAG replacement */
     /* + PERSONAL LIST */
-    const createList = async (list) => {
+    const createList = async (list: List) => {
         const response = await api.postInfo(`saveList/`, {list, uuid: socketUUID});
         await bigMenu.firstRequest();
         return response;
     };
-    const updateList = async (list) => {
+    const updateList = async (list: List) => {
         await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
         if (list.name) {
             currentListInfo.name = list.name;
@@ -457,14 +519,14 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await bigMenu.firstRequest();
     };
     /* - PERSONAL LIST */
-    const addAlert = (newAlert) => {
+    const addAlert = (newAlert: Alert) => {
         if (alerts.length > 2) {
             alerts.splice(0, 1);
         }
         alerts.push(newAlert);
         sortAlertsTop();
     };
-    const removeAlert = (alertId) => {
+    const removeAlert = (alertId: number) => {
         const idx = alerts.findIndex(alert => alert.id === alertId);
         alerts.splice(idx, 1);
         sortAlertsTop();
@@ -484,53 +546,53 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
             socket.emit('subscribe', 'ListViewStore');
 
-            socket.on('taskUpdated', (updatedTask) => {
+            socket.on('taskUpdated', (updatedTask: { uuid: string, task: Task }) => {
                 if (updatedTask.uuid !== socketUUID) {
                     handlePersonalListTaskSocketUpdate(updatedTask.task);
                 }
             });
-            socket.on('taskDeleted', (task) => {
+            socket.on('taskDeleted', (task: { uuid: string, taskId: number }) => {
                 if (task.uuid !== socketUUID) {
                     handlePersonalListTaskSocketDelete(task.taskId);
                 }
             });
-            socket.on('taskCreated', (newTask) => {
+            socket.on('taskCreated', (newTask: { uuid: string, task: Task }) => {
                 if (newTask.uuid !== socketUUID) {
                     handlePersonalListTaskSocketCreate(newTask.task);
                 }
             });
-            socket.on('listUpdated', (updatedList) => {
+            socket.on('listUpdated', (updatedList: { uuid: string, list: List }) => {
                 if (updatedList.uuid !== socketUUID) {
                     handlePersonalListSocketUpdate(updatedList.list);
                 }
             });
-            socket.on('createdTagTask', (createdTagTask) => {
+            socket.on('createdTagTask', (createdTagTask: { uuid: string, tag: object }) => {
                 if (createdTagTask.uuid !== socketUUID) {
                     handleTagTaskSocketCreate(createdTagTask);
                 }
             });
-            socket.on('addTagTask', (addTagToTask) => {
+            socket.on('addTagTask', (addTagToTask: { uuid: string, tag: object }) => {
                 if (addTagToTask.uuid !== socketUUID) {
                     handleAddTagTaskSocket(addTagToTask);
                 }
             });
-            socket.on('deleteTagTask', (deleteTagTask) => {
+            socket.on('deleteTagTask', (deleteTagTask: { uuid: string, tag: object }) => {
                 if (deleteTagTask.uuid !== socketUUID) {
                     handleDeleteTagTaskSocket(deleteTagTask);
                 }
             });
-            socket.on('deleteTag', (deleteTag) => {
+            socket.on('deleteTag', (deleteTag: { uuid: string, tag: Tag }) => {
                 if (deleteTag.uuid !== socketUUID) {
-                    handleDeleteTagSocket(deleteTag);
+                    handleDeleteTagSocket();
                 }
             });
-            socket.on('updateTag', (updateTag) => {
+            socket.on('updateTag', (updateTag: { uuid: string, tag: Tag }) => {
                 if (updateTag.uuid !== socketUUID) {
-                    handleUpdateTagTaskSocket(updateTag);
+                    handleUpdateTagTaskSocket(updateTag.tag);
                 }
             });
         } catch (e) {
-            console.log(е);
+            console.log(e);
             setTimeout(() => {
                 connectSocket();
             }, 1000);
@@ -542,7 +604,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         socket.off('taskCreated');
         socket.disconnect();
     };
-    const handlePersonalListTaskSocketUpdate = (updatedTask) => {
+    const handlePersonalListTaskSocketUpdate = (updatedTask: Task) => {
         console.log(`Updating task id=${updatedTask.id} on current list from socket:`, updatedTask);
         /*if (route.params.id_list) {
             if (!updatedTask.is_done) {
@@ -582,7 +644,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
-    const handlePersonalListTaskSocketDelete = (taskId) => {
+    const handlePersonalListTaskSocketDelete = (taskId: number) => {
         console.log('\\Delete task from websocket...')
         /*setTimeout(() => {
             console.log(taskId)
@@ -610,7 +672,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
-    const handlePersonalListTaskSocketCreate = (newTask) => {
+    const handlePersonalListTaskSocketCreate = (newTask: Task) => {
         console.log('Create task from websocket...')
         /*setTimeout(() => {
             if (newTask) {
@@ -636,7 +698,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
-    const handlePersonalListSocketUpdate = (updatedList) => {
+    const handlePersonalListSocketUpdate = (updatedList: List) => {
         console.log('Updating list info from websocket...')
         /*if (route.params.id_list) {
             currentListInfo.key = updatedList.key;
@@ -661,7 +723,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
-    const handleTagTaskSocketCreate = (createdTagTask) => {
+    const handleTagTaskSocketCreate = (createdTagTask: object) => {
         console.log('Add created tag to task...');
         /*handleAddTagToTask({
             key: Math.random(),
@@ -671,7 +733,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
-    const handleAddTagTaskSocket = (addTagToTask) => {
+    const handleAddTagTaskSocket = (addTagToTask: object) => {
         console.log('Add tag to task...');
         /*handleAddTagToTask({
             key: Math.random(),
@@ -681,7 +743,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
-    const handleDeleteTagTaskSocket = (deleteTagTask) => {
+    const handleDeleteTagTaskSocket = (deleteTagTask: object) => {
         console.log('\\Delete tag task from websocket...');
         /*handleDeleteTagTask({
             task_id: deleteTagTask.taskId,
@@ -696,8 +758,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();
     };
-    const handleUpdateTagTaskSocket = (updateTag) => {
-        console.log('Update tag...', updateTag.tag);
+    const handleUpdateTagTaskSocket = (updateTag: Tag) => {
+        console.log('Update tag...', updateTag);
         /*handleUpdateTag(updateTag.tag);*/
         getTasksOrTags(true).then();
         bigMenu.firstRequest().then();

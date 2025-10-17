@@ -1,72 +1,98 @@
 <script setup lang="ts">
-import api from "@/api";
-import { useRouter } from "vue-router";
-import InputBordered from "@/components/MY_UI/InputBordered.vue";
-import { useBigMenuStore } from "@/stores/BigMenuStore";
-import {ref, onMounted, watch, reactive} from "vue";
-import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
-import {Button} from "@/components/ui/button";
+  import api from "@/api";
+  import { useRouter } from "vue-router";
+  import InputBordered from "@/components/MY_UI/InputBordered.vue";
+  import { useBigMenuStore } from "@/stores/BigMenuStore";
+  import {ref, onMounted, watch, reactive, inject} from "vue";
+  import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
+  import {Button} from "@/components/ui/button";
 
-const router = useRouter();
-const bigMenu = useBigMenuStore();
-const loading = ref(true);
+  import { DIALOG_KEY, type DialogContext } from '@/types/dialog';
 
-const userInfo = reactive({
-  user_id: 0,
-  user_email: '',
-  user_name: '',
-  user_surname: ''
-});
+  const router = useRouter();
+  const bigMenu = useBigMenuStore();
+  const loading = ref(true);
 
-watch(() => bigMenu.user, (newUserInfo) => {
-      if (!newUserInfo) return;
-      console.log('User changed:', newUserInfo);
-      Object.assign(userInfo, {
-        user_id: newUserInfo.id,
-        user_email: newUserInfo.email,
-        user_name: newUserInfo.name,
-        user_surname: newUserInfo.surname
-      });
-    }, { deep: true, immediate: true }
-);
 
-onMounted(async () => {
-  try {
-    /*loading.value = true;*/
-    userInfo.user_id = bigMenu.user.id;
-    userInfo.user_email = bigMenu.user.email;
-    userInfo.user_name = bigMenu.user.name;
-    userInfo.user_surname = bigMenu.user.surname;
-  } catch (error) {
-    console.error("Failed to load user info:", error);
-  } finally {
-    loading.value = false;
-  }
-});
 
-const exit = async () => {
-  try {
-    const res = await api.logout();
-    if (res === 'logout') {
-      bigMenu.clearAll();
-      await router.push({ path: '/' });
+  const dialog = inject(DIALOG_KEY)
+
+  type UserInfo = {
+    user_id:      number;
+    user_email:   string;
+    user_name:    string;
+    user_surname: string;
+  };
+
+  type User = {
+    id:      number,
+    email:   string,
+    name:    string,
+    surname: string,
+  };
+
+  const userInfo = reactive<UserInfo>({
+    user_id: 0,
+    user_email: '',
+    user_name: '',
+    user_surname: ''
+  });
+
+  watch((): User => bigMenu.user, (newUserInfo): void => {
+        if (!newUserInfo) return;
+        console.log('User changed:', newUserInfo);
+        Object.assign(userInfo, {
+          user_id: newUserInfo.id,
+          user_email: newUserInfo.email,
+          user_name: newUserInfo.name,
+          user_surname: newUserInfo.surname
+        });
+      }, { deep: true, immediate: true }
+  );
+
+  onMounted((): void => {
+    try {
+      userInfo.user_id = bigMenu.user.id;
+      userInfo.user_email = bigMenu.user.email;
+      userInfo.user_name = bigMenu.user.name;
+      userInfo.user_surname = bigMenu.user.surname;
+    } catch (error) {
+      console.error("Failed to load user info:", error);
+    } finally {
+      loading.value = false;
     }
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
-};
+  });
 
-const getValue = (obj) => {
-  userInfo[obj.name] = obj.value;
-};
+  const exit = async (): Promise<void> => {
+    try {
+      const res = await api.logout();
+      if (res === 'logout') {
+        bigMenu.clearAll();
+        await router.push({ path: '/' });
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
-const save = async () => {
-  try {
-    await api.postInfo('updateUserInfo', userInfo);
-  } catch (error) {
-    console.error("Save failed:", error);
-  }
-};
+  const getValue = <K extends keyof UserInfo>(
+      obj: { name: K; value: UserInfo[K] }
+  ) => {
+    userInfo[obj.name] = obj.value;
+  };
+
+
+  const save = async (): Promise<void> => {
+    try {
+      await api.postInfo('updateUserInfo', userInfo);
+    } catch (error) {
+      console.error("Save failed:", error);
+    }
+  };
+
+  const handleOpenDialog = (): void => {
+    dialog?.openDialog({});
+  };
 </script>
 
 <template>
@@ -97,7 +123,7 @@ const save = async () => {
         </InputBordered>
         <div class="btn-container">
 
-          <Button>Поделиться</Button>
+          <Button @click="handleOpenDialog">Поделиться</Button>
 
           <button class="btn save" @click="save">Save</button>
           <button class="btn exit" @click="exit">Logout</button>

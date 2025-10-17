@@ -1,18 +1,32 @@
-<script setup>
-import {ref, watch} from "vue";
+<script setup lang="ts">
+import {Ref, ref, watch} from "vue";
 
-  const emit = defineEmits(['returnValue'])
-  const props = defineProps({
+  type ReturnValue = {
+    name: string,
+    value: string | number;
+  }
+
+  /*const emit = defineEmits(['returnValue']);*/
+  const emit = defineEmits<{
+    (e: 'returnValue', value: ReturnValue): void
+  }>();
+  /*const props = defineProps({
     name: String,
     value: String,
-  });
-  const model = ref(props.value);
+  });*/
+  const props = defineProps<{
+    name: string,
+    value: number | string
+  }>();
 
-  watch(() => props.value, (newValue) => {
+  const model: Ref = ref(props.value);
+
+  watch((): number | string => props.value,
+      (newValue: number | string): void => {
     model.value = newValue;
   });
 
-  const returnValue = () => {
+  const returnValue = (): void => {
     emit('returnValue', {name: props.name, value: model.value});
   }
 </script>
@@ -22,7 +36,7 @@ import {ref, watch} from "vue";
     <div class="label"><slot/>:</div>
     <label :for="`input-${props.name}`" class="bordered">
       <input :id="`input-${props.name}`"
-             type="text"
+             :type="props.name !== 'user_id' ? 'text': 'number'"
              v-model="model"
              @keyup="returnValue"
       />

@@ -2,7 +2,7 @@
 import {onMounted, ref, watch} from 'vue';
   import TopButton from '@/components/MY_UI/TopButton.vue';
   import SearchInputText from '@/components/MY_UI/SearchInputText.vue'
-  import {useImageDBStore} from "@/stores/imageDBStore";
+  /*import {useImageDBStore} from "@/stores/imageDBStore";*/
   import {useListViewStore} from "@/stores/ListViewStore";
   import {useRoute, useRouter} from "vue-router";
 
@@ -13,7 +13,7 @@ import {onMounted, ref, watch} from 'vue';
   const isSearchMode = ref(false);
   const isNeedToClearSearch = ref(false);
   const listInfo = useListViewStore();
-  const imageDB = useImageDBStore();
+  /*const imageDB = useImageDBStore();*/
 
   const props = defineProps({
     isOpenSearchTopBar: Boolean,

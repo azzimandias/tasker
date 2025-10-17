@@ -1,11 +1,60 @@
 import { defineStore } from 'pinia';
-import {ref, reactive, onMounted, onUnmounted} from "vue";
-import {useListViewStore} from "@/stores/ListViewStore";
+import {ref, reactive, onUnmounted} from "vue";
 import api from '@/api';
 import socket from "@/plugins/socket";
 import {v4 as uuidv4} from "uuid";
 
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
+    type User = {
+        id:      number,
+        email:   string,
+        name:    string,
+        surname: string,
+    };
+
+    type SocketSortListsCountRequest = {
+        uuid: string,
+        message: MessageItem[]
+    };
+    type MessageItem = {
+        id: number;
+        count: number;
+    };
+
+    type SocketListsRequest = {
+        uuid: string,
+        message: ListsItem[]
+    };
+    type ListsItem = {
+        key: number | null,
+        id: number | null,
+        name: string,
+        count_of_active_tasks: number,
+        color: string | null,
+        created_at: string | null,
+        updated_at: string | null,
+        deleted_at: string | null,
+        owner_id: number | null
+    };
+
+    type SocketTagsRequest = {
+        uuid: string,
+        message: TagItem[]
+    };
+    type TagItem = {
+        key: null | number,
+        id: number,
+        name: string,
+        created_at: string,
+        updated_at: string | null,
+        deleted_at: string | null,
+        pivot: {
+            user_id: string,
+            tag_id: string
+        }
+    };
+
+
     const user = reactive({
         id:      0,
         email:   '',
@@ -42,7 +91,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             url:   '/workspace/sortList=all'
         },
     ]);
-    const personalLists = reactive([]);
+    const personalLists = reactive<ListsItem[]>([]);
     const personalTags = reactive([
         {
             id:   0,
@@ -52,7 +101,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const is_load_sortLists     = ref(false);
     const is_load_personalLists = ref(false);
     const is_load_personalTags  = ref(false);
-    let socketUUID = uuidv4();
+    let socketUUID: string = uuidv4();
 
     onUnmounted(() => {
         socket.disconnect();
@@ -78,7 +127,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         is_load_personalTags.value = false;
         socketUUID = uuidv4();
     };
-    const setUserInfo = (userInfo) => {
+    const setUserInfo = (userInfo: User) => {
         user.id      = userInfo.id;
         user.email   = userInfo.email;
         user.name    = userInfo.name;
@@ -93,23 +142,23 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         try {
             socket.connect();
             socket.emit('subscribe', 'bigMenuStore');
-            socket.on('send_new_sort_lists_count', (new_sort_lists_count) => {
+            socket.on('send_new_sort_lists_count', (new_sort_lists_count: SocketSortListsCountRequest) => {
                 if (new_sort_lists_count.uuid !== socketUUID) {
                     updSortListsCount(new_sort_lists_count.message);
                 }
             });
-            socket.on('send_new_personal_lists_count', (new_personal_lists) => {
+            socket.on('send_new_personal_lists_count', (new_personal_lists: SocketListsRequest) => {
                 if (new_personal_lists.uuid !== socketUUID) {
                     updSocketPersonalLists(new_personal_lists.message);
                 }
             });
-            socket.on('send_new_personal_tags', (new_personal_tags) => {
+            socket.on('send_new_personal_tags', (new_personal_tags: SocketTagsRequest) => {
                 if (new_personal_tags.uuid !== socketUUID) {
                     updSocketPersonalTags(new_personal_tags.message);
                 }
             });
         } catch (e) {
-            console.log(е);
+            console.log(e);
             setTimeout(() => {
                 connectSocket();
             }, 1000);
@@ -129,25 +178,17 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             }
         });
         if ((typeof response) === "object") {
-            response.forEach(item => {
-                if (item.count >= 100) {
-                    sortLists[item.id-1].count = '+99';
-                } else {
-                    sortLists[item.id-1].count = item.count;
-                }
+            response.forEach((item: { id: number, count: number }) => {
+                sortLists[item.id - 1].count = item.count >= 100 ? '+99' : item.count.toString();
             });
             is_load_sortLists.value = false;
         }
     };
-    const updSortListsCount = (newSortListsCount) => {
+    const updSortListsCount = (newSortListsCount: MessageItem[]) => {
         if ((typeof newSortListsCount) === "object") {
             is_load_sortLists.value = true;
             newSortListsCount.forEach(item => {
-                if (item.count >= 100) {
-                    sortLists[item.id-1].count = '+99';
-                } else {
-                    sortLists[item.id-1].count = item.count;
-                }
+                sortLists[item.id-1].count = item.count >= 100 ? '+99' : item.count.toString();
             });
             is_load_sortLists.value = false;
         }
@@ -163,7 +204,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             });
             if ((typeof response) === "object" && response.length > 0) {
                 personalLists.length = 0;
-                response.forEach(item => {
+                response.forEach((item: ListsItem) => {
                     item.key = Math.random();
                     personalLists.push(item);
                 });
@@ -173,7 +214,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             console.log(e);
         }
     };
-    const updSocketPersonalLists = (newPersonalLists) => {
+    const updSocketPersonalLists = (newPersonalLists: ListsItem[]) => {
         if ((typeof newPersonalLists) === "object" && newPersonalLists.length > 0) {
             is_load_personalLists.value = true;
             personalLists.length = 0;
@@ -196,7 +237,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             if ((typeof response) === "object" && response.length > 0) {
                 personalTags.length = 0;
                 personalTags.push({ id:0, name:'Все теги' });
-                response.forEach(item => {
+                response.forEach((item: TagItem) => {
                     item.key = Math.random();
                     personalTags.push(item);
                 });
@@ -206,7 +247,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             console.log(e);
         }
     };
-    const updSocketPersonalTags = (newPersonalTags) => {
+    const updSocketPersonalTags = (newPersonalTags: TagItem[]) => {
         if ((typeof newPersonalTags) === "object" && newPersonalTags.length > 0) {
             personalTags.length = 0;
             personalTags.push({ id:0, name:'Все теги' });
@@ -217,14 +258,14 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             is_load_personalTags.value = false;
         }
     };
-    const addNewList = (list) => {
+    const addNewList = (list: ListsItem) => {
         personalLists.push(list);
     };
-    const saveList = async (list) => {
+    const saveList = async (list: ListsItem) => {
         await api.saveList(list);
         await firstRequest();
     };
-    const deleteList = async (listId) => {
+    const deleteList = async (listId: number) => {
         await api.deleteList(listId);
         await firstRequest();
     };
