@@ -1,11 +1,10 @@
 <script setup lang="ts">
   import SignButton from "@/components/MY_UI/SignButton.vue";
-  import { Button } from "@/components/ui/button"
   const emit = defineEmits(['clearInterval']);
 </script>
 
 <template>
-  <div class="bg-red-500 text-white p-20">Tailwind работает?</div>
+<!--  <div class="bg-red-500 text-white p-20">Tailwind работает?</div>-->
   <h2 class="header_big">Are you constantly planning something?</h2>
   <p class="description">
     Then we have a solution for you — TASKER.
@@ -17,7 +16,6 @@
   <router-link to="/signUp">
     <SignButton :class="'sign-up'">Start using</SignButton>
   </router-link>
-  <Button>Button</Button>
 </template>
 
 <style scoped>

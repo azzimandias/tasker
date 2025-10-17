@@ -1,8 +1,3 @@
-/*@tailwind base;
-@tailwind components;
-@tailwind utilities;*/
-
-@import "tailwindcss";
 
 .light-theme {
     --workspace: white;
@@ -50,7 +45,6 @@
     --goldBorder: 1px solid #af9a64;
 }
 
-
 .scroll {
     overflow-y: scroll;
     &::-webkit-scrollbar {
@@ -80,8 +74,8 @@ body {
     overflow: hidden;
 }
 button {
-    background: none;
-    border: 0;
+    /*background: none;
+    border: 0;*/
 }
 input {
     border: none;
@@ -108,4 +102,3 @@ textarea {
     resize: none;
     outline: none;
 }
-

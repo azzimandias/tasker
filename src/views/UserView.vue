@@ -1,10 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import api from "@/api";
 import { useRouter } from "vue-router";
 import InputBordered from "@/components/MY_UI/InputBordered.vue";
 import { useBigMenuStore } from "@/stores/BigMenuStore";
 import {ref, onMounted, watch, reactive} from "vue";
 import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
+import {Button} from "@/components/ui/button";
 
 const router = useRouter();
 const bigMenu = useBigMenuStore();
@@ -95,6 +96,9 @@ const save = async () => {
           Surname
         </InputBordered>
         <div class="btn-container">
+
+          <Button>Поделиться</Button>
+
           <button class="btn save" @click="save">Save</button>
           <button class="btn exit" @click="exit">Logout</button>
         </div>

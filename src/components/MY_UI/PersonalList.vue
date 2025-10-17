@@ -1,8 +1,26 @@
-<script setup>
+<script setup lang="ts">
   import {useRoute, useRouter} from 'vue-router';
   import InfoList from "@/components/MY_UI/InfoList.vue";
   import {useBigMenuStore} from "@/stores/BigMenuStore";
   import {inject, ref} from "vue";
+  import {Button} from '@/components/ui/button'
+  import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from '@/components/ui/dropdown-menu'
+  import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
 
   const isOpenBigMenu = inject('isOpenBigMenu');
   const bigMenu = useBigMenuStore();
@@ -24,7 +42,7 @@
   };
 
   const shareList = () => {
-
+    console.log('share list');
   };
 
   const deleteList = () => {
@@ -37,23 +55,44 @@
 
 <template>
     <div class="personal-list"
-         :class="{ active: props.list.id === +route.params.id_list, minimized: !isOpenBigMenu }"
+         :class="{ active: +props.list.id === +route.params.id_list, minimized: !isOpenBigMenu }"
          @mouseup="openList"
     >
         <div class="personal-list__circle" :key="Math.random()" :style="{ backgroundColor: props.list.color }"></div>
         <div class="personal-list__label"><slot name="name"></slot></div>
         <div class="info-list__wrapper" ref="infoList">
-          <InfoList
+<!--          <InfoList
               :idList="props.list.id"
               @share="shareList"
               @delete="deleteList"
-          />
+          />-->
+          <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+              <div class="info-list"
+                   :class="{ active: +props.list.id === +route.params.id_list }"
+              ></div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent class="w-56">
+              <DropdownMenuLabel>Действия:</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem @click="shareList">
+                  <span>Поделиться</span>
+                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="deleteList">
+                  <span>Удалить</span>
+                  <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div class="personal-list__count"><slot name="count"></slot></div>
     </div>
 </template>
 
-<style>
+<style scoped>
     .personal-list {
         display: flex;
         align-items: center;
@@ -100,5 +139,17 @@
         text-align: right;
       color: var(--textColor);
         transition: .3s;
+    }
+    .info-list {
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+      background-position: center;
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      background-image: url("@/assets/svgs/info.svg");
+      &.active { background-image: url("@/assets/svgs/info_invert.svg"); }
+      cursor: pointer;
+      transition: 0.3s;
     }
 </style>
