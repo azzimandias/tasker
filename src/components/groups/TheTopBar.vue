@@ -7,7 +7,9 @@ import {onMounted, ref, watch} from 'vue';
 
   const route = useRoute();
   const router = useRouter();
-  const emit = defineEmits<(['newTask'])>();
+  const emit = defineEmits<{
+    (e: 'newTask'): void
+  }>();
   const cl = ref(['person','plus','loup','close']);
   const isSearchMode = ref(false);
   const isNeedToClearSearch = ref(false);

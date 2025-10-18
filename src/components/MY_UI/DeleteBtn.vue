@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  const emit = defineEmits<(['delete'])>();
+  const emit = defineEmits<{
+    (e: 'delete'): void
+  }>();
 </script>
 
 <template>

@@ -2,7 +2,9 @@
   const prop = defineProps<({
     isDoneTasksOpen: boolean,
   })>();
-  const emit = defineEmits<(['openTasksDone'])>();
+  const emit = defineEmits<{
+    (e: 'openTasksDone'): void
+  }>();
 </script>
 
 <template>
