@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {Ref, ref, watch} from "vue";
+  import {Ref, ref, watch} from "vue";
+  import type { UserInfo } from '@/views/UserView.vue'
 
   type ReturnValue = {
     name: string,
@@ -8,7 +9,7 @@ import {Ref, ref, watch} from "vue";
 
   /*const emit = defineEmits(['returnValue']);*/
   const emit = defineEmits<{
-    (e: 'returnValue', value: ReturnValue): void
+    (e: 'returnValue', value: { name: keyof UserInfo; value: string }): void;
   }>();
   /*const props = defineProps({
     name: String,

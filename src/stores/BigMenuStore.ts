@@ -3,58 +3,17 @@ import {ref, reactive, onUnmounted} from "vue";
 import api from '@/api';
 import socket from "@/plugins/socket";
 import {v4 as uuidv4} from "uuid";
+import {
+    User,
+    TagItem,
+    MessageItem,
+    ListsItem,
+    SocketSortListsCountRequest,
+    SocketListsRequest,
+    SocketTagsRequest,
+} from '@/types/bigMenu';
 
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
-    type User = {
-        id:      number,
-        email:   string,
-        name:    string,
-        surname: string,
-    };
-
-    type SocketSortListsCountRequest = {
-        uuid: string,
-        message: MessageItem[]
-    };
-    type MessageItem = {
-        id: number;
-        count: number;
-    };
-
-    type SocketListsRequest = {
-        uuid: string,
-        message: ListsItem[]
-    };
-    type ListsItem = {
-        key: number | null,
-        id: number | null,
-        name: string,
-        count_of_active_tasks: number,
-        color: string | null,
-        created_at: string | null,
-        updated_at: string | null,
-        deleted_at: string | null,
-        owner_id: number | null
-    };
-
-    type SocketTagsRequest = {
-        uuid: string,
-        message: TagItem[]
-    };
-    type TagItem = {
-        key: null | number,
-        id: number,
-        name: string,
-        created_at: string,
-        updated_at: string | null,
-        deleted_at: string | null,
-        pivot: {
-            user_id: string,
-            tag_id: string
-        }
-    };
-
-
     const user = reactive({
         id:      0,
         email:   '',

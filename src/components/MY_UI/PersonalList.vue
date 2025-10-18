@@ -1,9 +1,8 @@
 <script setup lang="ts">
   import {useRoute, useRouter} from 'vue-router';
-  import InfoList from "@/components/MY_UI/InfoList.vue";
+  /*import InfoList from "@/components/MY_UI/InfoList.vue";*/
   import {useBigMenuStore} from "@/stores/BigMenuStore";
-  import {inject, ref} from "vue";
-  import {Button} from '@/components/ui/button'
+  import {inject, Ref, ref} from "vue";
   import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,30 +10,32 @@
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-  } from '@/components/ui/dropdown-menu'
-  import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
+    DropdownMenuShortcut,
+    DropdownMenuGroup,
+  } from '@/components/ui/dropdown-menu';
+  import DialogProvider from '@/components/CUSTOM_UI/DialogProvider.vue'
+  import { DIALOG_KEY, type DialogContext } from '@/types/dialog';
+  import {ListsItem} from "@/types/bigMenu";
 
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const dialog = inject<DialogContext>(DIALOG_KEY);
+  if (!dialog) throw new Error("DialogProvider is missing");
+
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
   const bigMenu = useBigMenuStore();
-  const props = defineProps({
+  /*const props = defineProps({
     list: Object,
-  });
+  });*/
+  const props = defineProps<{
+    list: ListsItem
+  }>();
   const route = useRoute();
   const router = useRouter();
 
-  const infoList = ref(null);
+  const infoList = ref<HTMLElement | null>(null);
 
-  const openList = (e) => {
-    if (!infoList.value.contains(e.target)) {
-      if (document.documentElement.clientWidth <= 700) {
+  const openList = (e: MouseEvent) => {
+    if (infoList.value && !infoList.value.contains(e.target as Node)) {
+      if (isOpenBigMenu && document.documentElement.clientWidth <= 700) {
         isOpenBigMenu.value = false;
       }
       router.push({ name: 'list', params: { id_list: props.list.id } });
@@ -43,53 +44,56 @@
 
   const shareList = () => {
     console.log('share list');
+    dialog?.openDialog({});
   };
 
   const deleteList = () => {
-    bigMenu.deleteList(props.list.id);
-    if (+props.list.id === +route.params.id_list) {
-      router.push({ name: 'intro' });
+    if (props.list.id) {
+      bigMenu.deleteList(props.list.id);
+      if (+props.list.id === +route.params.id_list) {
+        router.push({ name: 'intro' });
+      }
     }
   };
 </script>
 
 <template>
-    <div class="personal-list"
-         :class="{ active: +props.list.id === +route.params.id_list, minimized: !isOpenBigMenu }"
-         @mouseup="openList"
-    >
-        <div class="personal-list__circle" :key="Math.random()" :style="{ backgroundColor: props.list.color }"></div>
-        <div class="personal-list__label"><slot name="name"></slot></div>
-        <div class="info-list__wrapper" ref="infoList">
-<!--          <InfoList
-              :idList="props.list.id"
-              @share="shareList"
-              @delete="deleteList"
-          />-->
-          <DropdownMenu>
-            <DropdownMenuTrigger as-child>
-              <div class="info-list"
-                   :class="{ active: +props.list.id === +route.params.id_list }"
-              ></div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent class="w-56">
-              <DropdownMenuLabel>Действия:</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem @click="shareList">
-                  <span>Поделиться</span>
-                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem @click="deleteList">
-                  <span>Удалить</span>
-                  <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div class="personal-list__count"><slot name="count"></slot></div>
-    </div>
+      <div class="personal-list"
+           :class="{ active: (props.list.id && +props.list.id === +route.params.id_list), minimized: !isOpenBigMenu }"
+           @mouseup="openList"
+      >
+          <div class="personal-list__circle" :key="Math.random()" :style="{ backgroundColor: props.list.color ?? '#fff' }"></div>
+          <div class="personal-list__label"><slot name="name"></slot></div>
+          <div class="info-list__wrapper" ref="infoList">
+  <!--          <InfoList
+                :idList="props.list.id"
+                @share="shareList"
+                @delete="deleteList"
+            />-->
+            <DropdownMenu>
+              <DropdownMenuTrigger as-child>
+                <div class="info-list"
+                     :class="{ active: (props.list.id && +props.list.id === +route.params.id_list) }"
+                ></div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent class="w-56">
+                <DropdownMenuLabel>Действия:</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem @click="shareList">
+                    <span>Поделиться</span>
+                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem @click="deleteList">
+                    <span>Удалить</span>
+                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div class="personal-list__count"><slot name="count"></slot></div>
+      </div>
 </template>
 
 <style scoped>

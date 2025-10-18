@@ -1,21 +1,23 @@
-<script setup>
-  import {inject, ref, watch} from 'vue';
+<script setup lang="ts">
+import {inject, Ref, ref, watch} from 'vue';
   import {useRoute} from 'vue-router'
 
   const route = useRoute();
-  const applicationNameLabel = ref(null);
-  const closeOpen = ref(null);
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const applicationNameLabel = ref<HTMLElement | null>(null);
+  const closeOpen = ref<HTMLElement | null>(null);
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
+  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
   const closeOrOpen = () => {
     isOpenBigMenu.value = !isOpenBigMenu.value;
   }
   watch(isOpenBigMenu, (newVal) => {
+    if (!applicationNameLabel.value || !closeOpen.value) return;
     if (!newVal) {
-      applicationNameLabel.value.classList.add('hidden');
-      closeOpen.value.classList.add('minimized');
+      applicationNameLabel.value!.classList.add('hidden');
+      closeOpen.value!.classList.add('minimized');
     } else {
-      applicationNameLabel.value.classList.remove('hidden');
-      closeOpen.value.classList.remove('minimized');
+      applicationNameLabel.value!.classList.remove('hidden');
+      closeOpen.value!.classList.remove('minimized');
     }
   });
 </script>

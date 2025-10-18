@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import ApplicationName from '@/components/MY_UI/ApplicationName.vue';
   import SignButton from '@/components/MY_UI/SignButton.vue';
   import MacWindow from "@/components/MY_UI/MacWindow.vue";

@@ -1,53 +1,57 @@
-<script setup>
+<script setup lang="ts">
   import { useBigMenuStore } from "@/stores/BigMenuStore";
   import SectionHeader from '@/components/MY_UI/SectionHeader.vue';
   import PersonalList from '@/components/MY_UI/PersonalList.vue';
-  import {inject, watch, ref} from "vue";
+  import {inject, watch, ref, Ref} from "vue";
   import TopButton from "@/components/MY_UI/TopButton.vue";
   import {useRouter} from "vue-router";
+  import DialogProvider from "@/components/CUSTOM_UI/DialogProvider.vue";
 
-  const personalLists =ref(null);
+  const personalLists =ref<HTMLElement | null>(null);
   const bigMenuStore = useBigMenuStore();
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
+  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
   const router = useRouter();
 
-  watch(isOpenBigMenu, (newVal) => {
+  watch(isOpenBigMenu, (newVal: boolean) => {
     if (!newVal) {
       setTimeout(() => {
-        personalLists.value.classList.remove('hidden');
+        personalLists.value!.classList.remove('hidden');
       },450);
     }
   });
 </script>
 
 <template>
-    <div class="personal-lists"
-         ref="personalLists"
-         :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}"
-    >
-        <div class="personal-lists__header"
+    <DialogProvider>
+        <div class="personal-lists"
+             ref="personalLists"
              :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}"
         >
-          <SectionHeader :is_load="bigMenuStore.is_load_personalLists">Мои списки</SectionHeader>
-          <TopButton
-              :cl="'plus'"
-              @click="router.push({ name: 'list', params: { id_list: 'new' } })"
-          />
-        </div>
-        <div class="personal-lists__container scroll"
-             v-if="bigMenuStore.personalLists.length"
-             :class="{minimized: !isOpenBigMenu}"
-        >
-            <PersonalList 
-                v-for="list in bigMenuStore.personalLists"
-                :key="list.key"
-                :list="list"
+            <div class="personal-lists__header"
+                 :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}"
             >
-                <template #name>{{ list.name }}</template>
-                <template #count>{{ list.count_of_active_tasks }}</template>
-            </PersonalList>
+              <SectionHeader :is_load="bigMenuStore.is_load_personalLists">Мои списки</SectionHeader>
+              <TopButton
+                  :cl="'plus'"
+                  @click="router.push({ name: 'list', params: { id_list: 'new' } })"
+              />
+            </div>
+            <div class="personal-lists__container scroll"
+                 v-if="bigMenuStore.personalLists.length"
+                 :class="{minimized: !isOpenBigMenu}"
+            >
+                <PersonalList
+                    v-for="list in bigMenuStore.personalLists"
+                    :key="list.key ?? Math.random()"
+                    :list="list"
+                >
+                    <template #name>{{ list.name }}</template>
+                    <template #count>{{ list.count_of_active_tasks }}</template>
+                </PersonalList>
+            </div>
         </div>
-    </div>
+    </DialogProvider>
 </template>
 
 <style>

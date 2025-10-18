@@ -1,22 +1,22 @@
-<script setup>
+<script setup lang="ts">
   import {onBeforeUnmount, onMounted, ref} from "vue";
 
   let mainListCount = ref(0);
 
-  const listToActive = ref(null);
-  const listLabel = ref(null);
+  const listToActive = ref<HTMLElement | null>(null);
+  const listLabel = ref<HTMLElement | null>(null);
 
-  const taskOne = ref(null);
-  const taskTwo = ref(null);
-  const taskThree = ref(null);
-  const taskFour = ref(null);
-  const taskFive = ref(null);
-  const taskSix = ref(null);
+  const taskOne = ref<HTMLElement | null>(null);
+  const taskTwo = ref<HTMLElement | null>(null);
+  const taskThree = ref<HTMLElement | null>(null);
+  const taskFour = ref<HTMLElement | null>(null);
+  const taskFive = ref<HTMLElement | null>(null);
+  const taskSix = ref<HTMLElement | null>(null);
 
-  const dotOne = ref(null);
-  const dotThree = ref(null);
+  const dotOne = ref<HTMLElement | null>(null);
+  const dotThree = ref<HTMLElement | null>(null);
 
-  let animInterval = '';
+  let animInterval: number | null = null;
 
   onMounted(() => {
     macWindowAnim();
@@ -36,8 +36,10 @@
   };
 
   const clearInt = () => {
-    clearInterval(animInterval);
-    animInterval = null;
+    if (animInterval !== null) {
+      clearInterval(animInterval);
+      animInterval = null;
+    }
   }
 
   onBeforeUnmount(() => {
@@ -45,6 +47,16 @@
   })
 
   const startMacWindowAnim = () => {
+    if (
+        !listLabel.value ||
+        !taskOne.value   ||
+        !taskTwo.value   ||
+        !taskThree.value ||
+        !dotOne.value    ||
+        !taskFour.value  ||
+        !taskFive.value  ||
+        !dotThree.value
+    ) return;
     setTimeout(() => {
       if (animInterval && listToActive.value) {
         listToActive.value.classList.remove('deactivate');
@@ -53,62 +65,62 @@
     }, 1000);
     setTimeout(() => {
       if (animInterval) {
-        listLabel.value.classList.remove('deactivate');
-        listLabel.value.classList.add('active');
+        listLabel.value!.classList.remove('deactivate');
+        listLabel.value!.classList.add('active');
       }
     }, 1300);
     setTimeout(() => {
       if (animInterval) {
-        taskOne.value.classList.remove('deactivate');
-        taskOne.value.classList.add('active');
+        taskOne.value!.classList.remove('deactivate');
+        taskOne.value!.classList.add('active');
         PlusCountMain();
       }
     }, 2000);
     setTimeout(() => {
       if (animInterval) {
-        taskTwo.value.classList.remove('deactivate');
-        taskTwo.value.classList.add('active');
+        taskTwo.value!.classList.remove('deactivate');
+        taskTwo.value!.classList.add('active');
         PlusCountMain();
       }
     }, 3000);
     setTimeout(() => {
       if (animInterval) {
-        taskThree.value.classList.remove('deactivate');
-        taskThree.value.classList.add('active');
+        taskThree.value!.classList.remove('deactivate');
+        taskThree.value!.classList.add('active');
         PlusCountMain();
       }
     }, 4000);
     setTimeout(() => {
       if (animInterval) {
-        dotOne.value.classList.remove('deactivate');
-        dotOne.value.classList.add('active');
+        dotOne.value!.classList.remove('deactivate');
+        dotOne.value!.classList.add('active');
       }
     }, 4000);
     setTimeout(() => {
       if (animInterval) {
-        taskFour.value.classList.remove('deactivate');
-        taskFour.value.classList.add('active');
+        taskFour.value!.classList.remove('deactivate');
+        taskFour.value!.classList.add('active');
         PlusCountMain();
       }
     }, 5000);
     setTimeout(() => {
       if (animInterval) {
-        taskFive.value.classList.remove('deactivate');
-        taskFive.value.classList.add('active');
+        taskFive.value!.classList.remove('deactivate');
+        taskFive.value!.classList.add('active');
         PlusCountMain();
       }
     }, 6000);
     setTimeout(() => {
       if (animInterval) {
-        taskSix.value.classList.remove('deactivate');
-        taskSix.value.classList.add('active');
+        taskSix.value!.classList.remove('deactivate');
+        taskSix.value!.classList.add('active');
         PlusCountMain();
       }
     }, 7000);
     setTimeout(() => {
       if (animInterval) {
-        dotThree.value.classList.remove('deactivate');
-        dotThree.value.classList.add('active');
+        dotThree.value!.classList.remove('deactivate');
+        dotThree.value!.classList.add('active');
       }
     }, 7000);
   };
@@ -126,19 +138,30 @@
   };
 
   const clearWindow = () => {
+    if (
+        !listLabel.value ||
+        !taskOne.value   ||
+        !taskTwo.value   ||
+        !taskThree.value ||
+        !dotOne.value    ||
+        !taskFour.value  ||
+        !taskFive.value  ||
+        !dotThree.value  ||
+        !taskSix.value
+    ) return;
     if (animInterval) {
-      taskOne.value.classList.remove('active');
-      taskOne.value.classList.add('deactivate');
-      taskTwo.value.classList.remove('active');
-      taskTwo.value.classList.add('deactivate');
-      taskThree.value.classList.remove('active');
-      taskThree.value.classList.add('deactivate');
-      taskFour.value.classList.remove('active');
-      taskFour.value.classList.add('deactivate');
-      taskFive.value.classList.remove('active');
-      taskFive.value.classList.add('deactivate');
-      taskSix.value.classList.remove('active');
-      taskSix.value.classList.add('deactivate');
+      taskOne.value!.classList.remove('active');
+      taskOne.value!.classList.add('deactivate');
+      taskTwo.value!.classList.remove('active');
+      taskTwo.value!.classList.add('deactivate');
+      taskThree.value!.classList.remove('active');
+      taskThree.value!.classList.add('deactivate');
+      taskFour.value!.classList.remove('active');
+      taskFour.value!.classList.add('deactivate');
+      taskFive.value!.classList.remove('active');
+      taskFive.value!.classList.add('deactivate');
+      taskSix.value!.classList.remove('active');
+      taskSix.value!.classList.add('deactivate');
 
       if (listToActive.value) {
         listToActive.value.classList.remove('active');
@@ -150,10 +173,10 @@
       setTimeout(() => {
         if (animInterval) {
           mainListCount.value = 0;
-          dotOne.value.classList.remove('active');
-          dotOne.value.classList.add('deactivate');
-          dotThree.value.classList.remove('active');
-          dotThree.value.classList.add('deactivate');
+          dotOne.value!.classList.remove('active');
+          dotOne.value!.classList.add('deactivate');
+          dotThree.value!.classList.remove('active');
+          dotThree.value!.classList.add('deactivate');
         }
       }, 1000);
     }

@@ -7,17 +7,14 @@
   import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
   import {Button} from "@/components/ui/button";
 
-  import { DIALOG_KEY, type DialogContext } from '@/types/dialog';
+
 
   const router = useRouter();
   const bigMenu = useBigMenuStore();
   const loading = ref(true);
 
 
-
-  const dialog = inject(DIALOG_KEY)
-
-  type UserInfo = {
+  export type UserInfo = {
     user_id:      number;
     user_email:   string;
     user_name:    string;
@@ -91,7 +88,7 @@
   };
 
   const handleOpenDialog = (): void => {
-    dialog?.openDialog({});
+
   };
 </script>
 

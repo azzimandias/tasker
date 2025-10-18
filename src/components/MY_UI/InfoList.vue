@@ -1,15 +1,16 @@
-<script setup>
+<script setup lang="ts">
   import {ref, onMounted, onBeforeUnmount} from "vue";
-  import {useListViewStore} from "@/stores/ListViewStore";
   import {useRoute} from "vue-router";
 
   const router = useRoute();
-  const ListView = useListViewStore();
-  const props = defineProps({
+  /*const props = defineProps({
     idList: Number,
-  });
+  });*/
+  const props = defineProps<{
+    idList: number
+  }>();
   const emit = defineEmits(['delete', 'share']);
-  const infoList = ref(null);
+  const infoList = ref<HTMLElement | null>(null);
   const dropDownList = ref(null);
   const isOpen = ref(false);
   const openCloseDropDownList = () => {
@@ -26,8 +27,8 @@
     emit('share');
   }
 
-  const closeDropDown = (e) => {
-    if (!infoList.value.contains(e.target)) {
+  const closeDropDown = (e: MouseEvent) => {
+    if (infoList.value && !infoList.value.contains(e.target as Node)) {
       isOpen.value = false;
     }
   }
