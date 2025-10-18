@@ -1,25 +1,27 @@
-<script setup>
+<script setup lang="ts">
   import Loader from "@/components/MY_UI/Loader.vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import {useRoute, useRouter} from "vue-router";
-  import {onMounted, ref, watch} from "vue";
+  import {onMounted, PropType, ref, watch} from "vue";
+  import {List} from '@/types/listView'
+  import {SortList} from "@/types/bigMenu";
   const listView = useListViewStore();
   const props = defineProps({
-    list: Object,
-    isRouter: Boolean,
-    isCanChange: Boolean,
-    fontSize: String,
-    top: Number,
-    zIndex: Number,
-  })
+    list: { type: Object as PropType<List | SortList>, required: true },
+    top: { type: Number, default: 0 },
+    zIndex: { type: Number, default: 1 },
+    isRouter: { type: Boolean, default: false },
+    isCanChange: { type: Boolean, default: true },
+    fontSize: { type: String, default: '16px' }
+  });
   const router = useRouter();
   const route = useRoute();
   const emit = defineEmits(['saveChangedName']);
   const listName = ref(props.list.name);
-  const listHeaderInput = ref(null);
+  const listHeaderInput = ref<HTMLElement | null>(null);
 
   onMounted(() => {
-    if (props.isCanChange && route.params.id_list === 'new') {
+    if (props.isCanChange && route.params.id_list === 'new' && listHeaderInput.value) {
       listHeaderInput.value.focus();
     }
   });
@@ -53,8 +55,8 @@
     {{ props.list.name }}
     <Loader v-if="listView.loadingSmall"/>
   </h2>
-  <label v-else :for="`personal_list-${props.id}`">
-    <input :id="`personal_list-${props.id}`"
+  <label v-else :for="`personal_list-${props.list.id}`">
+    <input :id="`personal_list-${props.list.id}`"
            type="text"
            class="list-header"
            placeholder="Введите название списка"

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { useListViewStore } from "@/stores/ListViewStore";
   import ListHeader from "@/components/MY_UI/ListHeader.vue";
   import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
@@ -11,7 +11,7 @@
   const route = useRoute();
 
   onMounted(async () => {
-    await listView.getTasksOrTags();
+    await listView.getTasksOrTags(false);
   });
 
   watchEffect(() => {
@@ -21,11 +21,11 @@
   });
 
   // под вопросом, мб уже и не нужно оставить только listView.updateSortListTasks();
-  const refreshSortLists = (obj) => {
+  const refreshSortLists = (obj: object) => {
     //listView.updateSortListTasks();
   };
 
-  const format = (date) => date < 10 ? `0${date}` : date.toString();
+  const format = (date: number) => date < 10 ? `0${date}` : date.toString();
 
   const getTodayDate = () => {
     let date = new Date(Date.now());
@@ -49,7 +49,7 @@
     <div class="task__container">
       <div class="list-tasks__wrapper"
            v-for="stask in listView.sortTasks"
-           :key="stask.key"
+           :key="stask.key ?? Math.random()"
            v-if="listView.sortTasks.length"
       >
         <ListHeader :list="stask.personal_list"
@@ -61,7 +61,7 @@
         />
         <Task
           v-for="task in stask.tasks"
-          :key="task.key"
+          :key="task.changer ?? Math.random()"
           :task="task"
           :color="stask.personal_list.color"
           @done="refreshSortLists"

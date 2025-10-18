@@ -1,32 +1,39 @@
-<script setup>
-import {onMounted, reactive, ref, watch} from 'vue';
+<script setup lang="ts">
+  import {onMounted, reactive, ref, watch} from 'vue';
   import { useRoute } from 'vue-router';
   import {useListViewStore} from "@/stores/ListViewStore";
   import router from "@/router";
+  import {Tag, Task} from "@/types/listView";
 
-  const props = defineProps({
-    id_task: Number,
-    tag: Object,
-    isCanChange: Boolean,
-    isCanCreate: Boolean,
-    isRoute: Boolean,
-    isHeader: Boolean,
-    width: String,
-    placeholder: String,
-  });
+  const props = defineProps<({
+    id_task:     number,
+    tag:         Tag,
+    isCanChange: boolean,
+    isCanCreate: boolean,
+    isRoute:     boolean,
+    isHeader:    boolean,
+    width:       string,
+    placeholder: string,
+  })>();
 
-  const emit = defineEmits(['change', 'create', 'onFocus', 'onBlur', 'click']);
+  const emits = defineEmits<{
+    (e: 'change',  payload: string):   void;
+    (e: 'create',  payload: string):   void;
+    (e: 'onFocus', payload: void  ):   void;
+    (e: 'onBlur',  payload: void  ):   void;
+    (e: 'click',   payload: void  ):   void;
+  }>();
 
-  const route = useRoute();
-  const name = ref(props.tag.name);
-  const tagWrapper = ref(null);
-  const height = ref('');
-  const listView = useListViewStore();
-  const width = ref(props.width? props.width : '1px');
-  const span = ref(null);
-  const spanHeader = ref(null);
-  const headerTag = ref(null);
-  const isMounted = ref(false);
+  const route =         useRoute();
+  const name =          ref(props.tag.name);
+  const tagWrapper =    ref<HTMLElement | null>(null);
+  const height =        ref('');
+  const listView =      useListViewStore();
+  const width =         ref(props.width? props.width : '1px');
+  const span =          ref<HTMLElement | null>(null);
+  const spanHeader =    ref<HTMLElement | null>(null);
+  const headerTag =     ref<HTMLElement | null>(null);
+  const isMounted =     ref(false);
 
   watch(() => props.tag.name, (newName) => {
     if (isMounted.value) {
@@ -34,8 +41,8 @@ import {onMounted, reactive, ref, watch} from 'vue';
       resize();
     }
   });
-  watch(name, (newName) => {
-    emit('change', newName)
+  watch(name, (newName: string) => {
+    emits('change', newName)
   })
   onMounted(() => {
     resize();
@@ -84,13 +91,13 @@ const resize = () => {
       tagWrapper.value.classList.remove('show');
       tagWrapper.value.classList.add('hide');
       setTimeout(() => {
-        listView.deleteTagTask({tag_id: props.tag.id, tag_name: props.tag.name, task_id: props.id_task});
+        listView.deleteTagTask({id: props.tag.id, name: props.tag.name, task_id: props.id_task});
       }, 300);
     }
   };
   const createTag = () => {
     if (name.value.trim()) {
-      emit('create', name.value.trim());
+      emits('create', name.value.trim());
       name.value = '';
     }
   }
@@ -104,7 +111,7 @@ const resize = () => {
   <label v-if="props.isCanChange"
          :for="`task-tag-${props.id_task}-${props.tag.id}`"
          class="personal-tag show hash"
-         :class="{ active: +props.tag.id === +listView.currentTag.id }"
+         :class="{ active: (props.tag.id && +props.tag.id === +listView.currentTag.id) }"
          ref="tagWrapper"
          @dblclick="goToTagViewPage"
   >
@@ -113,7 +120,7 @@ const resize = () => {
            class="tag-input"
            v-model="name"
            @blur="changeTag"
-           @keyup.enter="(e) => e.target.blur()"
+           @keyup.enter="(e) => (e.target as HTMLElement).blur()"
            @keydown="resize"
            :style="{width: width}"
     />
@@ -134,8 +141,8 @@ const resize = () => {
            v-model="name"
            @keyup.enter="createTag"
            @keydown="resize"
-           @focus="emit('onFocus')"
-           @blur="() => {resize(); emit('onBlur')}"
+           @focus="emits('onFocus')"
+           @blur="() => {resize(); emits('onBlur')}"
            :style="{width: width}"
            :placeholder="props.placeholder"
     />
@@ -177,7 +184,7 @@ const resize = () => {
 
   <div v-else-if="props.isRoute" class="personal-tag__wrapper visible">
     <router-link :to="`/workspace/tag=${props.tag.id}`">
-      <div class="personal-tag visible" :class="{ active: +props.tag.id === +route.params.id_tag }">{{ name }}</div>
+      <div class="personal-tag visible" :class="{ active: (props.tag.id && +props.tag.id === +route.params.id_tag) }">{{ name }}</div>
     </router-link>
   </div>
 

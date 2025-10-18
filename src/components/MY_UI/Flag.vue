@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {ref, watch} from "vue";
   const props = defineProps({
     is_flagged: Number,
@@ -6,9 +6,9 @@ import {ref, watch} from "vue";
     id: Number,
   });
   const emits = defineEmits(['flag']);
-  const is_flaggedModel = ref(props.is_flagged);
+  const is_flaggedModel = ref(Boolean(props.is_flagged));
   watch(() => props.is_flagged, (newValue) => {
-    is_flaggedModel.value = newValue;
+    is_flaggedModel.value = Boolean(newValue);
   })
   const changeState = () => {
     is_flaggedModel.value = !is_flaggedModel.value;

@@ -1,8 +1,8 @@
-<script setup>
-  const prop = defineProps({
-    isDoneTasksOpen: Boolean,
-  });
-  const emit = defineEmits(['openTasksDone']);
+<script setup lang="ts">
+  const prop = defineProps<({
+    isDoneTasksOpen: boolean,
+  })>();
+  const emit = defineEmits<(['openTasksDone'])>();
 </script>
 
 <template>

@@ -1,17 +1,18 @@
-<script setup>
-  import {inject, ref, watch} from 'vue';
+<script setup lang="ts">
+import {inject, Ref, ref, watch} from 'vue';
   import { useBigMenuStore } from "@/stores/BigMenuStore";
   import SectionHeader from '@/components/MY_UI/SectionHeader.vue';
   import SortList from '@/components/MY_UI/SortList.vue';
 
-  const sortLists = ref(null);
+  const sortLists = ref<HTMLElement | null>(null);
   const bigMenuStore = useBigMenuStore();
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
+  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
 
   watch(isOpenBigMenu, (newVal) => {
     if (!newVal) {
       setTimeout(() => {
-        sortLists.value.classList.remove('hidden');
+        sortLists.value!.classList.remove('hidden');
       },450)
     } else {
       //sortLists.value.classList.remove('hidden');

@@ -1,17 +1,18 @@
-<script setup>
+<script setup lang="ts">
   import ApplicationName from '@/components/MY_UI/ApplicationName.vue';
   import TheSortLists from '@/components/groups/TheSortLists.vue';
   import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
   import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
-  import {inject, ref, watch} from "vue";
+  import {inject, Ref, ref, watch} from "vue";
 
-  const newPersonalListBtn = ref(null);
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const newPersonalListBtn = ref<HTMLElement | null>(null);
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
+  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
 
   watch(isOpenBigMenu, (newVal) => {
     if (!newVal) {
       setTimeout(() => {
-        newPersonalListBtn.value.classList.remove('hidden');
+        newPersonalListBtn.value?.classList.remove('hidden');
       },450);
     }
   });

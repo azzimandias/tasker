@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { useListViewStore } from "@/stores/ListViewStore";
   /*import {useImageDBStore} from "@/stores/imageDBStore";*/
   import ListHeader from "@/components/MY_UI/ListHeader.vue";
@@ -6,9 +6,9 @@
   import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
   import Task from "@/components/MY_UI/Task.vue";
   import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
-  import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
   import {computed, onMounted, ref, watchEffect} from "vue";
   import {useRoute, useRouter} from "vue-router";
+  import {Task as TaskType} from '@/types/listView'
 
 
   const listView = useListViewStore();
@@ -18,7 +18,7 @@
   const isDoneTasksOpen = ref(false);
 
   onMounted(async () => {
-    await listView.getTasksOrTags();
+    await listView.getTasksOrTags(false);
   });
 
   watchEffect(() => {
@@ -27,7 +27,7 @@
     }
   });
 
-  const taskSlideToBottom = (obj) => {
+  const taskSlideToBottom = (obj: {task: TaskType, is_done: boolean}) => {
     listView.updateTaskDone(obj.task.id, obj.is_done);
   };
 
@@ -35,17 +35,26 @@
     isDoneTasksOpen.value = !isDoneTasksOpen.value;
   };
 
-  const saveChangedName = async (newName) => {
+  const saveChangedName = async (newName: string) => {
     if (route.params.id_list !== 'new' && newName) {
-      await listView.updateList({id: listView.listInfo.id, name: newName});
+      await listView.updateList({
+        ...listView.listInfo,
+        name: newName,
+      });
     } else {
-      const response = await listView.createList({name: newName, color: listView.listInfo.color, user_id: listView.user.id});
+      const response = await listView.createList({
+        ...listView.listInfo,
+        name: newName,
+      });
       await router.push({name: 'list', params: {id_list: response.id}});
     }
   }
 
-  const saveChangedColor = (newColor) => {
-    listView.updateList({id: listView.listInfo.id, color: newColor});
+  const saveChangedColor = (newColor: string) => {
+    listView.updateList({
+      ...listView.listInfo,
+      color: newColor,
+    });
   };
 </script>
 
@@ -81,6 +90,7 @@
                 :isOpen="isDoneTasksOpen"
                 :class="{active: isDoneTasksOpen}"
                 @openTasksDone="openTasksDone"
+                is-done-tasks-open
       >
         Выполненные
       </ListDone>

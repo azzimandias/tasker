@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {onMounted, ref, watch} from 'vue';
 
   const props = defineProps({
@@ -8,13 +8,14 @@ import {onMounted, ref, watch} from 'vue';
   });
   const emits = defineEmits(['dot']);
   const is_doneModel = ref(Boolean(props.is_done));
-  const innerDot = ref(null);
+  const innerDot = ref<HTMLElement | null>(null);
 
   watch(() => props.is_done, (new_is_done) => {
-    is_doneModel.value = new_is_done;
+    is_doneModel.value = Boolean(new_is_done);
   });
 
   watch(is_doneModel, (new_is_done) => {
+    if (!innerDot.value) return;
     if (is_doneModel.value) {
       innerDot.value.classList.add('active');
     } else {
@@ -23,6 +24,7 @@ import {onMounted, ref, watch} from 'vue';
   })
 
   onMounted(() => {
+    if (!innerDot.value) return;
     if (is_doneModel.value) {
       innerDot.value.classList.add('active');
     } else {

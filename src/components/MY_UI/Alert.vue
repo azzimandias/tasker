@@ -1,20 +1,24 @@
-<script setup>
+<script setup lang="ts">
 import {onMounted, ref, watch} from "vue";
+import {Alert} from "@/types/listView";
   const emit = defineEmits(['closeAlert']);
-  const props = defineProps({
+  /*const props = defineProps({
     alert: Object
-  })
-  const alert = ref(null);
+  })*/
+  const props = defineProps<{
+    alert: Alert
+  }>();
+  const alert = ref<HTMLElement | null>(null);
   const scrollWidth = ref('');
   const top = ref(props.alert.top);
   watch(() => props.alert.top, (newTop) => {
     top.value = newTop;
   });
   onMounted(() => {
-    scrollWidth.value = -1 * alert.value.scrollWidth + 20 + 'px';
+    scrollWidth.value = -1 * alert.value!.scrollWidth + 20 + 'px';
   })
   const hideAndRemoveAlert = () => {
-    alert.value.classList.add('hide');
+    alert.value!.classList.add('hide');
     setTimeout(() => {
       emit('closeAlert', props.alert.id);
     }, 300);

@@ -10,7 +10,7 @@ import {
     ListsItem,
     SocketSortListsCountRequest,
     SocketListsRequest,
-    SocketTagsRequest,
+    SocketTagsRequest, SortList,
 } from '@/types/bigMenu';
 
 export const useBigMenuStore = defineStore('bigMenuStore', () => {
@@ -20,38 +20,38 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         name:    '',
         surname: '',
     });
-    const sortLists = reactive([
+    const sortLists = reactive<SortList[]>([
         {
             id:    1,
             name:  'Сегодня',
-            count: '',
+            count: 0,
             color: '#4ceba7',
             url:   '/workspace/sortList=today'
         },
         {
             id:    2,
             name:  'С флажком',
-            count: '',
+            count: 0,
             color: '#e76262',
             url:   '/workspace/sortList=with_flag'
         },
         {
             id:    3,
             name:  'Завершено',
-            count: '',
+            count: 0,
             color: '#daadad',
             url:   '/workspace/sortList=done'
         },
         {
             id:    4,
             name:  'Все',
-            count: '',
+            count: 0,
             color: '#c4c4c4',
             url:   '/workspace/sortList=all'
         },
     ]);
     const personalLists = reactive<ListsItem[]>([]);
-    const personalTags = reactive([
+    const personalTags = reactive<TagItem[]>([
         {
             id:   0,
             name: 'Все теги'
@@ -72,7 +72,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
         user.name = '';
         user.surname = '';
         sortLists.forEach((list, idx) => {
-            list.count = '';
+            list.count = 0;
             sortLists[idx] = list;
         });
         personalLists.length = 0;

@@ -1,15 +1,20 @@
-<script setup>
+<script setup lang="ts">
   import {useListViewStore} from "@/stores/ListViewStore";
   import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
   import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
   import Task from "@/components/MY_UI/Task.vue";
   import ListHeader from "@/components/MY_UI/ListHeader.vue";
   import {onMounted, onUnmounted} from "vue";
+  import {FoundedListWithTasks, Task as TaskType} from '@/types/listView'
 
   const listView = useListViewStore();
-  const emit = defineEmits(["openSearchTopBar"]);
+  const emit = defineEmits<(["openSearchTopBar"])>();
 
-  const refreshSortLists = (obj) => {
+  const refreshSortLists = (obj: {
+    task: TaskType;
+    is_done: boolean;
+    action: string
+  }) => {
     //listView.updateSortListTasks();
   };
 
@@ -34,19 +39,19 @@
       <ListHeader :list="{name: 'Поиск по задачам'}"/>
       <div class="task__container">
         <div class="list-tasks__wrapper"
-             v-for="list in listView.searchResult.filter(list => list.tasks.length > 0)"
-             :key="list.changer"
+             v-for="foundedList in listView.searchResult.filter((list: FoundedListWithTasks) => list.tasks.length > 0)"
+             :key="foundedList.changer ?? Math.random()"
              v-if="listView.searchResult.length"
         >
-          <ListHeader :list="list"
+          <ListHeader :list="foundedList"
                       :isRouter="true"
                       :fontSize="'20px'"
                       :top="60"
                       :zIndex="1"
           />
           <Task
-              v-for="task in list.tasks"
-              :key="task.key"
+              v-for="task in foundedList.tasks"
+              :key="task?.changer ?? Math.random()"
               :task="task"
               :color="list.color"
               @done="refreshSortLists"
@@ -97,12 +102,10 @@
 
 .slide-up-enter-from {
   opacity: 0;
-  //transform: translateY(30px);
 }
 
 .slide-up-leave-to {
   opacity: 0;
-  //transform: translateY(-30px);
 }
 .empty-list__title {
   flex: 1 0 100px;

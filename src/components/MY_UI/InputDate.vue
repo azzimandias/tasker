@@ -1,50 +1,51 @@
-<script setup>
-import VueDatePicker from "@vuepic/vue-datepicker";
-import '@vuepic/vue-datepicker/dist/main.css';
-import { computed, ref, watch } from "vue";
+<!--
+<script setup lang="ts">
+  import VueDatePicker from "@vuepic/vue-datepicker";
+  import '@vuepic/vue-datepicker/dist/main.css';
+  import { computed, ref, watch } from "vue";
 
-const emit = defineEmits(['saveChangesDate'])
-const props = defineProps({
-  id: Number,
-  deadline: [String, Date, null],
-})
+  const emit = defineEmits<(['saveChangesDate'])>();
+  const props = defineProps<({
+    id: number,
+    deadline: string | Date | null,
+  })>();
 
-const datePicker = ref(null);
-const deadlineModel = ref(props.deadline);
+  const datePicker = ref(null);
+  const deadlineModel = ref(props.deadline);
 
-const formatDateSafe = (date) => {
-  if (!date) return { iso: null, display: 'Дата' };
+  const formatDateSafe = (date: string | Date | null) => {
+    if (!date) return { iso: null, display: 'Дата' };
 
-  try {
-    const d = new Date(date);
-    if (isNaN(d.getTime())) return { iso: null, display: 'Дата' };
+    try {
+      const d = new Date(date);
+      if (isNaN(d.getTime())) return { iso: null, display: 'Дата' };
 
-    const iso = d.toISOString().split('T')[0];
-    const display = iso.split('-').reverse().join('.');
-    return { iso, display };
-  } catch {
-    return { iso: null, display: 'Дата' };
-  }
-};
+      const iso = d.toISOString().split('T')[0];
+      const display = iso.split('-').reverse().join('.');
+      return { iso, display };
+    } catch {
+      return { iso: null, display: 'Дата' };
+    }
+  };
 
-const displayDate = computed(() => {
-  return formatDateSafe(deadlineModel.value).display;
-});
+  const displayDate = computed(() => {
+    return formatDateSafe(deadlineModel.value).display;
+  });
 
-const handleDateChange = (date) => {
-  const { iso } = formatDateSafe(date);
-  if (iso) {
-    emit('saveChangesDate', iso);
-  }
-};
+  const handleDateChange = (date: string | Date | null) => {
+    const { iso } = formatDateSafe(date);
+    if (iso) {
+      emit('saveChangesDate', iso);
+    }
+  };
 
-watch(() => props.deadline, (newValue) => {
-  deadlineModel.value = newValue;
-});
+  watch(() => props.deadline, (newValue) => {
+    deadlineModel.value = newValue;
+  });
 
-const openDatePicker = () => {
-  datePicker.value?.firstElementChild?.querySelector('.dp__input')?.click();
-};
+  const openDatePicker = () => {
+    datePicker.value?.firstElementChild?.querySelector('.dp__input')?.click();
+  };
 </script>
 
 <template>
@@ -97,7 +98,7 @@ const openDatePicker = () => {
   }
   .date {
     width: 100%;
-    color: var(--smallTextColor);
+    color: var(&#45;&#45;smallTextColor);
     text-align: right;
     font-size: 12px;
   }
@@ -106,3 +107,4 @@ const openDatePicker = () => {
     height: 18px;
   }
 </style>
+-->

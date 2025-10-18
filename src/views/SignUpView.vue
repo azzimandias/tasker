@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import api from "@/api";
   import {ref} from "vue";
   import {useRouter} from "vue-router";
@@ -6,37 +6,42 @@
   const router = useRouter();
   const emits = defineEmits(['clearInterval']);
 
-  const name =     ref(null);
-  const surname =  ref(null);
-  const email =    ref(null);
-  const login =    ref(null);
-  const password = ref(null);
+  const name =     ref<HTMLInputElement | null>(null);
+  const surname =  ref<HTMLInputElement | null>(null);
+  const email =    ref<HTMLInputElement | null>(null);
+  const login =    ref<HTMLInputElement | null>(null);
+  const password = ref<HTMLInputElement | null>(null);
+
+  interface SignUpData {
+    email: string;
+    login: string;
+    password: string;
+    name: string;
+    surname: string;
+  }
+
   const signUp = async () => {
+    const fields = { email, login, password, name, surname };
     removeHighlight();
-    const signUpData = {
-      email:      String(email.value.value).trim(),
-      login:      String(login.value.value).trim(),
-      password:   String(password.value.value).trim(),
-      name:       String(name.value.value).trim(),
-      surname:    String(surname.value.value).trim(),
+
+    const signUpData = Object.fromEntries(
+        Object.entries(fields).map(([key, ref]) => [key, ref.value?.value.trim() || ''])
+    ) as unknown as SignUpData;
+    const requiredFields = ['email', 'login', 'password'] as const;
+    const emptyFields = requiredFields.filter((key) => !signUpData[key]);
+
+    if (emptyFields.length > 0) {
+      emptyFields.forEach((key) => {
+        fields[key].value?.parentElement?.classList.add('empty');
+      });
+      return;
     }
-    if (signUpData.email !== '' && signUpData.login !== '' && signUpData.password !== '') {
-      removeHighlight();
-      const response = await api.signUp(signUpData);
-      await show(response);
-    } else {
-      if (signUpData.email === '') {
-        email.value.parentElement.classList.add('empty');
-      }
-      if (signUpData.login === '') {
-        login.value.parentElement.classList.add('empty');
-      }
-      if (signUpData.password === '') {
-        password.value.parentElement.classList.add('empty');
-      }
-    }
+
+    const response = await api.signUp(signUpData);
+    show(response);
   };
-  const show = (res) => {
+
+  const show = (res: string) => {
     //console.log(res);
     if (res === 'done') {
       emits('clearInterval');
@@ -44,9 +49,9 @@
     }
   }
   const removeHighlight = () => {
-    email.value.parentElement.classList.remove('empty');
-    login.value.parentElement.classList.remove('empty');
-    password.value.parentElement.classList.remove('empty');
+    email.value?.parentElement?.classList.remove('empty');
+    login.value?.parentElement?.classList.remove('empty');
+    password.value?.parentElement?.classList.remove('empty');
   }
 </script>
 

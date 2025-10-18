@@ -4,7 +4,7 @@ import api from "@/api";
 const PRODMODE: boolean = !(['localhost', '127.0.0.1', '0.0.0.0', ''].includes(window.location.hostname));
 
 const router = createRouter({
-  history: createWebHistory(PRODMODE ? import.meta.env.VITE_APP_BASE_URL_PROD : import.meta.env.VITE_APP_BASE_URL), /* process.env.BASE_URL */
+  history: createWebHistory(PRODMODE ? import.meta.env.VITE_APP_BASE_URL_PROD : import.meta.env.VITE_APP_BASE_URL),
   routes: [
     { path: '/', name: 'welcome', component: () => import('../views/WelcomeView.vue'),
       children: [

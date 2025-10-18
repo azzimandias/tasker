@@ -1,14 +1,15 @@
-<script setup>
+<script setup lang="ts">
   /*import { ref,reactive,onMounted } from 'vue';*/
   import { useBigMenuStore } from "@/stores/BigMenuStore";
   import SectionHeader from '@/components/MY_UI/SectionHeader.vue';
   import PersonalTag from '@/components/MY_UI/PersonalTag.vue';
-  import {inject, watch} from "vue";
+  import {inject, Ref, watch} from "vue";
   import TopButton from "@/components/MY_UI/TopButton.vue";
   import {useRouter} from "vue-router";
 
   const bigMenuStore = useBigMenuStore();
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
+  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
   const router = useRouter();
 </script>
 

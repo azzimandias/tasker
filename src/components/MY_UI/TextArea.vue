@@ -1,5 +1,5 @@
-<script setup>
-import {onMounted, ref, watch} from "vue";
+<script setup lang="ts">
+  import {onMounted, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
@@ -10,7 +10,7 @@ import {onMounted, ref, watch} from "vue";
     name: String,
     value: String,
   });
-  const taskTextareaNode = ref(null);
+  const taskTextareaNode = ref<HTMLElement | null>(null);
   const valueModel = ref(props.value);
 
   watch(() => props.value, (newValue) => {
@@ -22,6 +22,7 @@ import {onMounted, ref, watch} from "vue";
   });
 
   const resize = () => {
+    if (!taskTextareaNode.value) return;
     taskTextareaNode.value.style.cssText = 'height: auto; padding: 0';
     taskTextareaNode.value.style.cssText = `height: ${taskTextareaNode.value.scrollHeight + 15}px`;
   };

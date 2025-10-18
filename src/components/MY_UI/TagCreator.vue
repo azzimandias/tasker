@@ -1,13 +1,14 @@
-<script setup>
+<script setup lang="ts">
 
-import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
+  import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import PersonalTag from "@/components/MY_UI/PersonalTag.vue";
+  import {Tag} from "@/types/listView";
 
-  const props = defineProps({
-    id_task: Number,
-    possibleTags: Array,
-  });
+  const props = defineProps<({
+    id_task: number,
+    possibleTags: Tag[],
+  })>();
 
   const listView = useListViewStore();
   const newTag = reactive({id: 0, name: ''});
@@ -16,8 +17,8 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
   const possibleTags = reactive(props.possibleTags.length ? [...props.possibleTags] : []);
   const sortPossibleTagsName = ref('');
   const windowHeight = ref(window.innerHeight)
-  const possibleTagsList = ref(null);
-  const possibleTagsListScrollHeight = ref(possibleTagsList.offsetHeight);
+  const possibleTagsList = ref<HTMLElement | null>(null);
+  const possibleTagsListScrollHeight = ref<number>(0);
 
   const scrollHeightStyle = computed(() => {
     if (!possibleTagsList.value) return {}
@@ -65,8 +66,8 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
     },300);
   };
 
-  const sortPossibleTags = (inputName) => {
-    const baseTags = JSON.parse(JSON.stringify(props.possibleTags));
+  const sortPossibleTags = (inputName: string) => {
+    const baseTags: Tag[] = JSON.parse(JSON.stringify(props.possibleTags));
     if (!inputName) {
       baseTags.sort((a, b) => a.name.localeCompare(b.name));
       possibleTags.splice(0, possibleTags.length, ...baseTags);
@@ -78,18 +79,19 @@ import {computed, nextTick, onMounted, reactive, ref, watch} from "vue";
     possibleTags.splice(0, possibleTags.length, ...filteredAndSorted);
   };
 
-  const createTag = async (newName) => {
+  const createTag = async (newName: string) => {
     isOpenTagList.value = false;
     const newTag = await listView.createTag({
+      id: null,
       name: newName,
       task_id: props.id_task
     });
   };
-  const addTagToTask = async (tagToAdd) => {
+  const addTagToTask = async (tagToAdd: Tag) => {
     console.log('tagToAdd')
     const addTag = await listView.addTagToTask({
-      tag_id: tagToAdd.id,
-      tag_name: tagToAdd.name,
+      id: tagToAdd.id,
+      name: tagToAdd.name,
       task_id: props.id_task
     });
   };

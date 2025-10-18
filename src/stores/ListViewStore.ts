@@ -5,7 +5,7 @@ import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
 import socket from "@/plugins/socket";
 import { v4 as uuidv4 } from 'uuid';
-import {User} from '@/types/bigMenu';
+import {SortList, User} from '@/types/bigMenu';
 import {
     List,
     Task,
@@ -23,17 +23,21 @@ export const useListViewStore = defineStore('listViewStore', () => {
     });
     const currentPersonalListTasks = reactive<Task[]>([]);
     const currentPersonalListTasksDone = reactive<Task[]>([]);
-    const currentSortListTasks = reactive<{personal_list: List, tasks: Task[]}[]>([]);
-    const currentListInfo = reactive({
+    const currentSortListTasks = reactive<{key?: number, personal_list: List, tasks: Task[]}[]>([]);
+    const currentListInfo = reactive<List>({
         id: 0,
         name: '',
         color: '',
         count_of_active_tasks: 0,
+        owner_id: 0,
+        tasks: [],
     });
-    const currentSortListInfo = reactive({
+    const currentSortListInfo = reactive<SortList>({
         id: 0,
         name: '',
-        color: '',
+        count: 0,
+        color: "",
+        url: "",
     });
     const currentTag = reactive({
         id: -1,
@@ -269,7 +273,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const addNewTask = () => {
         currentPersonalListTasks.push({
             id: null,
-            id_list: currentListInfo.id,
+            id_list: currentListInfo.id ?? 0,
             name: null,
             description: null,
             deadline: null,
@@ -288,7 +292,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         });
     };
-    const updateTaskDone = (id: number, is_done: number) => {
+    const updateTaskDone = (id: number | null, is_done: boolean) => {
+        if (!id) return;
         try {
             const sourceArray = is_done ? currentPersonalListTasks : currentPersonalListTasksDone;
             const targetArray = is_done ? currentPersonalListTasksDone : currentPersonalListTasks;
@@ -322,14 +327,18 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     /* + TASK */
-    const updateTask = async (task: Task) => {
+    const updateTask = async (task: {
+        id: number,
+        name: string,
+        value: string | number | boolean,
+    }) => {
         const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
         handleUpdateTask(response);
         //await getTasksOrTags();
         await bigMenu.firstRequest();
     };
     const createTask = async (task: Task) => {
-        task.id_list = currentListInfo.id;
+        task.id_list = currentListInfo.id ?? 0;
         const response = await api.postInfo(`createTask`, {task, uuid: socketUUID});
         currentPersonalListTasks.forEach((task, idx) => {
             if (!task.id) {
@@ -343,7 +352,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
         return response;
     };
-    const deleteTask = async (obj: {id: number, uuid: string | null}) => {
+    const deleteTask = async (obj: {id: number, uuid?: string | null}) => {
         currentPersonalListTasks.forEach((task, idx) => {
             if (task.id === obj.id) {
                 currentPersonalListTasks.splice(idx,1);

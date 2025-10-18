@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 
 const PRODMODE: boolean = !(['localhost', '127.0.0.1', '0.0.0.0', ''].includes(window.location.hostname));
 
-const socket = io( (PRODMODE ? import.meta.env.VUE_APP_SOCKET_URL_PROD : import.meta.env.VUE_APP_SOCKET_URL), {
+const socket = io( (PRODMODE ? import.meta.env.VITE_APP_SOCKET_URL_PROD : import.meta.env.VITE_APP_SOCKET_URL), {
     autoConnect: false,
     reconnection: true,
     reconnectionAttempts: 5,

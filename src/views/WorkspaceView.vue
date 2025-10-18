@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import TheBigMenu from '@/components/groups/TheBigMenu.vue';
   import TheTasker from '@/components/groups/TheTasker.vue';
   /*import {useImageDBStore} from "@/stores/imageDBStore";*/
@@ -9,7 +9,7 @@
   import TheAlerts from "@/components/groups/TheAlerts.vue";
   /*const imageDB = useImageDBStore();*/
 
-  const workspace = ref(null);
+  const workspace = ref<HTMLElement | null>(null);
   const isOpenBigMenu = ref(true);
   provide('isOpenBigMenu', isOpenBigMenu);
 
@@ -29,10 +29,10 @@
   watch(isOpenBigMenu, (newVal) => {
     if (!newVal) {
       setTimeout(() => {
-        workspace.value.classList.add('closed');
+        workspace.value?.classList.add('closed');
       }, 300);
     } else {
-      workspace.value.classList.remove('closed');
+      workspace.value?.classList.remove('closed');
     }
   });
 

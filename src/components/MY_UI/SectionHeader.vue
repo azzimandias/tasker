@@ -1,18 +1,20 @@
-<script setup>
+<script setup lang="ts">
   import Loader from './Loader.vue';
-  import {inject, ref, watch} from "vue";
-  const props = defineProps({
-    'is_load': Boolean,
-  });
+  import {inject, Ref, ref, watch} from "vue";
+  const props = defineProps<({
+    'is_load': boolean,
+  })>();
 
-  const shc = ref(null);
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const shc = ref<HTMLElement | null>(null);
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
+  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
 
   watch(isOpenBigMenu, (newVal) => {
+    if (!shc.value) return;
     if (!newVal) {
-      shc.value.classList.add('hide');
+      shc.value!.classList.add('hide');
     } else {
-      shc.value.classList.remove('hide');
+      shc.value!.classList.remove('hide');
     }
   });
 </script>

@@ -1,5 +1,5 @@
-<script setup>
-  const emit = defineEmits(['delete']);
+<script setup lang="ts">
+  const emit = defineEmits<(['delete'])>();
 </script>
 
 <template>

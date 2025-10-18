@@ -1,7 +1,6 @@
-<script setup>
+<script setup lang="ts">
   import { useListViewStore } from "@/stores/ListViewStore";
   import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
-  import TagHeader from "@/components/MY_UI/TagHeader.vue";
   import Task from "@/components/MY_UI/Task.vue";
   import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
   import {useRoute, useRouter} from "vue-router";
@@ -15,7 +14,7 @@
   const router = useRouter();
 
   onMounted(async () => {
-    await listView.getTasksOrTags();
+    await listView.getTasksOrTags(false);
   });
 
   watchEffect(() => {
@@ -24,7 +23,7 @@
     }
   });
 
-  const refreshSortLists = (obj) => {
+  const refreshSortLists = (obj: object) => {
     /*listView.clearTasks(obj.task.id);*/
     listView.updateSortListTasks();
   };
@@ -47,7 +46,7 @@
       <div class="workspace__label">
         <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>
         <PersonalTag
-            :key="listView.currentTag.key"
+            :key="`current-tag-${listView.currentTag.name}`"
             :tag="listView.currentTag"
             :isHeader="true"
         />
@@ -59,21 +58,21 @@
     </div>
     <div class="task__container">
       <div class="list-tasks__wrapper"
-           v-for="list in listView.tags"
-           :key="list.id"
+           v-for="listAndTasks in listView.tags"
+           :key="listAndTasks.personal_list.id ?? Math.random()"
            v-if="listView.tags && listView.tags.length"
       >
-        <ListHeader :list="list"
+        <ListHeader :list="listAndTasks.personal_list"
                     :isRouter="true"
                     :fontSize="'20px'"
-                    v-if="list.tasks.length"
+                    v-if="listAndTasks.personal_list.tasks.length"
         />
         <Task
-            v-if="list.tasks.length"
-            v-for="task in list.tasks"
-            :key="task.key"
+            v-if="listAndTasks.tasks.length"
+            v-for="task in listAndTasks.tasks"
+            :key="task.changer ?? Math.random()"
             :task="task"
-            :color="list.color"
+            :color="listAndTasks.personal_list.color"
             @done="refreshSortLists"
             @flag="refreshSortLists"
             @date="refreshSortLists"

@@ -3,9 +3,9 @@ export interface List {
     name: string,
     count_of_active_tasks: number,
     color: string,
-    created_at: string | null,
-    updated_at: string | null,
-    deleted_at: string | null,
+    created_at?: string | null,
+    updated_at?: string | null,
+    deleted_at?: string | null,
     owner_id: number | null,
     tasks: Task[],
 }
@@ -35,6 +35,10 @@ export interface Tag {
     deleted_at?: string | null,
     task_id?: number | null,
     uuid?: string,
+    pivot?: {
+        user_id: string,
+        tag_id: string
+    }
 }
 
 export interface FoundedListWithTasks {

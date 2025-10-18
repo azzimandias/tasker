@@ -1,38 +1,43 @@
-<script setup>
-import {onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from 'vue';
+<script setup lang="ts">
+import {onMounted, ref, watch} from 'vue';
   import {useListViewStore} from "@/stores/ListViewStore";
   import InputTaskHeader from "@/components/MY_UI/InputTaskHeader.vue";
   import DotBtn from "@/components/MY_UI/DotBtn.vue";
   import Flag from "@/components/MY_UI/Flag.vue";
-  import InfoList from "@/components/MY_UI/InfoList.vue";
   import TextArea from "@/components/MY_UI/TextArea.vue";
-  import InputDate from "@/components/MY_UI/InputDate.vue";
+  /*import InputDate from "@/components/MY_UI/InputDate.vue";*/
   import PersonalTag from "@/components/MY_UI/PersonalTag.vue";
   import {useRoute} from "vue-router";
   import TagCreator from "@/components/MY_UI/TagCreator.vue";
-import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
+  import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
+  import {Task} from "@/types/listView";
 
-  const props = defineProps({
-    task: Object,
-    color: String,
-  });
-  const emits = defineEmits(['done', 'flag', 'date']);
+  const props = defineProps<({
+    task:   Task,
+    color:  string,
+  })>();
+  const emits = defineEmits<{
+    (e: 'done', payload: { task: Task; is_done: boolean; action: string }): void;
+    (e: 'flag', payload: { task: Task; is_flagged: boolean; action: string }): void;
+    (e: 'date', payload: { task: Task; date: string; action: string }): void;
+  }>();
   const route = useRoute();
 
   const is_visible = ref(false);
   const listView = useListViewStore();
-  const taskNode = ref(null);
+  const taskNode = ref<HTMLElement | null>(null);
 
   const height = ref('');
 
   const isMounted = ref(false);
 
   watch(() => props.task.changer, () => {
+    if (taskNode.value) return;
     if (isMounted.value) {
       console.log('watch')
-      height.value = `${taskNode.value.scrollHeight}px`;
-      taskNode.value.classList.remove('show-anim');
-      taskNode.value.classList.remove('hide-anim');
+      height.value = `${taskNode.value!.scrollHeight}px`;
+      taskNode.value!.classList.remove('show-anim');
+      taskNode.value!.classList.remove('hide-anim');
       if (document.documentElement.clientWidth <= 700) {
         is_visible.value = true;
       }
@@ -40,25 +45,26 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
   });
 
   onMounted(() => {
-    height.value = `${taskNode.value.scrollHeight}px`;
-    taskNode.value.classList.add('show-anim');
-    taskNode.value.classList.remove('hide-anim');
+    if (taskNode.value) return;
+    height.value = `${taskNode.value!.scrollHeight}px`;
+    taskNode.value!.classList.add('show-anim');
+    taskNode.value!.classList.remove('hide-anim');
     if (document.documentElement.clientWidth <= 700) {
       is_visible.value = true;
     }
     isMounted.value = true;
   });
 
-  const saveChangesName = (newName) => {saveChanges('name', newName);};
+  const saveChangesName = (newName: string) => {saveChanges('name', newName);};
 
-  const saveChangesDescription = (description) => {saveChanges('description', description);};
+  const saveChangesDescription = (description: string) => {saveChanges('description', description);};
 
-  const saveChangesDate = (date) => {
+  const saveChangesDate = (date: string) => {
     saveChanges('deadline', date);
     emits('date', {task: props.task, date, action: 'date'});
   };
 
-  const saveChangesFlag = (is_flagged) => {
+  const saveChangesFlag = (is_flagged: boolean) => {
     stylesForFlagChanges(is_flagged);
     saveChanges('is_flagged', is_flagged);
     setTimeout(() => {
@@ -66,7 +72,7 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
     }, 1000);
   };
 
-  const saveChangesDot = (is_done) => {
+  const saveChangesDot = (is_done: boolean) => {
     stylesForDotChanges(is_done);
     saveChanges('is_done', is_done);
     setTimeout(() => {
@@ -74,11 +80,11 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
     },1000);
   };
 
-  const stylesForFlagChanges = (is_flagged) => {
+  const stylesForFlagChanges = (is_flagged: boolean) => {
     if (!is_flagged && route.params.name === 'with_flag') hideTask();
   };
 
-  const stylesForDotChanges = (is_done) => {
+  const stylesForDotChanges = (is_done: boolean) => {
     if (route.params.id_list || route.params.name === 'done') {
       hideTask();
     } else {
@@ -87,26 +93,45 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
   };
 
   const hideTask = () => {
+    if (!taskNode.value) return;
     height.value = `${taskNode.value.scrollHeight}px`;
     taskNode.value.classList.add('hide-anim');
   };
 
-  const disableEnableTask = (is_done) => {
+  const disableEnableTask = (is_done: boolean) => {
+    if (!taskNode.value) return;
     if (is_done) taskNode.value.classList.add('done');
     else taskNode.value.classList.remove('done');
   };
 
-  const saveChanges = (whatChanges, changeValue) => {
-    let update = {
-      id: props.task.id,
+  const saveChanges = (whatChanges: string, changeValue: string | number | boolean) => {
+    let update: {
+      id: number,
+      name: string,
+      value: string | number | boolean,
+    } = {
+      id: props.task.id ?? 0,
       name: whatChanges,
       value: changeValue,
     };
     listView.updateTask(update);
   }
-  const createTask = async (newName) => {
+  const createTask = async (newName: string) => {
     if (newName) {
-      const newTask = await listView.createTask({name: newName});
+      const newTask = {
+        id:           null,
+        id_list:      0,
+        name:         newName,
+        description:  null,
+        deadline:     null,
+        is_done:      0,
+        is_flagged:   0,
+        url:          null,
+        priority:     null,
+        tags:         [],
+        possibleTags: [],
+      };
+      const newTaskResponse = await listView.createTask(newTask);
     } else {
       hideTask();
       setTimeout(() => {
@@ -117,7 +142,9 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
   const deleteTask = () => {
     hideTask();
     setTimeout(() => {
-      listView.deleteTask({id: props.task.id});
+      if (props.task.id) {
+        listView.deleteTask({id: props.task.id});
+      }
     }, 1000);
   };
 </script>
@@ -130,18 +157,18 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
   >
     <div class="task__top-container">
       <DotBtn
-          :key="props.task.changer"
+          :key="props.task.changer ?? Math.random()"
           :is_done="props.task.is_done"
-          :id="props.task.id"
+          :id="props.task.id ?? 0"
           :color="props.color"
           @dot="saveChangesDot"
       />
       <div class="task__group">
         <InputTaskHeader
-            :id="props.task.id"
+            :id="props.task.id ?? 0"
             :color="props.color"
             :name="`name_${props.task.id}`"
-            :taskName="props.task.name"
+            :taskName="props.task.name ?? ''"
             :placeholder="'Задача'"
             @saveChangesName="saveChangesName"
             @createTask="createTask"
@@ -166,11 +193,11 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
           @saveChangesDescription="saveChangesDescription"
       />
       <div class="info-btns__container">
-        <InputDate
+<!--        <InputDate
             :id="props.task.id"
             :deadline="props.task.deadline"
             @saveChangesDate="saveChangesDate"
-        />
+        />-->
         <TagCreator
             v-if="props.task.possibleTags"
             :key="props.task.tagCreatorKey"
@@ -180,7 +207,7 @@ import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
         <PersonalTag
             v-for="tag in props.task.tags"
             :key="`added-tag-${props.task.id}-${tag.id}`"
-            :id_task="props.task.id"
+            :id_task="props.task.id ?? 0"
             :tag="tag"
             :isCanChange="true"
         />

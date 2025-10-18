@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from "@/components/MY_UI/Alert.vue";
   import {useListViewStore} from "@/stores/ListViewStore";
   import {reactive, watch} from "vue";

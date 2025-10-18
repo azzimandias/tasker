@@ -1,29 +1,22 @@
-<script setup>
+<script setup lang="ts">
   import { useRoute } from "vue-router";
   import TheTopBar from '@/components/groups/TheTopBar.vue';
-  import {ref, watch} from "vue";
+  import {computed, ref, watch} from "vue";
   const route = useRoute();
   const isOpenSearchTopBar = ref(false);
+
+  const routeKey = computed(() => {
+    const params = route.params;
+    const key = params.name ?? params.id_list ?? params.id_tag ?? route.path;
+    return Array.isArray(key) ? key.join('-') : key;
+  });
 </script>
 
 <template>
   <div class="tasker">
       <TheTopBar :isOpenSearchTopBar="isOpenSearchTopBar"/>
       <router-view
-          v-if="route.params.name"
-          :key="route.params.name"
-      />
-      <router-view
-          v-else-if="route.params.id_list"
-          :key="route.params.id_list"
-      />
-      <router-view
-          v-else-if="route.params.id_tag"
-          :key="route.params.id_tag"
-      />
-      <router-view
-          v-else
-          :key="route.path"
+          :key="routeKey"
           @openSearchTopBar="isOpenSearchTopBar = true"
       />
   </div>

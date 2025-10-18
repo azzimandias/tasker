@@ -1,9 +1,10 @@
-<script setup>
+<script setup lang="ts">
   import { useRoute } from 'vue-router'
-  import {inject, ref, watch} from "vue";
+  import {inject, Ref, ref, watch} from "vue";
 
-  const sortList = ref(null);
-  const isOpenBigMenu = inject('isOpenBigMenu');
+  const sortList = ref<HTMLElement | null>(null);
+  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
+  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
 
   const closeOrOpen = () => {
     if (document.documentElement.clientWidth <= 700) {
@@ -11,10 +12,10 @@
     }
   }
 
-  const props = defineProps({
-    color: String,
-    url: String
-  });
+  const props = defineProps<({
+    color:  string,
+    url:    string
+  })>();
 
   const route = useRoute();
 

@@ -35,14 +35,22 @@ export interface SocketTagsRequest {
     message: TagItem[]
 }
 export interface TagItem {
-    key: null | number,
+    key?: null | number,
     id: number,
     name: string,
-    created_at: string,
-    updated_at: string | null,
-    deleted_at: string | null,
-    pivot: {
+    created_at?: string,
+    updated_at?: string | null,
+    deleted_at?: string | null,
+    pivot?: {
         user_id: string,
         tag_id: string
     }
+}
+
+export interface SortList {
+    id:    number,
+    name:  string,
+    count: number | string,
+    color: string,
+    url:   string
 }

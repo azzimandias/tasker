@@ -1,34 +1,34 @@
-<script setup>
+<script setup lang="ts">
   import {ref} from "vue";
   import api from "@/api";
   import {useRouter} from "vue-router"
 
   const router = useRouter();
-  const emits = defineEmits(['clearInterval']);
-  const loginOrEmail = ref(null);
-  const password = ref(null);
+  /*const emits = defineEmits(['clearInterval']);*/
+  const emits = defineEmits<{
+    (e: "clearInterval"): void
+  }>()
+  const loginOrEmail = ref<HTMLInputElement | null>(null);
+  const password = ref<HTMLInputElement | null>(null);
 
   const signIn = async () => {
-    removeHighlight();
-    const signInData = {
-      email:      String(loginOrEmail.value.value).trim(),
-      password:   String(password.value.value).trim(),
-    };
-    if (signInData.email !== '' && signInData.password !== '') {
-      removeHighlight();
-      const response = await api.signIn(signInData);
-      await show(response);
-    } else {
-      if (signInData.email === '') {
-        loginOrEmail.value.parentElement.classList.add('empty');
-      }
-      if (signInData.password === '') {
-        password.value.parentElement.classList.add('empty');
-      }
+    const email = loginOrEmail.value?.value.trim() || '';
+    const pass = password.value?.value.trim() || '';
+
+    if (!email || !pass) {
+      if (!email) loginOrEmail.value?.parentElement?.classList.add('empty');
+      if (!pass) password.value?.parentElement?.classList.add('empty');
+      return;
     }
+
+    removeHighlight();
+
+    const response = await api.signIn({ email, password: pass });
+    show(response);
   };
 
-  const show = (res) => {
+
+  const show = (res: string) => {
     //console.log(res);
     if (res === 'done') {
       emits('clearInterval');
@@ -37,8 +37,8 @@
   };
 
   const removeHighlight = () => {
-    loginOrEmail.value.parentElement.classList.remove('empty');
-    password.value.parentElement.classList.remove('empty');
+    loginOrEmail.value?.parentElement?.classList.remove('empty');
+    password.value?.parentElement?.classList.remove('empty');
   };
 </script>
 

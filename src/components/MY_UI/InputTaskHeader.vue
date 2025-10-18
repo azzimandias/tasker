@@ -1,9 +1,9 @@
-<script setup>
-import {onMounted, ref, watch} from "vue";
+<script setup lang="ts">
+  import {onMounted, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
-  const taskNode = ref(null);
+  const taskNode = ref<HTMLElement | null>(null);
   const emit = defineEmits(['saveChangesName', 'createTask']);
   const props = defineProps({
     id: Number,
@@ -21,8 +21,9 @@ import {onMounted, ref, watch} from "vue";
   );
 
   onMounted(() => {
+    if (!taskNode.value) return;
     if (!props.id) {
-      taskNode.value.focus();
+      taskNode.value?.focus();
     }
   });
 

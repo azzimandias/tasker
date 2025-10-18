@@ -1,23 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import {onMounted, ref, watch} from 'vue';
   import TopButton from '@/components/MY_UI/TopButton.vue';
   import SearchInputText from '@/components/MY_UI/SearchInputText.vue'
-  /*import {useImageDBStore} from "@/stores/imageDBStore";*/
   import {useListViewStore} from "@/stores/ListViewStore";
   import {useRoute, useRouter} from "vue-router";
 
   const route = useRoute();
   const router = useRouter();
-  const emit = defineEmits(['newTask']);
+  const emit = defineEmits<(['newTask'])>();
   const cl = ref(['person','plus','loup','close']);
   const isSearchMode = ref(false);
   const isNeedToClearSearch = ref(false);
   const listInfo = useListViewStore();
-  /*const imageDB = useImageDBStore();*/
 
-  const props = defineProps({
-    isOpenSearchTopBar: Boolean,
-  })
+  const props = defineProps<({
+    isOpenSearchTopBar: boolean,
+  })>();
 
   watch(route, () => {
     if (route.path.indexOf('search') >= 0) {
@@ -29,7 +27,6 @@ import {onMounted, ref, watch} from 'vue';
 
   watch(() => props.isOpenSearchTopBar, (newIsOpenSearch) => {
     isSearchMode.value = newIsOpenSearch;
-
   });
 
   const showSearch = () => {
