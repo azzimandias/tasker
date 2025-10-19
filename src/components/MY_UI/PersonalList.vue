@@ -16,15 +16,12 @@
   import DialogProvider from '@/components/CUSTOM_UI/DialogProvider.vue'
   import { DIALOG_KEY, type DialogContext } from '@/types/dialog';
   import {ListsItem} from "@/types/bigMenu";
+  import {storeToRefs} from "pinia";
 
   const dialog = inject<DialogContext>(DIALOG_KEY);
   if (!dialog) throw new Error("DialogProvider is missing");
 
-  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
   const bigMenu = useBigMenuStore();
-  /*const props = defineProps({
-    list: Object,
-  });*/
   const props = defineProps<{
     list: ListsItem
   }>();
@@ -35,8 +32,8 @@
 
   const openList = (e: MouseEvent) => {
     if (infoList.value && !infoList.value.contains(e.target as Node)) {
-      if (isOpenBigMenu && document.documentElement.clientWidth <= 700) {
-        isOpenBigMenu.value = false;
+      if (bigMenu.isOpenBigMenu && document.documentElement.clientWidth <= 700) {
+        bigMenu.isOpenBigMenu = false;
       }
       router.push({ name: 'list', params: { id_list: props.list.id } });
     }
@@ -59,7 +56,7 @@
 
 <template>
       <div class="personal-list"
-           :class="{ active: (props.list.id && +props.list.id === +route.params.id_list), minimized: !isOpenBigMenu }"
+           :class="{ active: (props.list.id && +props.list.id === +route.params.id_list), minimized: !bigMenu.isOpenBigMenu }"
            @mouseup="openList"
       >
           <div class="personal-list__circle" :key="Math.random()" :style="{ backgroundColor: props.list.color ?? '#fff' }"></div>

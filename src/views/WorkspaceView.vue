@@ -10,8 +10,6 @@
   /*const imageDB = useImageDBStore();*/
 
   const workspace = ref<HTMLElement | null>(null);
-  const isOpenBigMenu = ref(true);
-  provide('isOpenBigMenu', isOpenBigMenu);
 
   const bigMenuStore = useBigMenuStore();
   const listViewStore = useListViewStore();
@@ -26,7 +24,7 @@
     listViewStore.setUserInfo(userInfo);
   }
 
-  watch(isOpenBigMenu, (newVal) => {
+  watch(() => bigMenuStore.isOpenBigMenu, (newVal) => {
     if (!newVal) {
       setTimeout(() => {
         workspace.value?.classList.add('closed');
@@ -56,6 +54,7 @@
     grid-column-gap: 2px;
     background-color: var(--workspace);
     transition: .3s;
+    position: relative;
     &.closed {
       grid-template-columns: 50px 1fr;
     }

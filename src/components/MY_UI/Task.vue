@@ -17,8 +17,8 @@ import {onMounted, ref, watch} from 'vue';
     color:  string,
   })>();
   const emits = defineEmits<{
-    (e: 'done', payload: { task: Task; is_done: boolean; action: string }): void;
-    (e: 'flag', payload: { task: Task; is_flagged: boolean; action: string }): void;
+    (e: 'done', payload: { task: Task; is_done: boolean | number; action: string }): void;
+    (e: 'flag', payload: { task: Task; is_flagged: boolean | number; action: string }): void;
     (e: 'date', payload: { task: Task; date: string; action: string }): void;
   }>();
   const route = useRoute();
@@ -119,13 +119,13 @@ import {onMounted, ref, watch} from 'vue';
   const createTask = async (newName: string) => {
     if (newName) {
       const newTask = {
-        id:           null,
+        id:           0,
         id_list:      0,
         name:         newName,
         description:  null,
         deadline:     null,
-        is_done:      0,
-        is_flagged:   0,
+        is_done:      false,
+        is_flagged:   false,
         url:          null,
         priority:     null,
         tags:         [],
@@ -189,7 +189,7 @@ import {onMounted, ref, watch} from 'vue';
           :id="props.task.id"
           :placeholder="'Описание'"
           :name="`description_${props.task.id}`"
-          :value="props.task.description"
+          :value="props.task.description ?? ''"
           @saveChangesDescription="saveChangesDescription"
       />
       <div class="info-btns__container">
@@ -200,8 +200,8 @@ import {onMounted, ref, watch} from 'vue';
         />-->
         <TagCreator
             v-if="props.task.possibleTags"
-            :key="props.task.tagCreatorKey"
-            :id_task="props.task.id"
+            :key="props.task.tagCreatorKey ?? ''"
+            :id_task="props.task.id ?? 0"
             :possibleTags="props.task.possibleTags"
         />
         <PersonalTag

@@ -182,7 +182,7 @@
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
   //background-color: #c4c4c4;
-    /*@include theme('background-color', $description);*/
+    background-color: var(--description);
   }
 
   &::-webkit-scrollbar-track {

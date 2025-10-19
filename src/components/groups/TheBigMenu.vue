@@ -4,12 +4,12 @@
   import ThePersonalLists from '@/components/groups/ThePersonalLists.vue';
   import ThePersonalTags from '@/components/groups/ThePersonalTags.vue';
   import {inject, Ref, ref, watch} from "vue";
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
 
   const newPersonalListBtn = ref<HTMLElement | null>(null);
-  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
-  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
+  const bigMenu = useBigMenuStore();
 
-  watch(isOpenBigMenu, (newVal) => {
+  watch(() => bigMenu.isOpenBigMenu, (newVal) => {
     if (!newVal) {
       setTimeout(() => {
         newPersonalListBtn.value?.classList.remove('hidden');

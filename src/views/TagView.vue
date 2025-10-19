@@ -1,13 +1,14 @@
 <script setup lang="ts">
+  import { onMounted } from "vue";
   import { useListViewStore } from "@/stores/ListViewStore";
-  import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
-  import Task from "@/components/MY_UI/Task.vue";
   import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
-  import {useRoute, useRouter} from "vue-router";
-  import {onMounted, ref, watchEffect} from "vue";
+  import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
   import ListHeader from "@/components/MY_UI/ListHeader.vue";
+  import Task from "@/components/MY_UI/Task.vue";
   import PersonalTag from "@/components/MY_UI/PersonalTag.vue";
   import InfoList from "@/components/MY_UI/InfoList.vue";
+  import { useRoute, useRouter } from "vue-router";
+  import type { List, Task as TaskType } from "@/types/listView";
 
   const listView = useListViewStore();
   const route = useRoute();
@@ -17,18 +18,12 @@
     await listView.getTasksOrTags(false);
   });
 
-  watchEffect(() => {
-    if (!route.params.id_tag) {
-      listView.loading = true;
-    }
-  });
-
-  const refreshSortLists = (obj: object) => {
-    /*listView.clearTasks(obj.task.id);*/
+  const refreshSortLists = (obj: { task: TaskType }) => {
     listView.updateSortListTasks();
   };
 
   const deleteTag = () => {
+    if (!listView.currentTag) return;
     listView.deleteTag(listView.currentTag);
     if (+listView.currentTag.id === +route.params.id_tag) {
       router.push({ name: 'intro' });
@@ -37,48 +32,55 @@
 </script>
 
 <template>
-  <LoaderBig v-if="listView.loading"/>
+  <LoaderBig v-if="listView.isLoading" />
 
-  <SomethingWrong v-else-if="listView.is_somethingWrong"/>
+  <SomethingWrong v-else-if="listView.isSomethingWrong" />
 
   <div class="workspace scroll" v-else>
     <div class="workspace__header">
       <div class="workspace__label">
-        <p class="workspace__name" v-if="route.params.id_tag !== 'new'">По тегам:</p>
+        <p v-if="route.params.id_tag !== 'new'">По тегам:</p>
         <PersonalTag
-            :key="`current-tag-${listView.currentTag.name}`"
+            v-if="listView.currentTag"
+            :key="`current-tag-${listView.currentTag.id}`"
             :tag="listView.currentTag"
             :isHeader="true"
         />
       </div>
       <InfoList
+          v-if="listView.currentTag"
           :idList="listView.currentTag.id"
           @delete="deleteTag"
       />
     </div>
+
     <div class="task__container">
-      <div class="list-tasks__wrapper"
-           v-for="listAndTasks in listView.tags"
-           :key="listAndTasks.personal_list.id ?? Math.random()"
-           v-if="listView.tags && listView.tags.length"
+      <template v-for="list in listView.listsByTag"
+                :key="list?.id ?? Math.random()"
       >
-        <ListHeader :list="listAndTasks.personal_list"
-                    :isRouter="true"
-                    :fontSize="'20px'"
-                    v-if="listAndTasks.personal_list.tasks.length"
-        />
-        <Task
-            v-if="listAndTasks.tasks.length"
-            v-for="task in listAndTasks.tasks"
-            :key="task.changer ?? Math.random()"
-            :task="task"
-            :color="listAndTasks.personal_list.color"
-            @done="refreshSortLists"
-            @flag="refreshSortLists"
-            @date="refreshSortLists"
-        />
+        <div v-if="list && Array.isArray(list.tasks)" :style="{width: '100%'}">
+          <ListHeader
+              v-if="list.tasks.length"
+              :list="list"
+              :isRouter="true"
+              :fontSize="'20px'"
+              :top="60"
+              :zIndex="1"
+          />
+          <Task
+              v-for="task in list.tasks"
+              :key="task.id ?? Math.random()"
+              :task="task"
+              :color="list.color"
+              @done="refreshSortLists"
+              @flag="refreshSortLists"
+              @date="refreshSortLists"
+          />
+        </div>
+      </template>
+      <div class="empty-list__title" v-if="!listView.listsByTag.length">
+        <p>Здесь пусто.</p>
       </div>
-      <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
     </div>
   </div>
 </template>
@@ -114,6 +116,9 @@
     align-items: center;
   }
   .workspace__header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -121,8 +126,6 @@
   }
   .workspace__label {
     width: 100%;
-    position: sticky;
-    top: 0;
     min-height: 60px;
     display: flex;
     align-items: center;

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from 'vue';
+import {onMounted, PropType, ref, watch} from 'vue';
 
   const props = defineProps({
-    is_done: Number,
-    id: Number,
-    color: String,
+    is_done:  { type: Number as PropType<number | boolean>, required: false },
+    id:       Number,
+    color:    String,
   });
   const emits = defineEmits(['dot']);
   const is_doneModel = ref(Boolean(props.is_done));

@@ -35,47 +35,30 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-@use "sass:math";
-$size: 12px;
-$time: 1;
-
+<style scoped>
 .loader {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
 
-  .row {
-    display: flex;
-  }
+.row {
+  display: flex;
 }
 
 .arrow {
   width: 0;
   height: 0;
-  margin: 0 math.div(-$size , 2);
-  border-left: $size solid transparent;
-  border-right: $size solid transparent;
-  border-bottom-width: ($size * 1.8);
-  border-bottom-style: solid;
-  border-bottom: var(--gold);
-  animation: blink $time + s infinite;
+  margin: 0 -6px;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 21.6px solid var(--gold);
+  animation: blink 1s infinite;
+  opacity: 0.1;
+}
 
-  &.down {
-    transform: rotate(180deg);
-  }
-
-  @for $i from 1 through 18 {
-    &.outer-#{$i} {
-      animation-delay: -(math.div($time , 18)) * $i + s;
-    }
-  }
-
-  @for $i from 1 through 6 {
-    &.inner-#{$i} {
-      animation-delay: -(math.div($time , 6)) * $i + s;
-    }
-  }
+.arrow.down {
+  transform: rotate(180deg);
 }
 
 @keyframes blink {
@@ -83,4 +66,30 @@ $time: 1;
   30% { opacity: 1; }
   100% { opacity: 0.1; }
 }
+
+.arrow.outer-1  { animation-delay: -0.0555s; }
+.arrow.outer-2  { animation-delay: -0.1111s; }
+.arrow.outer-3  { animation-delay: -0.1666s; }
+.arrow.outer-4  { animation-delay: -0.2222s; }
+.arrow.outer-5  { animation-delay: -0.2777s; }
+.arrow.outer-6  { animation-delay: -0.3333s; }
+.arrow.outer-7  { animation-delay: -0.3888s; }
+.arrow.outer-8  { animation-delay: -0.4444s; }
+.arrow.outer-9  { animation-delay: -0.5s; }
+.arrow.outer-10 { animation-delay: -0.5555s; }
+.arrow.outer-11 { animation-delay: -0.6111s; }
+.arrow.outer-12 { animation-delay: -0.6666s; }
+.arrow.outer-13 { animation-delay: -0.7222s; }
+.arrow.outer-14 { animation-delay: -0.7777s; }
+.arrow.outer-15 { animation-delay: -0.8333s; }
+.arrow.outer-16 { animation-delay: -0.8888s; }
+.arrow.outer-17 { animation-delay: -0.9444s; }
+.arrow.outer-18 { animation-delay: -1s; }
+
+.arrow.inner-1 { animation-delay: -0.1666s; }
+.arrow.inner-2 { animation-delay: -0.3333s; }
+.arrow.inner-3 { animation-delay: -0.5s; }
+.arrow.inner-4 { animation-delay: -0.6666s; }
+.arrow.inner-5 { animation-delay: -0.8333s; }
+.arrow.inner-6 { animation-delay: -1s; }
 </style>

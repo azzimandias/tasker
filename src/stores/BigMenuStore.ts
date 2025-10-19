@@ -57,6 +57,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
             name: 'Все теги'
         }
     ]);
+    const isOpenBigMenu = ref(true);
     const is_load_sortLists     = ref(false);
     const is_load_personalLists = ref(false);
     const is_load_personalTags  = ref(false);
@@ -231,7 +232,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     return {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
-        personalTags, is_load_personalTags, user,
+        personalTags, is_load_personalTags, user, isOpenBigMenu,
         clearAll, setUserInfo, firstRequest, addNewList, saveList, deleteList,
     };
 });

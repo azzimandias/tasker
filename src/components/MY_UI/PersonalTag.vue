@@ -1,20 +1,20 @@
 <script setup lang="ts">
-  import {onMounted, reactive, ref, watch} from 'vue';
+import {onMounted, PropType, reactive, ref, watch} from 'vue';
   import { useRoute } from 'vue-router';
   import {useListViewStore} from "@/stores/ListViewStore";
   import router from "@/router";
-  import {Tag, Task} from "@/types/listView";
+  import {Tag} from "@/types/listView";
 
-  const props = defineProps<({
-    id_task:     number,
-    tag:         Tag,
-    isCanChange: boolean,
-    isCanCreate: boolean,
-    isRoute:     boolean,
-    isHeader:    boolean,
-    width:       string,
-    placeholder: string,
-  })>();
+  const props = defineProps({
+    tag:         {type: Object as PropType<Tag>, required: true},
+    id_task:     {type: Number,  default: 0},
+    isCanChange: {type: Boolean, default: false},
+    isCanCreate: {type: Boolean, default: false},
+    isRoute:     {type: Boolean, default: false},
+    isHeader:    {type: Boolean, default: false},
+    width:       {type: String,  default: null},
+    placeholder: {type: String,  default: null},
+  });
 
   const emits = defineEmits<{
     (e: 'change',  payload: string):   void;
@@ -184,7 +184,7 @@ const resize = () => {
 
   <div v-else-if="props.isRoute" class="personal-tag__wrapper visible">
     <router-link :to="`/workspace/tag=${props.tag.id}`">
-      <div class="personal-tag visible" :class="{ active: (props.tag.id && +props.tag.id === +route.params.id_tag) }">{{ name }}</div>
+      <div class="personal-tag visible" :class="{ active: (+props.tag.id === +route.params.id_tag) }">{{ name }}</div>
     </router-link>
   </div>
 

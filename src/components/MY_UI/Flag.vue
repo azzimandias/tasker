@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
+import {PropType, ref, watch} from "vue";
   const props = defineProps({
-    is_flagged: Number,
+    is_flagged: { type: Number as PropType<number | boolean>, required: false },
     is_visible: Boolean,
-    id: Number,
+    id: { type: Number as PropType<number | null>, required: false },
   });
   const emits = defineEmits(['flag']);
   const is_flaggedModel = ref(Boolean(props.is_flagged));

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { useListViewStore } from "@/stores/ListViewStore";
-  /*import {useImageDBStore} from "@/stores/imageDBStore";*/
   import ListHeader from "@/components/MY_UI/ListHeader.vue";
   import ListDone from "@/components/MY_UI/ListDone.vue";
   import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
@@ -12,7 +11,6 @@
 
 
   const listView = useListViewStore();
-  /*const imageDB = useImageDBStore();*/
   const route = useRoute();
   const router = useRouter();
   const isDoneTasksOpen = ref(false);
@@ -23,7 +21,7 @@
 
   watchEffect(() => {
     if (!route.params.id_list) {
-      listView.loading = true;
+      listView.isLoading = true;
     }
   });
 
@@ -59,8 +57,8 @@
 </script>
 
 <template>
-  <LoaderBig v-if="listView.loading"/>
-  <SomethingWrong v-else-if="listView.is_somethingWrong"/>
+  <LoaderBig v-if="listView.isLoading"/>
+  <SomethingWrong v-else-if="listView.isSomethingWrong"/>
   <div class="workspace scroll" v-else>
     <div class="top-header">
       <ListHeader

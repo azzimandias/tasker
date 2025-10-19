@@ -3,19 +3,19 @@ import {ref, watch, onUnmounted, onMounted} from 'vue';
   import { useListViewStore } from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
-  const props = defineProps<({
-    placeholder:          string,
-    width:                string,
-    border:               string,
-    isNeedToClearSearch:  boolean,
-  })>();
+  const props = defineProps({
+    width:                { type: String, default: '100%' },
+    placeholder:          String,
+    border:               String,
+    isNeedToClearSearch:  Boolean,
+  });
   const emit = defineEmits(['needNoMore']);
   const search = ref('');
   const searchInput = ref<HTMLInputElement | null>(null);
   let timeout: number | null = null;
   let isActive = true;
 
-  const performSearch = (searchValue) => {
+  const performSearch = (searchValue: string) => {
     if (!isActive) return;
 
     if (searchValue) {
@@ -26,8 +26,7 @@ import {ref, watch, onUnmounted, onMounted} from 'vue';
   };
 
   const setChanges = () => {
-    if (!timeout) return;
-    clearTimeout(timeout);
+    if (timeout !== null) clearTimeout(timeout);
     timeout = setTimeout(() => {
       performSearch(search.value);
     }, 300);

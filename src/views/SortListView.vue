@@ -16,7 +16,7 @@
 
   watchEffect(() => {
     if (!route.params.name) {
-      listView.loading = true;
+      listView.isLoading = true;
     }
   });
 
@@ -37,9 +37,9 @@
 </script>
 
 <template>
-  <LoaderBig v-if="listView.loading"/>
+  <LoaderBig v-if="listView.isLoading"/>
 
-  <SomethingWrong v-else-if="listView.is_somethingWrong"/>
+  <SomethingWrong v-else-if="listView.isSomethingWrong"/>
 
   <div class="workspace scroll" v-else>
     <ListHeader :list="listView.sortListInfo"

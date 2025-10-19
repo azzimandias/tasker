@@ -5,7 +5,6 @@
   import { useBigMenuStore } from "@/stores/BigMenuStore";
   import {ref, onMounted, watch, reactive, inject} from "vue";
   import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
-  import {Button} from "@/components/ui/button";
 
 
 
@@ -86,10 +85,6 @@
       console.error("Save failed:", error);
     }
   };
-
-  const handleOpenDialog = (): void => {
-
-  };
 </script>
 
 <template>
@@ -119,9 +114,6 @@
           Surname
         </InputBordered>
         <div class="btn-container">
-
-          <Button @click="handleOpenDialog">Поделиться</Button>
-
           <button class="btn save" @click="save">Save</button>
           <button class="btn exit" @click="exit">Logout</button>
         </div>

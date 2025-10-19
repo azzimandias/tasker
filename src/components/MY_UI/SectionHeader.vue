@@ -1,15 +1,16 @@
 <script setup lang="ts">
   import Loader from './Loader.vue';
   import {inject, Ref, ref, watch} from "vue";
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
+  import {storeToRefs} from "pinia";
   const props = defineProps<({
     'is_load': boolean,
   })>();
 
   const shc = ref<HTMLElement | null>(null);
-  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
-  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
+  const bigMenu = useBigMenuStore();
 
-  watch(isOpenBigMenu, (newVal) => {
+  watch(() => bigMenu.isOpenBigMenu, (newVal) => {
     if (!shc.value) return;
     if (!newVal) {
       shc.value!.classList.add('hide');
@@ -20,7 +21,7 @@
 </script>
 
 <template>
-    <div class="section-header__container" ref="shc" :class="{hidden: !isOpenBigMenu}">
+    <div class="section-header__container" ref="shc" :class="{hidden: !bigMenu.isOpenBigMenu}">
         <div class="section-header__label"><slot></slot></div>
         <Loader v-if="props.is_load"/>
     </div>

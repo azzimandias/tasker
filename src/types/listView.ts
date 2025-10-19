@@ -1,5 +1,5 @@
 export interface List {
-    id: number | null,
+    id: number,
     name: string,
     count_of_active_tasks: number,
     color: string,
@@ -12,13 +12,13 @@ export interface List {
 
 export interface Task {
     changer?: number | null,
-    id: number | null,
+    id: number,
     id_list: number,
     name: string | null,
     description: string | null,
     deadline: string | null,
-    is_done: number,
-    is_flagged: number,
+    is_done: boolean | number,
+    is_flagged: boolean | number,
     url: string | null,
     priority: null,
     tags: Tag[],
@@ -28,7 +28,7 @@ export interface Task {
 
 export interface Tag {
     key?: number | null,
-    id: number | null,
+    id: number,
     name: string,
     created_at?: string | null,
     updated_at?: string | null,

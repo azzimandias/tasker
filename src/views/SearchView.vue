@@ -5,22 +5,25 @@
   import Task from "@/components/MY_UI/Task.vue";
   import ListHeader from "@/components/MY_UI/ListHeader.vue";
   import {onMounted, onUnmounted} from "vue";
-  import {FoundedListWithTasks, Task as TaskType} from '@/types/listView'
+  /*import {FoundedListWithTasks, Task as TaskType} from '@/types/listView'*/
+  import {List} from '@/types/listView'
 
   const listView = useListViewStore();
-  const emit = defineEmits<(["openSearchTopBar"])>();
+  const emit = defineEmits<{
+    (e: 'openSearchTopBar'): void;
+  }>();
 
-  const refreshSortLists = (obj: {
+  /*const refreshSortLists = (obj: {
     task: TaskType;
     is_done: boolean;
     action: string
   }) => {
     //listView.updateSortListTasks();
-  };
+  };*/
 
   onMounted(() => {
     emit('openSearchTopBar');
-    listView.loading = false;
+    listView.isLoading = false;
   });
 
   onUnmounted(() => {
@@ -31,16 +34,24 @@
 
 <template>
   <Transition mode="out-in" name="fade">
-    <LoaderBig v-if="listView.loading"/>
+    <LoaderBig v-if="listView.isLoading"/>
 
-    <SomethingWrong v-else-if="listView.is_somethingWrong"/>
+    <SomethingWrong v-else-if="listView.isSomethingWrong"/>
 
     <div class="workspace scroll" v-else>
-      <ListHeader :list="{name: 'Поиск по задачам'}"/>
+      <ListHeader :list="{
+                    id: 0,
+                    name: 'Поиск по задачам',
+                    color: '#fff',
+                    count: 0,
+                    url: ''
+                  }"
+                  :zIndex="2"
+      />
       <div class="task__container">
         <div class="list-tasks__wrapper"
-             v-for="foundedList in listView.searchResult.filter((list: FoundedListWithTasks) => list.tasks.length > 0)"
-             :key="foundedList.changer ?? Math.random()"
+             v-for="foundedList in listView.searchResult.filter((list: List) => list.tasks.length > 0)"
+             :key="`founded-list-with-tasks-${foundedList.id}-${foundedList.name}`"
              v-if="listView.searchResult.length"
         >
           <ListHeader :list="foundedList"
@@ -53,14 +64,14 @@
               v-for="task in foundedList.tasks"
               :key="task?.changer ?? Math.random()"
               :task="task"
-              :color="list.color"
-              @done="refreshSortLists"
-              @flag="refreshSortLists"
-              @date="refreshSortLists"
+              :color="foundedList.color"
           />
+<!--          @done="refreshSortLists"
+          @flag="refreshSortLists"
+          @date="refreshSortLists"-->
         </div>
         <div class="empty-list__title" v-if="!listView.searchResult.length">
-          <p>Здесь пусто.</p>
+          <p>Введите запрос</p>
         </div>
       </div>
     </div>

@@ -1,20 +1,16 @@
 <script setup lang="ts">
-  /*import { ref,reactive,onMounted } from 'vue';*/
   import { useBigMenuStore } from "@/stores/BigMenuStore";
   import SectionHeader from '@/components/MY_UI/SectionHeader.vue';
   import PersonalTag from '@/components/MY_UI/PersonalTag.vue';
-  import {inject, Ref, watch} from "vue";
   import TopButton from "@/components/MY_UI/TopButton.vue";
   import {useRouter} from "vue-router";
 
   const bigMenuStore = useBigMenuStore();
-  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
-  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
   const router = useRouter();
 </script>
 
 <template>
-    <div class="personal-tags" :class="{hidden: !isOpenBigMenu}">
+    <div class="personal-tags" :class="{hidden: !bigMenuStore.isOpenBigMenu}">
         <div class="personal-lists__header">
           <SectionHeader :is_load="bigMenuStore.is_load_personalTags">Теги</SectionHeader>
           <TopButton

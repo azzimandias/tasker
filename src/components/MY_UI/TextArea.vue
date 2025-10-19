@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import {onMounted, ref, watch} from "vue";
+import {onMounted, PropType, ref, watch} from "vue";
   import {useListViewStore} from "@/stores/ListViewStore";
 
   const listView = useListViewStore();
   const emit = defineEmits(['saveChangesDescription'])
   const props = defineProps({
-    id: Number,
-    placeholder: String,
-    name: String,
-    value: String,
+    id:          { type: Number as PropType<number | null>, required: false },
+    placeholder: { type: String as PropType<string | null>, required: false },
+    name:        String,
+    value:       String,
   });
   const taskTextareaNode = ref<HTMLElement | null>(null);
   const valueModel = ref(props.value);
@@ -40,7 +40,7 @@
   <textarea
       class="task__description scroll"
       ref="taskTextareaNode"
-      :placeholder="props.placeholder"
+      :placeholder="props.placeholder ?? ''"
       :name="props.name"
       v-model="valueModel"
       @blur="saveChangesTextarea"

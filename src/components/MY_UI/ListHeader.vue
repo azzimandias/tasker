@@ -11,8 +11,8 @@
     top: { type: Number, default: 0 },
     zIndex: { type: Number, default: 1 },
     isRouter: { type: Boolean, default: false },
-    isCanChange: { type: Boolean, default: true },
-    fontSize: { type: String, default: '16px' }
+    isCanChange: { type: Boolean, default: false },
+    fontSize: { type: String, default: '35px' }
   });
   const router = useRouter();
   const route = useRoute();
@@ -53,17 +53,22 @@
       @dblclick="goToPersonalList"
   >
     {{ props.list.name }}
-    <Loader v-if="listView.loadingSmall"/>
+    <Loader v-if="listView.isLoadingSmall"/>
   </h2>
-  <label v-else :for="`personal_list-${props.list.id}`">
+  <label v-else :for="`personal_list-${props.list.id}`"
+         :style="{
+                   position: 'sticky',
+                   top: `${props.top}px`,
+                   zIndex: props.zIndex,
+                   width: '100%',
+         }"
+  >
     <input :id="`personal_list-${props.list.id}`"
            type="text"
            class="list-header"
            placeholder="Введите название списка"
            :style="{color: props.list.color,
                    fontSize: props.fontSize,
-                   top: `${props.top}px`,
-                   zIndex: props.zIndex,
                    width: '100%',
             }"
            v-model="listName"

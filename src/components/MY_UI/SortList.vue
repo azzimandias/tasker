@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { useRoute } from 'vue-router'
   import {inject, Ref, ref, watch} from "vue";
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
 
   const sortList = ref<HTMLElement | null>(null);
-  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
-  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
+  const bigMenu = useBigMenuStore();
 
   const closeOrOpen = () => {
     if (document.documentElement.clientWidth <= 700) {
-      isOpenBigMenu.value = false;
+      bigMenu.isOpenBigMenu = false;
     }
   }
 
@@ -26,12 +26,12 @@
   <router-link :to="props.url">
     <div class="sort-list"
          ref="sortList"
-         :class="{ hidden: !isOpenBigMenu, active: props.url === route.path }"
+         :class="{ hidden: !bigMenu.isOpenBigMenu, active: props.url === route.path }"
          @click="closeOrOpen"
     >
         <div class="sort-list__container">
             <div class="circle" :style="{ backgroundColor: currentColor }">
-              <div class="sort-list__count-small" v-if="!isOpenBigMenu"><slot name="count"></slot></div>
+              <div class="sort-list__count-small" v-if="!bigMenu.isOpenBigMenu"><slot name="count"></slot></div>
             </div>
             <div class="sort-list__count"><slot name="count"></slot></div>
         </div>

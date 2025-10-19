@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import {inject, Ref, ref, watch} from 'vue';
+  import {inject, Ref, ref, watch} from 'vue';
   import {useRoute} from 'vue-router'
+  import {useBigMenuStore} from "@/stores/BigMenuStore";
+  import {storeToRefs} from "pinia";
 
+  const bigMenu = useBigMenuStore();
   const route = useRoute();
   const applicationNameLabel = ref<HTMLElement | null>(null);
   const closeOpen = ref<HTMLElement | null>(null);
-  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
-  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
+
   const closeOrOpen = () => {
-    isOpenBigMenu.value = !isOpenBigMenu.value;
+    bigMenu.isOpenBigMenu = !bigMenu.isOpenBigMenu;
   }
-  watch(isOpenBigMenu, (newVal) => {
+
+  watch(() => bigMenu.isOpenBigMenu, (newVal) => {
     if (!applicationNameLabel.value || !closeOpen.value) return;
     if (!newVal) {
       applicationNameLabel.value!.classList.add('hidden');

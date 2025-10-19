@@ -6,10 +6,8 @@ import {inject, Ref, ref, watch} from 'vue';
 
   const sortLists = ref<HTMLElement | null>(null);
   const bigMenuStore = useBigMenuStore();
-  const isOpenBigMenu = inject<Ref<boolean>>('isOpenBigMenu');
-  if (!isOpenBigMenu) throw new Error('isOpenBigMenu not provided');
 
-  watch(isOpenBigMenu, (newVal) => {
+  watch(() => bigMenuStore.isOpenBigMenu, (newVal) => {
     if (!newVal) {
       setTimeout(() => {
         sortLists.value!.classList.remove('hidden');
@@ -21,7 +19,7 @@ import {inject, Ref, ref, watch} from 'vue';
 </script>
 
 <template>
-    <div class="sort-lists" ref="sortLists" :class="{minimized: !isOpenBigMenu, hidden: !isOpenBigMenu}">
+    <div class="sort-lists" ref="sortLists" :class="{minimized: !bigMenuStore.isOpenBigMenu, hidden: !bigMenuStore.isOpenBigMenu}">
         <SectionHeader :is_load="bigMenuStore.is_load_sortLists">Списки</SectionHeader>
         <div class="sort-lists__container">
             <SortList 
