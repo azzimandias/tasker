@@ -99,8 +99,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
         } else { request.value = ''; }
         let response = null;
         if (request.value) {
-            response = await api.getInfoWithArgs(request.value, {params: {}});
             try {
+                response = await api.getInfoWithArgs(request.value, {params: {}});
                 clearCurrentData();
                 clearCurrentInfo();
                 if (response) {
@@ -113,12 +113,15 @@ export const useListViewStore = defineStore('listViewStore', () => {
                     }
                 }
             } catch (error) {
-                console.error("Error in setCurrentPersonalListTasks:", error);
+                console.error("Error in setListViewInfo:", error);
                 isSomethingWrong.value = true;
             } finally {
                 isLoading.value = false;
                 isLoadingSmall.value = false;
             }
+        } else {
+            isLoading.value = false;
+            isLoadingSmall.value = false;
         }
     };
     const setCurrentPersonalListTasks = (response: {list: List, tasks: Task[], tasksDone: Task[]}) => {
@@ -222,7 +225,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         });
     };
-    const updateTaskDone = (id: number | null, is_done: boolean) => {
+    const updateTaskDone = (id: number | null, is_done: boolean | number) => {
         if (!id) return;
         try {
             const sourceArray = is_done ? currentPersonalListTasks : currentPersonalListTasksDone;
@@ -444,7 +447,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* - TAG replacement */
     /* + PERSONAL LIST */
     const createList = async (list: List) => {
-        const response = await api.postInfo(`saveList/`, {list, uuid: socketUUID});
+        const response = await api.postInfo(`saveList`, {list, uuid: socketUUID});
         await bigMenu.firstRequest();
         return response;
     };

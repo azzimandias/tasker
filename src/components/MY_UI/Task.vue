@@ -5,12 +5,12 @@ import {onMounted, ref, watch} from 'vue';
   import DotBtn from "@/components/MY_UI/DotBtn.vue";
   import Flag from "@/components/MY_UI/Flag.vue";
   import TextArea from "@/components/MY_UI/TextArea.vue";
-  /*import InputDate from "@/components/MY_UI/InputDate.vue";*/
   import PersonalTag from "@/components/MY_UI/PersonalTag.vue";
   import {useRoute} from "vue-router";
   import TagCreator from "@/components/MY_UI/TagCreator.vue";
   import DeleteBtn from "@/components/MY_UI/DeleteBtn.vue";
   import {Task} from "@/types/listView";
+  import DatePickerTask from "@/components/CUSTOM_UI/DatePickerTask.vue";
 
   const props = defineProps<({
     task:   Task,
@@ -193,11 +193,9 @@ import {onMounted, ref, watch} from 'vue';
           @saveChangesDescription="saveChangesDescription"
       />
       <div class="info-btns__container">
-<!--        <InputDate
-            :id="props.task.id"
-            :deadline="props.task.deadline"
-            @saveChangesDate="saveChangesDate"
-        />-->
+        <DatePickerTask :deadline="task.deadline"
+                        @setDeadline="saveChangesDate"
+        />
         <TagCreator
             v-if="props.task.possibleTags"
             :key="props.task.tagCreatorKey ?? ''"

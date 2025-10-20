@@ -55,7 +55,8 @@
     {{ props.list.name }}
     <Loader v-if="listView.isLoadingSmall"/>
   </h2>
-  <label v-else :for="`personal_list-${props.list.id}`"
+  <label v-else
+         :for="`personal_list-${props.list.id}`"
          :style="{
                    position: 'sticky',
                    top: `${props.top}px`,

@@ -5,9 +5,10 @@
   import SomethingWrong from "@/components/MY_UI/SomethingWrong.vue";
   import Task from "@/components/MY_UI/Task.vue";
   import LoaderBig from "@/components/MY_UI/LoaderBig.vue";
-  import {computed, onMounted, ref, watchEffect} from "vue";
+  import {onMounted, ref, watchEffect} from "vue";
   import {useRoute, useRouter} from "vue-router";
   import {Task as TaskType} from '@/types/listView'
+  import ColorPickerList from "@/components/CUSTOM_UI/ColorPickerList.vue";
 
 
   const listView = useListViewStore();
@@ -25,7 +26,7 @@
     }
   });
 
-  const taskSlideToBottom = (obj: {task: TaskType, is_done: boolean}) => {
+  const taskSlideToBottom = (obj: {task: TaskType, is_done: boolean | number}) => {
     listView.updateTaskDone(obj.task.id, obj.is_done);
   };
 
@@ -49,6 +50,7 @@
   }
 
   const saveChangedColor = (newColor: string) => {
+    console.log(newColor)
     listView.updateList({
       ...listView.listInfo,
       color: newColor,
@@ -71,6 +73,9 @@
         {{ listView.listInfo.count_of_active_tasks }}
       </div>
       <div class="list-redact-wrapper">
+        <ColorPickerList :color="listView.listInfo.color"
+                         @setColor="saveChangedColor"
+        />
       </div>
     </div>
     <div class="task__container" v-if="listView.tasks.length">

@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cyhnkckali/vue3-color-picker": "^2.1.5",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vuepic/vue-datepicker": "^6.0.1",
