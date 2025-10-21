@@ -1,9 +1,22 @@
 <script setup lang="ts">
   import {onMounted} from 'vue';
   import api from '@/api'
-  onMounted( () => {
+  onMounted(() => {
     api.getCookies();
-  })
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const applyTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (e.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    applyTheme(media);
+    media.addEventListener('change', applyTheme);
+  });
 </script>
 
 <template>

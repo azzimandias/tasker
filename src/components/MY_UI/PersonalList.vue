@@ -1,22 +1,11 @@
 <script setup lang="ts">
   import {useRoute, useRouter} from 'vue-router';
-  /*import InfoList from "@/components/MY_UI/InfoList.vue";*/
   import {useBigMenuStore} from "@/stores/BigMenuStore";
-  import {inject, Ref, ref} from "vue";
-  import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-    DropdownMenuShortcut,
-    DropdownMenuGroup,
-  } from '@/components/ui/dropdown-menu';
-  import DialogProvider from '@/components/CUSTOM_UI/DialogProvider.vue'
+  import {inject, ref} from "vue";
   import { DIALOG_KEY, type DialogContext } from '@/types/dialog';
   import {ListsItem} from "@/types/bigMenu";
-  import {storeToRefs} from "pinia";
+  import DropdownMenuList from "@/components/CUSTOM_UI/DropdownMenuList.vue";
+  import DialogShareList from "@/components/CUSTOM_UI/DialogShareList.vue";
 
   const dialog = inject<DialogContext>(DIALOG_KEY);
   if (!dialog) throw new Error("DialogProvider is missing");
@@ -41,7 +30,7 @@
 
   const shareList = () => {
     console.log('share list');
-    dialog?.openDialog({});
+    dialog?.openDialog(DialogShareList, { list: props.list  });
   };
 
   const deleteList = () => {
@@ -62,32 +51,10 @@
           <div class="personal-list__circle" :key="Math.random()" :style="{ backgroundColor: props.list.color ?? '#fff' }"></div>
           <div class="personal-list__label"><slot name="name"></slot></div>
           <div class="info-list__wrapper" ref="infoList">
-  <!--          <InfoList
-                :idList="props.list.id"
-                @share="shareList"
-                @delete="deleteList"
-            />-->
-            <DropdownMenu>
-              <DropdownMenuTrigger as-child>
-                <div class="info-list"
-                     :class="{ active: (props.list.id && +props.list.id === +route.params.id_list) }"
-                ></div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent class="w-56">
-                <DropdownMenuLabel>Действия:</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem @click="shareList">
-                    <span>Поделиться</span>
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem @click="deleteList">
-                    <span>Удалить</span>
-                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <DropdownMenuList :listId="props.list.id ?? 0"
+                              @shareList="shareList"
+                              @deleteList="deleteList"
+            />
           </div>
           <div class="personal-list__count"><slot name="count"></slot></div>
       </div>
@@ -141,16 +108,9 @@
       color: var(--textColor);
         transition: .3s;
     }
-    .info-list {
-      flex: 0 0 20px;
-      width: 20px;
-      height: 20px;
-      background-position: center;
-      background-size: 20px 20px;
-      background-repeat: no-repeat;
-      background-image: url("@/assets/svgs/info.svg");
-      &.active { background-image: url("@/assets/svgs/info_invert.svg"); }
-      cursor: pointer;
-      transition: 0.3s;
+    .info-list__wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 </style>

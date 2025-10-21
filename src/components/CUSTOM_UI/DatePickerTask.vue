@@ -59,7 +59,6 @@
     }
   });
 
-  // Обработчик для быстрого выбора даты
   const handleQuickSelect = (days: number) => {
     value.value = today(getLocalTimeZone()).add({ days });
   };

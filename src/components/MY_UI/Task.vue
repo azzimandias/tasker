@@ -193,7 +193,7 @@ import {onMounted, ref, watch} from 'vue';
           @saveChangesDescription="saveChangesDescription"
       />
       <div class="info-btns__container">
-        <DatePickerTask :deadline="task.deadline"
+        <DatePickerTask :deadline="task.deadline ?? ''"
                         @setDeadline="saveChangesDate"
         />
         <TagCreator

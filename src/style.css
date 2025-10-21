@@ -77,6 +77,27 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --workspace: white;
+  --bigMenu: #e0e0e0;
+  --tasker: #f6f6f6;
+  --gold: #ffd700ff;
+  --personal: #f9f9f9;
+  --substrate: #e5e5e5;
+  --topBlock: #dfdddd;
+  --textColorActive: #171515;
+  --textColor: #736f6f;
+  --description: #c4c4c4;
+  --placeholder: rgba(115, 111, 111, 0.44);
+  --smallTextColor: #f8f8f8;
+  --AnimatedWindow: #f1eeee;
+  --SvgColor: #aaadae;
+  --macWindow: #383939;
+  --introTextColor: #5C5D5F;
+  --line: #494B4E;
+  --dropDownListBackground: #b6b1b1;
+  --dropDownListBorder: #5F6164;
+  --goldBorder: 1px solid #ffd700ff;
 }
 
 .dark {
@@ -112,44 +133,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
-}
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-
-
-
-.light-theme {
-  --workspace: white;
-  --bigMenu: #e0e0e0;
-  --tasker: #f6f6f6;
-  --gold: #ffd700ff;
-  --personal: #f9f9f9;
-  --substrate: #e5e5e5;
-  --topBlock: #dfdddd;
-  --textColorActive: #171515;
-  --textColor: #736f6f;
-  --description: #c4c4c4;
-  --placeholder: rgba(115, 111, 111, 0.44);
-  --smallTextColor: #f8f8f8;
-  --AnimatedWindow: #f1eeee;
-  --SvgColor: #aaadae;
-  --macWindow: #383939;
-  --introTextColor: #5C5D5F;
-  --line: #494B4E;
-  --dropDownListBackground: #b6b1b1;
-  --dropDownListBorder: #5F6164;
-  --goldBorder: 1px solid #ffd700ff;
-}
-
-.dark-theme {
   --workspace: #0f0f0f;
   --bigMenu: #26282B;
   --tasker: #1b1c1f;
@@ -172,6 +156,64 @@
   --goldBorder: 1px solid #af9a64;
 }
 
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+
+
+/*.light-theme {
+  --workspace: white;
+  --bigMenu: #e0e0e0;
+  --tasker: #f6f6f6;
+  --gold: #ffd700ff;
+  --personal: #f9f9f9;
+  --substrate: #e5e5e5;
+  --topBlock: #dfdddd;
+  --textColorActive: #171515;
+  --textColor: #736f6f;
+  --description: #c4c4c4;
+  --placeholder: rgba(115, 111, 111, 0.44);
+  --smallTextColor: #f8f8f8;
+  --AnimatedWindow: #f1eeee;
+  --SvgColor: #aaadae;
+  --macWindow: #383939;
+  --introTextColor: #5C5D5F;
+  --line: #494B4E;
+  --dropDownListBackground: #b6b1b1;
+  --dropDownListBorder: #5F6164;
+  --goldBorder: 1px solid #ffd700ff;
+}*/
+
+/*.dark-theme {
+  --workspace: #0f0f0f;
+  --bigMenu: #26282B;
+  --tasker: #1b1c1f;
+  --gold: #af9a64;
+  --personal: #494B4E;
+  --substrate: #494B4E;
+  --topBlock: #494B4E;
+  --textColorActive: #171515;
+  --textColor: #c5c7ca;
+  --description: #c4c4c4;
+  --placeholder: rgba(115, 111, 111, 0.44);
+  --smallTextColor: #f8f8f8;
+  --AnimatedWindow: #383939;
+  --SvgColor: #aaadae;
+  --macWindow: #383939;
+  --introTextColor: #c4c4c4;
+  --line: #c4c4c466;
+  --dropDownListBackground: #0a0a0a;
+  --dropDownListBorder: #5F6164;
+  --goldBorder: 1px solid #af9a64;
+}*/
+
 .scroll {
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -181,7 +223,6 @@
 
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
-  //background-color: #c4c4c4;
     background-color: var(--description);
   }
 
@@ -201,8 +242,6 @@ body {
   overflow: hidden;
 }
 button {
-  /*background: none;
-  border: 0;*/
   cursor: pointer;
 }
 input {
