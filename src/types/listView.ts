@@ -60,3 +60,7 @@ export interface Alert {
     description: string,
     top?: string | null
 }
+export interface FoundedUser {
+    value: number,
+    label: string,
+}

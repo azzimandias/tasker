@@ -1,20 +1,15 @@
-import { defineStore } from 'pinia';
-import {ref, reactive, onUnmounted} from "vue";
+import {defineStore} from 'pinia';
+import {onUnmounted, reactive, Ref, ref, UnwrapRef} from "vue";
 import {useRoute} from "vue-router";
 import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
 import socket from "@/plugins/socket";
-import { v4 as uuidv4 } from 'uuid';
-import {SortList, User} from '@/types/bigMenu';
-import {
-    List,
-    Task,
-    Tag,
-    Alert
-} from '@/types/listView';
+import {v4 as uuidv4} from 'uuid';
+import {ListsItem, SortList, User} from '@/types/bigMenu';
+import {Alert, FoundedUser, List, Tag, Task} from '@/types/listView';
 
 export const useListViewStore = defineStore('listViewStore', () => {
-    const user = reactive({
+    const user = reactive<User>({
         id:      0,
         email:   '',
         name:    '',
@@ -45,6 +40,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const listsByTag = reactive<List[]>([]);
     const searchResult = reactive<List[]>([]);
     const alerts = reactive<Alert[]>([]);
+    const foundedUsers = reactive<FoundedUser[]>([]);
     const isLoading = ref(true);
     const isLoadingSmall = ref(true);
     const isSomethingWrong = ref(false);
@@ -461,6 +457,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         await bigMenu.firstRequest();
     };
     /* - PERSONAL LIST */
+    /* + ALERT LIST */
     const addAlert = (newAlert: Alert) => {
         if (alerts.length > 2) {
             alerts.splice(0, 1);
@@ -479,6 +476,23 @@ export const useListViewStore = defineStore('listViewStore', () => {
             alerts[idx] = alert;
         });
     };
+    /* - ALERT LIST */
+    /* + USERS LIST */
+    type FoundedUser = {
+        value: number;
+        label: string;
+    };
+    const findMatchUsers = async (searchStr: string) => {
+        return await api.postInfo(`findUsers`, {searchStr});
+    };
+    const createMembershipLists = async (list: ListsItem, selectedUsers: Ref<UnwrapRef<FoundedUser[]>, UnwrapRef<FoundedUser[]> | FoundedUser[]>) => {
+        await api.postInfo(`createMembershipLists`, {
+            listId: list.id,
+            selectedUsers,
+        });
+    };
+    /* - USERS LIST */
+    //foundedUsers
     /* + SOCKET */
     const connectSocket = async () => {
         try {
@@ -752,5 +766,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         updateList,
         addAlert,
         removeAlert,
+        findMatchUsers,
+        createMembershipLists,
     };
 });

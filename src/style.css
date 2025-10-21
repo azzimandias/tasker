@@ -165,7 +165,9 @@
   }
 }
 
-
+[data-reka-popper-content-wrapper] {
+  z-index: 9999 !important;
+}
 
 
 /*.light-theme {
