@@ -221,18 +221,14 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const addNewList = (list: ListsItem) => {
         personalLists.push(list);
     };
-    const saveList = async (list: ListsItem) => {
-        await api.saveList(list);
-        await firstRequest();
-    };
     const deleteList = async (listId: number) => {
-        await api.deleteList(listId);
+        await api.delete('personalList', listId);
         await firstRequest();
     };
     return {
         sortLists, is_load_sortLists,
         personalLists, is_load_personalLists,
         personalTags, is_load_personalTags, user, isOpenBigMenu,
-        clearAll, setUserInfo, firstRequest, addNewList, saveList, deleteList,
+        clearAll, setUserInfo, firstRequest, addNewList, deleteList,
     };
 });

@@ -55,6 +55,30 @@ export default {
             return e;
         }
     },
+    async signUp(obj: object) {
+        try {
+            const response = await HTTP.post(this.url + 'register', obj);
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
+    async signIn(obj: object) {
+        try {
+            const response = await HTTP.post(this.url + 'login', obj);
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
+    async logout() {
+        try {
+            const response = await HTTP.post(this.url + 'logout');
+            return await response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    },
     async getInfo(path: string) {
         try {
             const response = await HTTP.get(this.url + this.prefix + path);
@@ -77,55 +101,23 @@ export default {
     },
     async postInfo(path: string, body: object) {
         try {
-            const response = await HTTP.post(this.url + this.prefix + path, JSON.stringify(body));
+            const response = await HTTP.post(this.url + this.prefix + path, body);
             return await response.data;
         } catch (e) {
             console.log(e);
         }
     },
-    async saveList(obj: object) {
+    async patchInfo(path: string, body: object) {
         try {
-            const response = await HTTP.post(this.url + this.prefix + 'saveList', JSON.stringify(obj));
+            const response = await HTTP.patch(this.url + this.prefix + path, body);
             return await response.data;
         } catch (e) {
             console.log(e);
         }
     },
-    async deleteList(listId: number) {
+    async delete(route: string, id: number) {
         try {
-            const response = await HTTP.post(this.url + this.prefix + 'deleteList', +listId);
-            return await response.data;
-        } catch (e) {
-            console.log(e);
-        }
-    },
-    async globalSearch(searchObj: object) {
-        try {
-            const response = await HTTP.post(this.url + this.prefix + 'globalSearch', searchObj);
-            return await response.data;
-        } catch (e) {
-            console.log(e);
-        }
-    },
-    async signUp(obj: object) {
-        try {
-            const response = await HTTP.post(this.url + 'register', obj);
-            return await response.data;
-        } catch (e) {
-            console.log(e);
-        }
-    },
-    async signIn(obj: object) {
-        try {
-            const response = await HTTP.post(this.url + 'login', obj);
-            return await response.data;
-        } catch (e) {
-            console.log(e);
-        }
-    },
-    async logout() {
-        try {
-            const response = await HTTP.post(this.url + 'logout');
+            const response = await HTTP.delete(this.url + this.prefix + `${route}/${id}`);
             return await response.data;
         } catch (e) {
             console.log(e);

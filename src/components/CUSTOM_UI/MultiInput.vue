@@ -33,19 +33,24 @@
     (e: 'removeUser',            payload: FoundedUser): void;
   }>();
   const selectedUser =  ref<FoundedUser | null>(null);
+  const selectedUsers = ref<FoundedUser[]>([]);
   const searchSrt = ref("");
+  const isOpen = ref(false);
   watch(searchSrt, (newVal) => {
     emits('updateFoundedUsers', newVal);
+  });
+  watch(() => props.isOpen, (newVal) => {
+    isOpen.value = newVal;
   });
 </script>
 
 <template>
   <Combobox v-model="selectedUser"
-            v-model:open="props.isOpen"
+            v-model:open="isOpen"
             :ignore-filter="true"
   >
     <ComboboxAnchor as-child>
-      <TagsInput v-model="props.selectedUsers" class="px-2 gap-2 w-[100%]">
+      <TagsInput v-model="selectedUsers" class="px-2 gap-2 w-[100%]">
         <div class="flex gap-2 flex-wrap items-center">
           <TagsInputItem v-for="user in props.selectedUsers"
                          :key="`user-${user.label}`"
@@ -66,7 +71,7 @@
       </TagsInput>
     </ComboboxAnchor>
 
-    <ComboboxList v-if="props.isOpen"
+    <ComboboxList v-if="isOpen"
                   class="z-[9999] border rounded shadow-md mt-1 max-h-60 overflow-auto"
     >
       <ComboboxEmpty v-if="!props.foundedUsers.length">

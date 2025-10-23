@@ -16,7 +16,7 @@ export interface Task {
     id_list: number,
     name: string | null,
     description: string | null,
-    deadline: string | null,
+    deadline: number | null,
     is_done: boolean | number,
     is_flagged: boolean | number,
     url: string | null,

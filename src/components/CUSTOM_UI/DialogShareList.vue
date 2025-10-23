@@ -10,7 +10,8 @@
   import {Badge} from "@/components/ui/badge";
   import MultiInput from "@/components/CUSTOM_UI/MultiInput.vue";
   import { useListViewStore } from "@/stores/ListViewStore";
-  import {ref} from "vue";
+  import {ref, toRaw} from "vue";
+  import {Spinner} from "@/components/ui/spinner";
 
   const props = defineProps<({
     list: ListsItem
@@ -28,6 +29,7 @@
   const foundedUsers = ref<FoundedUser[]>([]);
   const isOpen = ref(false);
   const selectedUser = ref<FoundedUser | null>(null);
+  const isLoading = ref(false);
   let timeout: number | undefined;
 
   const updateFoundedUsers = (searchStr: string) => {
@@ -62,10 +64,18 @@
       selectedUsers.value.splice(index, 1);
     }
   };
-  const createMembershipLists = () => {
-    listInfo.createMembershipLists(props.list, selectedUsers);
-    emit('closeDialog');
+  const createMembershipInvitation = async () => {
+    isLoading.value = true;
+    const response = await listInfo.createMembershipInvitation(
+        toRaw(props.list),
+        toRaw(selectedUsers.value)
+    );
+    setTimeout(() => {
+      isLoading.value = false;
+      emit('closeDialog');
+    }, 500);
   };
+
 </script>
 
 <template>
@@ -83,10 +93,12 @@
         />
   <DialogFooter>
     <Button class="ok-button"
-            @click="createMembershipLists"
-    >OK</button>
+            @click="createMembershipInvitation"
+            :disabled="isLoading"
+    ><Spinner v-if="isLoading"/>OK</button>
     <Button class="cancel-button"
             @click="emit('closeDialog')"
+            :disabled="isLoading"
     >Отмена</button>
   </DialogFooter>
 </template>

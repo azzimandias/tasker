@@ -1,29 +1,30 @@
 <script setup lang="ts">
   import type { DateValue } from "@internationalized/date";
   import {
-    DateFormatter,
     getLocalTimeZone,
     today,
     parseDate,
   } from "@internationalized/date";
   import { CalendarIcon } from "lucide-vue-next";
-  import {ref, watch} from "vue";
+  import {computed, ref, watch} from "vue";
   import { Button } from "@/components/ui/button";
   import { Calendar } from "@/components/ui/calendar";
   import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+  import dayjs from 'dayjs';
+  import utc from "dayjs/plugin/utc";
+  import timezone from "dayjs/plugin/timezone";
 
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  const tz = dayjs.tz.guess();
   const locale = "ru-RU";
-  const props = defineProps({
-    deadline: String
-  });
+  const props = defineProps<({
+    deadline: number | null
+  })>();
   const emit = defineEmits<{
-    (e: 'setDeadline', payload: string): void;
+    (e: 'setDeadline', payload: number | null): void;
   }>();
-
-  const df = new DateFormatter(locale, {
-    dateStyle: 'short',
-  });
 
   const items = [
     { value: 0, label: "Сегодня" },
@@ -32,36 +33,41 @@
     { value: 7, label: "Через неделю" },
   ];
 
-  const value = ref<DateValue>();
+  const deadline = ref<DateValue | undefined>();
 
-  watch(() => props.deadline, (newDeadline) => {
-    if (newDeadline) {
-      try {
-        value.value = parseDate(newDeadline);
-      } catch (e) {
-        console.warn('Invalid date format:', newDeadline);
-        value.value = undefined;
-      }
-    } else {
-      value.value = undefined;
-    }
+  watch(() => props.deadline, (newVal) => {
+        if (newVal != null) {
+          const isSeconds = newVal < 1e12;
+          const d = isSeconds
+              ? dayjs.unix(newVal).utc().tz(tz)
+              : dayjs(newVal).utc().tz(tz);
+          console.log(dayjs.unix(newVal).utc().tz(tz));
+          console.log(dayjs(newVal).utc().tz(tz))
+          deadline.value = parseDate(d.format("YYYY-MM-DD"));
+        } else {
+          deadline.value = undefined;
+        }
   }, { immediate: true });
 
-  watch(value, (newValue) => {
-    if (newValue) {
-      const year = newValue.year;
-      const month = String(newValue.month).padStart(2, '0');
-      const day = String(newValue.day).padStart(2, '0');
-      const dateString = `${year}-${month}-${day}`;
-      emit('setDeadline', dateString);
+
+  watch(deadline, (newVal) => {
+    if (newVal) {
+      const jsDate = new Date(newVal.toDate(getLocalTimeZone()));
+      emit("setDeadline", dayjs(jsDate).utc().unix());
     } else {
-      emit('setDeadline', '');
+      emit("setDeadline", null);
     }
   });
 
   const handleQuickSelect = (days: number) => {
-    value.value = today(getLocalTimeZone()).add({ days });
+    deadline.value = today(getLocalTimeZone()).add({ days });
   };
+
+  const displayLabel = computed(() => {
+    if (!deadline.value) return "Выберите дату";
+    const jsDate = new Date(deadline.value.toDate(getLocalTimeZone()));
+    return dayjs(jsDate).format("DD.MM.YYYY");
+  });
 </script>
 
 <template>
@@ -71,7 +77,7 @@
               class='h-[28px] rounded-[5px] justify-start text-left font-normal'
       >
         <CalendarIcon class="mr-2 h-4 w-4" />
-        {{ value ? df.format(value.toDate(getLocalTimeZone())) : "Выберите дату" }}
+        {{ displayLabel }}
       </Button>
     </PopoverTrigger>
     <PopoverContent class="flex w-auto flex-col gap-y-2 p-2">
@@ -89,7 +95,7 @@
           </SelectItem>
         </SelectContent>
       </Select>
-      <Calendar v-model="value" :locale="locale" />
+      <Calendar v-model="deadline" :locale="locale" />
     </PopoverContent>
   </Popover>
 </template>

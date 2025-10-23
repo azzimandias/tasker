@@ -4,15 +4,17 @@
   import {onMounted, ref, watch} from "vue";
   import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
   import {Button} from "@/components/ui/button";
-  import router from "@/router";
+
   const props = defineProps({
     color: String
   });
   const emit = defineEmits<{
     (e: 'setColor', payload: string): void;
   }>();
+
   const color = ref(props.color || '');
   const theme = ref<'dark' | 'light'>('light');
+  const isOpen = ref(false);
 
   onMounted(() => {
     const isDark = document.documentElement.classList.contains('dark');
@@ -29,13 +31,13 @@
     color.value = newVal || '';
   });
 
-  watch(color, (newVal) => {
-    emit('setColor', newVal);
+  watch(isOpen, (open) => {
+    if (!open) emit('setColor', color.value);
   });
 </script>
 
 <template>
-  <Popover>
+  <Popover v-model:open="isOpen">
     <PopoverTrigger as-child>
       <Button variant="outline"
               :style="{backgroundColor: color}"

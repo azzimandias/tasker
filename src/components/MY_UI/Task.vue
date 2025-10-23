@@ -19,7 +19,7 @@ import {onMounted, ref, watch} from 'vue';
   const emits = defineEmits<{
     (e: 'done', payload: { task: Task; is_done: boolean | number; action: string }): void;
     (e: 'flag', payload: { task: Task; is_flagged: boolean | number; action: string }): void;
-    (e: 'date', payload: { task: Task; date: string; action: string }): void;
+    (e: 'date', payload: { task: Task; date: number | null; action: string }): void;
   }>();
   const route = useRoute();
 
@@ -59,7 +59,7 @@ import {onMounted, ref, watch} from 'vue';
 
   const saveChangesDescription = (description: string) => {saveChanges('description', description);};
 
-  const saveChangesDate = (date: string) => {
+  const saveChangesDate = (date: number | null) => {
     saveChanges('deadline', date);
     emits('date', {task: props.task, date, action: 'date'});
   };
@@ -104,14 +104,14 @@ import {onMounted, ref, watch} from 'vue';
     else taskNode.value.classList.remove('done');
   };
 
-  const saveChanges = (whatChanges: string, changeValue: string | number | boolean) => {
+  const saveChanges = (whatChanges: string, changeValue: string | number | boolean | null) => {
     let update: {
-      id: number,
-      name: string,
-      value: string | number | boolean,
+      task_id: number,
+      key: string,
+      value: string | number | boolean | null,
     } = {
-      id: props.task.id ?? 0,
-      name: whatChanges,
+      task_id: props.task.id ?? 0,
+      key: whatChanges,
       value: changeValue,
     };
     listView.updateTask(update);
@@ -193,7 +193,7 @@ import {onMounted, ref, watch} from 'vue';
           @saveChangesDescription="saveChangesDescription"
       />
       <div class="info-btns__container">
-        <DatePickerTask :deadline="task.deadline ?? ''"
+        <DatePickerTask :deadline="task.deadline ?? null"
                         @setDeadline="saveChangesDate"
         />
         <TagCreator

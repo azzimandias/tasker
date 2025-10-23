@@ -1,12 +1,12 @@
 import {defineStore} from 'pinia';
-import {onUnmounted, reactive, Ref, ref, UnwrapRef} from "vue";
+import {onUnmounted, reactive, Ref, ref, toRaw, UnwrapRef} from "vue";
 import {useRoute} from "vue-router";
 import api from "@/api";
 import {useBigMenuStore} from "@/stores/BigMenuStore";
 import socket from "@/plugins/socket";
 import {v4 as uuidv4} from 'uuid';
 import {ListsItem, SortList, User} from '@/types/bigMenu';
-import {Alert, FoundedUser, List, Tag, Task} from '@/types/listView';
+import {Alert, List, Tag, Task} from '@/types/listView';
 
 export const useListViewStore = defineStore('listViewStore', () => {
     const user = reactive<User>({
@@ -58,10 +58,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         user.email   = userInfo.email;
         user.name    = userInfo.name;
         user.surname = userInfo.surname;
-        initialize().then();
-    };
-    const initialize = async () => {
-        await getTasksOrTags(false);
     };
     const getTasksOrTags = async (isSocket: boolean) => {
         if (!isSocket) {
@@ -116,6 +112,8 @@ export const useListViewStore = defineStore('listViewStore', () => {
                 isLoadingSmall.value = false;
             }
         } else {
+            clearCurrentData();
+            clearCurrentInfo();
             isLoading.value = false;
             isLoadingSmall.value = false;
         }
@@ -256,12 +254,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
 
     /* + TASK */
-    const updateTask = async (task: {
-        id: number,
-        name: string,
-        value: string | number | boolean,
+    const updateTask = async (field: {
+        task_id: number,
+        key: string,
+        value: string | number | boolean | null,
     }) => {
-        const response = await api.postInfo(`updateTask/${task.id}`, {task, uuid: socketUUID});
+        console.log(field)
+        const response = await api.patchInfo(`updateTask/${field.task_id}`, {field, uuid: socketUUID});
         handleUpdateTask(response);
         //await getTasksOrTags();
         await bigMenu.firstRequest();
@@ -288,7 +287,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
             }
         });
         obj.uuid = socketUUID;
-        await api.postInfo(`deleteTask`, obj);
+        await api.delete(`deleteTask`, obj.id);
         currentListInfo.count_of_active_tasks = currentPersonalListTasks.length;
         await bigMenu.firstRequest();
     };
@@ -305,7 +304,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* + Search */
     const findTasks = async (searchObj: { searchString: string }) => {
         isLoading.value = true;
-        const response = await api.globalSearch(searchObj);
+        const response = await api.postInfo('globalSearch', searchObj);
         searchResult.length = 0;
         if (typeof response === 'object') {
             response.forEach((item: List) => {
@@ -348,7 +347,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const updateTag = async (tag: Tag) => {
         tag["uuid"] = socketUUID;
-        const response = await api.postInfo(`updateTag/${tag.id}`, tag);
+        const response = await api.patchInfo(`updateTag/${tag.id}`, tag);
         /*handleUpdateTag(response);*/
         //await getTasksOrTags();
         await bigMenu.firstRequest();
@@ -363,7 +362,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const deleteTag = async (tag: Tag) => {
         tag['uuid'] = socketUUID;
-        await api.postInfo(`deleteTag/${tag.id}`, tag);
+        await api.delete(`deleteTag`, tag.id);
         await getTasksOrTags(false);
         await bigMenu.firstRequest();
     };
@@ -443,15 +442,17 @@ export const useListViewStore = defineStore('listViewStore', () => {
     /* - TAG replacement */
     /* + PERSONAL LIST */
     const createList = async (list: List) => {
-        const response = await api.postInfo(`saveList`, {list, uuid: socketUUID});
+        const response = await api.postInfo(`createList`, {list, uuid: socketUUID});
         await bigMenu.firstRequest();
         return response;
     };
     const updateList = async (list: List) => {
-        await api.postInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
+        if (!list.id) return;
+        await api.patchInfo(`updateList/${list.id}`, {list, uuid: socketUUID});
         if (list.name) {
             currentListInfo.name = list.name;
-        } else if (list.color) {
+        }
+        if (list.color) {
             currentListInfo.color = list.color;
         }
         await bigMenu.firstRequest();
@@ -485,12 +486,13 @@ export const useListViewStore = defineStore('listViewStore', () => {
     const findMatchUsers = async (searchStr: string) => {
         return await api.postInfo(`findUsers`, {searchStr});
     };
-    const createMembershipLists = async (list: ListsItem, selectedUsers: Ref<UnwrapRef<FoundedUser[]>, UnwrapRef<FoundedUser[]> | FoundedUser[]>) => {
-        await api.postInfo(`createMembershipLists`, {
+    const createMembershipInvitation = async (list: ListsItem, selectedUsers: FoundedUser[]) => {
+        return await api.postInfo('createMembershipInvitation', {
             listId: list.id,
             selectedUsers,
         });
     };
+
     /* - USERS LIST */
     //foundedUsers
     /* + SOCKET */
@@ -767,6 +769,6 @@ export const useListViewStore = defineStore('listViewStore', () => {
         addAlert,
         removeAlert,
         findMatchUsers,
-        createMembershipLists,
+        createMembershipInvitation,
     };
 });
