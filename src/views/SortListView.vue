@@ -48,28 +48,27 @@
     />
     <div class="task__container">
       <div class="list-tasks__wrapper"
-           v-for="stask in listView.sortTasks"
-           :key="stask.key ?? Math.random()"
-           v-if="listView.sortTasks.length"
+           v-for="list in listView.sortedListsWithTasks"
+           :key="`sorted-list-with-tasks-${list.id}-${list.name}`"
+           v-if="listView.sortedListsWithTasks.length"
       >
-        <ListHeader :list="stask.personal_list"
+        <ListHeader :list="list"
                     :isRouter="true"
                     :fontSize="'20px'"
                     :top="60"
                     :zIndex="1"
-                    v-if="stask.tasks.length"
+                    v-if="list.tasks.length"
         />
         <Task
-          v-for="task in stask.tasks"
+          v-for="task in list.tasks"
           :key="task.changer ?? Math.random()"
           :task="task"
-          :color="stask.personal_list.color"
+          :color="list.color"
           @done="refreshSortLists"
           @flag="refreshSortLists"
           @date="refreshSortLists"
-          v-if="stask.tasks.length"
+          v-if="list.tasks.length"
         />
-        <!--          :color="task.color"-->
       </div>
       <div class="empty-list__title" v-else><p>Здесь пусто.</p></div>
     </div>

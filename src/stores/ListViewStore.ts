@@ -17,7 +17,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     });
     const currentPersonalListTasks = reactive<Task[]>([]);
     const currentPersonalListTasksDone = reactive<Task[]>([]);
-    const currentSortListTasks = reactive<{key?: number, personal_list: List, tasks: Task[]}[]>([]);
+    const currentSortListTasks = reactive<List[]>([]);
     const currentListInfo = reactive<List>({
         id: 0,
         name: '',
@@ -92,7 +92,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         let response = null;
         if (request.value) {
             try {
-                response = await api.getInfoWithArgs(request.value, {params: {}});
+                response = await api.postInfo(request.value, {});
                 clearCurrentData();
                 clearCurrentInfo();
                 if (response) {
@@ -130,7 +130,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
     };
     const setCurrentSortListTasks = (response: {
         sortList: {id:number,name:string},
-        tasksByList: {personal_list: List, tasks: Task[]}[]
+        tasksByList: List[]
     }) => {
         Object.assign(currentSortListInfo, {
             id: response.sortList.id,
@@ -180,7 +180,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
 
     const clearTasks = (id: number) => {
         let i = 0;
-        currentSortListTasks.forEach((list: {personal_list: List, tasks: Task[]}) => {
+        currentSortListTasks.forEach((list: List) => {
             list.tasks.forEach((task: Task,idx: number) => {
                 if (task.id && +id === +task.id) {
                     list.tasks.splice(idx,1);
@@ -731,7 +731,7 @@ export const useListViewStore = defineStore('listViewStore', () => {
         tasksDone: currentPersonalListTasksDone,
 
         sortListInfo: currentSortListInfo,
-        sortTasks: currentSortListTasks,
+        sortedListsWithTasks: currentSortListTasks,
 
         currentTag,
         listsByTag,

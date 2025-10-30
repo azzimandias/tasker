@@ -131,12 +131,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     };
     const getSortListsCount = async () => {
         is_load_sortLists.value = true;
-        const response = await api.getInfoWithArgs('sortLists', {
-            params: {
-                user_id: user.id,
-                uuid: socketUUID
-            }
-        });
+        const response = await api.getInfo('sortLists');
         if ((typeof response) === "object") {
             response.forEach((item: { id: number, count: number }) => {
                 sortLists[item.id - 1].count = item.count >= 100 ? '+99' : item.count.toString();
@@ -156,12 +151,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getPersonalLists = async () => {
         try {
             is_load_personalLists.value = true;
-            const response = await api.getInfoWithArgs('lists', {
-                params: {
-                    user_id: user.id,
-                    uuid: socketUUID
-                }
-            });
+            const response = await api.getInfo('lists');
             if ((typeof response) === "object" && response.length > 0) {
                 personalLists.length = 0;
                 response.forEach((item: ListsItem) => {
@@ -188,12 +178,7 @@ export const useBigMenuStore = defineStore('bigMenuStore', () => {
     const getPersonalTags = async () => {
         try {
             is_load_personalTags.value = true;
-            const response = await api.getInfoWithArgs(`tags/${user.id}`, {
-                params: {
-                    user_id: user.id,
-                    uuid: socketUUID
-                }
-            });
+            const response = await api.getInfo(`tags`);
             if ((typeof response) === "object" && response.length > 0) {
                 personalTags.length = 0;
                 personalTags.push({ id:0, name:'Все теги' });

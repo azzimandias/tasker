@@ -19,7 +19,7 @@
   });
 
   const getUserInfo = async () => {
-    const userInfo =  await api.getInfo('user');
+    const userInfo =  await api.postInfo('user', {});
     bigMenuStore.setUserInfo(userInfo);
     listViewStore.setUserInfo(userInfo);
   }
